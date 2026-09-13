@@ -1,0 +1,95 @@
+
+.hide-scroll::-webkit-scrollbar {
+    display: none;
+  }
+  .hide-scroll {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .glow-text {
+    text-shadow: 0 0 35px rgba(0, 128, 251, 0.45);
+  }
+
+  .glow-green-text {
+    text-shadow: 0 0 35px rgba(37, 211, 102, 0.45);
+  }
+
+  .bento-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 1px;
+    background-color: #262626;
+    border: 1px solid #262626;
+  }
+
+  .tech-line {
+    position: relative;
+  }
+  .tech-line::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 100%;
+    width: 24px;
+    height: 1px;
+    background-color: #262626;
+    z-index: 10;
+  }
+
+@media (max-width: 768px) {
+  .tech-line::after {
+    display: none;
+  }
+}
+
+.scroll-smooth {
+  scroll-behavior: smooth;
+}
+
+/* Custom scrollbar for flow section */
+.flow-scroll::-webkit-scrollbar {
+  height: 8px;
+}
+.flow-scroll::-webkit-scrollbar-track {
+  background: #1c1b1b;
+}
+.flow-scroll::-webkit-scrollbar-thumb {
+  background: #414754;
+  border-radius: 4px;
+}
+.flow-scroll::-webkit-scrollbar-thumb:hover {
+  background: #0080FB;
+}
+
+/* Global scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #131313;
+}
+::-webkit-scrollbar-thumb {
+  background: #262626;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #0080FB;
+}
+
+/* Lenis Integration */
+html.lenis, html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
