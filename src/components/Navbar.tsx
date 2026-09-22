@@ -24,18 +24,18 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenTerminal, onScrollToSectio
   return (
     <header className="fixed top-0 w-full z-50 bg-[#0b0d12]/90 backdrop-blur-md border-b border-[#262626]">
       <div className="flex justify-between items-center h-20 px-6 md:px-16 w-full mx-auto max-w-[1440px]">
-        {/* Logo with CR Icon Box */}
+        {/* Brand Logo */}
         <a 
           href="#" 
           onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
-          className="flex items-center gap-3 group"
+          className="flex items-center group py-1"
+          aria-label="ChatRadix"
         >
-          <div className="w-8 h-8 border border-[#0080FB] bg-[#0080FB]/10 flex items-center justify-center font-['Hanken_Grotesk'] font-black text-sm text-[#0080FB] group-hover:scale-105 transition-transform">
-            CR
-          </div>
-          <span className="font-['Hanken_Grotesk'] font-extrabold text-xl md:text-2xl tracking-tighter text-[#e5e2e1] uppercase">
-            ChatRadix
-          </span>
+          <img 
+            src="/logo.svg" 
+            alt="ChatRadix Logo" 
+            className="h-10 sm:h-11 md:h-12 w-auto object-contain group-hover:opacity-90 group-hover:scale-105 transition-all duration-300"
+          />
         </a>
 
         {/* Desktop Navigation */}

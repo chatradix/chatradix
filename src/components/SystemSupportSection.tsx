@@ -33,11 +33,16 @@ export const SystemSupportSection: React.FC<SystemSupportSectionProps> = ({ onNo
   };
 
   return (
-    <section id="support" className="mb-24 md:mb-32 max-w-[1440px] mx-auto px-6 md:px-16">
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-[1px] bg-[#262626] border border-[#262626]">
+    <section id="support" className="mb-24 md:mb-32 max-w-[1440px] mx-auto px-6 md:px-16 perspective-1000">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-[1px] bg-[#262626] border border-[#262626] shadow-2xl">
         {/* Left Column */}
-        <div className="lg:col-span-5 bg-[#0e0e0e] p-8 md:p-14 lg:p-16 flex flex-col justify-between border-b lg:border-b-0 lg:border-r border-[#262626]">
-          <div>
+        <div className="lg:col-span-5 bg-[#0e0e0e] p-8 md:p-14 lg:p-16 flex flex-col justify-between border-b lg:border-b-0 lg:border-r border-[#262626] relative overflow-hidden">
+          {/* Subtle Ambient Glow */}
+          <div
+            className="absolute top-0 right-0 w-64 h-64 bg-[#0080FB]/10 rounded-full blur-[90px] pointer-events-none"
+          />
+
+          <div className="relative z-10">
             {/* Terminal Header Dots */}
             <div className="flex items-center gap-2 mb-10">
               <div className="w-3 h-3 rounded-full bg-[#ff5f56]" />
@@ -60,7 +65,7 @@ export const SystemSupportSection: React.FC<SystemSupportSectionProps> = ({ onNo
 
           <button
             onClick={() => onNotify('Redirecting to demo scheduling calendar...')}
-            className="border border-[#262626] bg-[#131313] text-[#e5e2e1] font-['JetBrains_Mono'] text-xs font-semibold px-6 py-4 hover:border-[#0080FB] hover:text-[#0080FB] transition-all uppercase tracking-[0.15em] inline-flex items-center gap-3 self-start"
+            className="relative z-10 border border-[#262626] bg-[#131313] text-[#e5e2e1] font-['JetBrains_Mono'] text-xs font-semibold px-6 py-4 hover:border-[#0080FB] hover:text-[#0080FB] hover:shadow-[0_0_20px_rgba(0,128,251,0.2)] transition-all uppercase tracking-[0.15em] inline-flex items-center gap-3 self-start"
           >
             <Calendar className="w-4 h-4 text-[#0080FB]" />
             <span>&lt; Schedule a Demo Call &gt;</span>

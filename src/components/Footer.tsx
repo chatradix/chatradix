@@ -15,9 +15,14 @@ export const Footer: React.FC<FooterProps> = ({ onScrollToTop, onOpenTerminal, o
         <div className="flex flex-col gap-6 max-w-sm">
           <button 
             onClick={onScrollToTop}
-            className="font-['Hanken_Grotesk'] font-black text-5xl sm:text-6xl md:text-7xl leading-none tracking-tighter text-[#e5e2e1] uppercase text-left hover:text-[#0080FB] transition-colors"
+            className="text-left group inline-flex items-center self-start"
+            aria-label="ChatRadix - Scroll to top"
           >
-            CHATRADIX
+            <img 
+              src="/logo.svg" 
+              alt="ChatRadix Logo" 
+              className="h-12 sm:h-14 md:h-16 w-auto object-contain group-hover:opacity-90 group-hover:scale-105 transition-all duration-300"
+            />
           </button>
           <p className="font-['JetBrains_Mono'] text-xs text-[#888888] uppercase tracking-[0.15em] leading-relaxed">
             HIGH-PRECISION CONVERSATIONAL COMMERCE ARCHITECTURE FOR SHOPIFY.

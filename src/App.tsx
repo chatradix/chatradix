@@ -24,6 +24,17 @@ export const App: React.FC = () => {
   const [manifestoOpen, setManifestoOpen] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
+  // Ambient mouse glow coords
+  const [cursorPos, setCursorPos] = useState({ x: -200, y: -200 });
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      setCursorPos({ x: e.clientX, y: e.clientY });
+    };
+    window.addEventListener('mousemove', handleMouseMove, { passive: true });
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, []);
+
   useEffect(() => {
     // Initialize Lenis Smooth Scroll
     const lenis = new Lenis({
@@ -33,7 +44,7 @@ export const App: React.FC = () => {
       gestureOrientation: 'vertical',
       smoothWheel: true,
       wheelMultiplier: 1.0,
-      touchMultiplier: 2.0,
+      touchMultiplier: 1.8,
     });
 
     lenis.on('scroll', ScrollTrigger.update);
@@ -68,7 +79,19 @@ export const App: React.FC = () => {
   };
 
   return (
-    <div className="bg-[#0b0d12] text-[#e5e2e1] min-h-screen flex flex-col font-['Hanken_Grotesk'] selection:bg-[#0080FB] selection:text-white relative">
+    <div className="bg-[#0b0d12] text-[#e5e2e1] min-h-screen flex flex-col font-['Hanken_Grotesk'] selection:bg-[#0080FB] selection:text-white relative overflow-x-hidden">
+      {/* Dynamic Ambient Mouse Glow Tracking Light */}
+      <div
+        className="fixed w-[600px] h-[600px] rounded-full pointer-events-none z-0 transition-transform duration-700 ease-out will-change-transform opacity-35 blur-[120px]"
+        style={{
+          transform: `translate3d(${cursorPos.x - 300}px, ${cursorPos.y - 300}px, 0)`,
+          background: 'radial-gradient(circle, rgba(0,128,251,0.22) 0%, rgba(37,211,102,0.12) 40%, transparent 70%)',
+        }}
+      />
+
+      {/* Cyber Technical Grid Overlay */}
+      <div className="fixed inset-0 pointer-events-none z-0 cyber-grid opacity-30" />
+
       {/* Porsche Style Preloader */}
       <Preloader />
 
