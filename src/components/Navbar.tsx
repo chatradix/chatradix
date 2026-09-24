@@ -31,7 +31,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onScrollToSection }) => {
           aria-label="ChatRadix"
         >
           <img 
-            src="/logo.svg" 
+            src="./logo.svg" 
             alt="ChatRadix Logo" 
             className="h-10 sm:h-11 md:h-12 w-auto object-contain group-hover:opacity-90 group-hover:scale-105 transition-all duration-300"
           />

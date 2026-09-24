@@ -332,7 +332,7 @@ export const UltimateFlows: React.FC<UltimateFlowsProps> = ({ onNotify }) => {
                 <div className="lg:col-span-6 bg-[#080a0f] p-4 sm:p-6 md:p-8 flex flex-col items-center justify-center relative overflow-hidden">
                   <div className="relative flex items-center justify-center w-full h-full max-h-[72vh]">
                     <img
-                      src="/whatsapp-mockup.png"
+                      src="./whatsapp-mockup.png"
                       alt={`${flow.titleLine1} ${flow.titleLine2} WhatsApp Flow`}
                       className="max-h-[66vh] w-auto max-w-[90%] object-contain drop-shadow-[0_25px_60px_rgba(0,0,0,0.9)] hover:scale-[1.02] transition-transform duration-500"
                     />

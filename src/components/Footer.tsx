@@ -18,7 +18,7 @@ export const Footer: React.FC<FooterProps> = ({ onScrollToTop, onScrollToSection
             aria-label="ChatRadix - Scroll to top"
           >
             <img 
-              src="/logo.svg" 
+              src="./logo.svg" 
               alt="ChatRadix Logo" 
               className="h-12 sm:h-14 md:h-16 w-auto object-contain group-hover:opacity-90 group-hover:scale-105 transition-all duration-300"
             />
