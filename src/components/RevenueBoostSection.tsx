@@ -1,12 +1,11 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { ArrowRight, X, Check, TrendingUp, Zap, Sparkles, ShieldCheck } from 'lucide-react';
+import React, { useEffect, useRef } from 'react';
+import { ArrowRight, TrendingUp, Zap, Sparkles, ShieldCheck } from 'lucide-react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
 export const RevenueBoostSection: React.FC = () => {
-  const [showTrialModal, setShowTrialModal] = useState(false);
   const sectionRef = useRef<HTMLDivElement>(null);
   const line1Ref = useRef<HTMLSpanElement>(null);
   const line2Ref = useRef<HTMLSpanElement>(null);
@@ -125,7 +124,10 @@ export const RevenueBoostSection: React.FC = () => {
               </p>
 
               <button
-                onClick={() => setShowTrialModal(true)}
+                onClick={() => {
+                  const el = document.getElementById('offer');
+                  if (el) el.scrollIntoView({ behavior: 'smooth' });
+                }}
                 className="bg-[#25D366] text-black font-['JetBrains_Mono'] text-xs font-bold px-8 py-4 hover:bg-white hover:text-black transition-all flex items-center gap-3 uppercase tracking-[0.15em] group shadow-[0_0_20px_rgba(37,211,102,0.3)] hover:shadow-[0_0_30px_rgba(255,255,255,0.4)]"
               >
                 <span>START FREE TRIAL</span>
@@ -135,55 +137,6 @@ export const RevenueBoostSection: React.FC = () => {
           </div>
         </div>
       </div>
-
-      {/* Free Trial Modal */}
-      {showTrialModal && (
-        <div className="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4 animate-in fade-in duration-200">
-          <div className="bg-[#131313] border border-[#25D366] w-full max-w-lg p-8 relative shadow-[0_0_50px_rgba(37,211,102,0.3)]">
-            <button
-              onClick={() => setShowTrialModal(false)}
-              className="absolute top-6 right-6 p-2 text-[#888888] hover:text-white"
-            >
-              <X className="w-5 h-5" />
-            </button>
-
-            <div className="font-['JetBrains_Mono'] text-xs text-[#25D366] uppercase mb-2 tracking-widest">
-              /// INSTANT ONBOARDING ///
-            </div>
-            <h3 className="font-['Hanken_Grotesk'] text-3xl font-black uppercase text-[#e5e2e1] mb-4">
-              Start Your 14-Day Free Trial
-            </h3>
-            <p className="font-['Hanken_Grotesk'] text-sm text-[#888888] mb-6 leading-relaxed">
-              Connect your Shopify store in under 2 minutes with automated webhook setup. No credit card required.
-            </p>
-
-            <div className="space-y-3 font-['JetBrains_Mono'] text-xs text-[#c1c6d6] mb-8">
-              <div className="flex items-center gap-2 text-[#25D366]">
-                <Check className="w-4 h-4" />
-                <span>Zero-Code Shopify App Store Installation</span>
-              </div>
-              <div className="flex items-center gap-2 text-[#25D366]">
-                <Check className="w-4 h-4" />
-                <span>Pre-configured Abandoned Checkout & Shipping Flows</span>
-              </div>
-              <div className="flex items-center gap-2 text-[#25D366]">
-                <Check className="w-4 h-4" />
-                <span>Official Meta WhatsApp API Connection</span>
-              </div>
-            </div>
-
-            <button
-              onClick={() => {
-                alert('Redirecting to Shopify App Store installation...');
-                setShowTrialModal(false);
-              }}
-              className="w-full bg-[#25D366] text-black font-['JetBrains_Mono'] text-xs font-bold py-4 uppercase tracking-[0.15em] hover:bg-white transition-all"
-            >
-              INSTALL ON SHOPIFY NOW
-            </button>
-          </div>
-        </div>
-      )}
     </section>
   );
 };

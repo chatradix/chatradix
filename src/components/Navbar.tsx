@@ -2,11 +2,10 @@ import React, { useState } from 'react';
 import { Mail, Menu, X, ArrowUpRight } from 'lucide-react';
 
 interface NavbarProps {
-  onOpenTerminal: () => void;
   onScrollToSection: (id: string) => void;
 }
 
-export const Navbar: React.FC<NavbarProps> = ({ onOpenTerminal, onScrollToSection }) => {
+export const Navbar: React.FC<NavbarProps> = ({ onScrollToSection }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const navLinks = [
@@ -55,8 +54,8 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenTerminal, onScrollToSectio
         {/* Action Controls */}
         <div className="flex items-center gap-4">
           <button
-            onClick={onOpenTerminal}
-            title="Open Support Terminal"
+            onClick={() => handleNavClick('support')}
+            title="Contact Support"
             className="hidden sm:flex items-center justify-center w-10 h-10 border border-[#262626] hover:border-[#0080FB] text-[#e5e2e1] hover:text-[#0080FB] transition-colors bg-[#131313]"
           >
             <Mail className="w-4 h-4" />
@@ -101,8 +100,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenTerminal, onScrollToSectio
           ))}
           <button
             onClick={() => {
-              setMobileMenuOpen(false);
-              onOpenTerminal();
+              handleNavClick('support');
             }}
             className="flex items-center gap-3 font-['JetBrains_Mono'] text-sm uppercase tracking-[0.15em] text-[#0080FB] py-2"
           >

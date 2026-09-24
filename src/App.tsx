@@ -13,15 +13,11 @@ import { OfferBanner } from './components/OfferBanner';
 import { SystemSupportSection } from './components/SystemSupportSection';
 import { RevenueBoostSection } from './components/RevenueBoostSection';
 import { Footer } from './components/Footer';
-import { TerminalModal } from './components/TerminalModal';
-import { ManifestoModal } from './components/ManifestoModal';
 import { CheckCircle } from 'lucide-react';
 
 gsap.registerPlugin(ScrollTrigger);
 
 export const App: React.FC = () => {
-  const [terminalOpen, setTerminalOpen] = useState(false);
-  const [manifestoOpen, setManifestoOpen] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
   // Ambient mouse glow coords
@@ -105,7 +101,6 @@ export const App: React.FC = () => {
 
       {/* Top Navbar */}
       <Navbar
-        onOpenTerminal={() => setTerminalOpen(true)}
         onScrollToSection={handleScrollToSection}
       />
 
@@ -114,7 +109,7 @@ export const App: React.FC = () => {
         {/* 1. Hero Section */}
         <HeroSection
           onInitialize={() => handleScrollToSection('offer')}
-          onOpenManifesto={() => setManifestoOpen(true)}
+          onOpenManifesto={() => handleScrollToSection('support')}
         />
 
         {/* 2. Ultimate Flows Section */}
@@ -139,20 +134,7 @@ export const App: React.FC = () => {
       {/* Footer */}
       <Footer
         onScrollToTop={handleScrollToTop}
-        onOpenTerminal={() => setTerminalOpen(true)}
         onScrollToSection={handleScrollToSection}
-      />
-
-      {/* Interactive Terminal CLI Modal */}
-      <TerminalModal
-        isOpen={terminalOpen}
-        onClose={() => setTerminalOpen(false)}
-      />
-
-      {/* Interactive Architectural Manifesto Modal */}
-      <ManifestoModal
-        isOpen={manifestoOpen}
-        onClose={() => setManifestoOpen(false)}
       />
     </div>
   );

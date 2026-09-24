@@ -2,11 +2,10 @@ import React from 'react';
 
 interface FooterProps {
   onScrollToTop: () => void;
-  onOpenTerminal: () => void;
   onScrollToSection: (id: string) => void;
 }
 
-export const Footer: React.FC<FooterProps> = ({ onScrollToTop, onOpenTerminal, onScrollToSection }) => {
+export const Footer: React.FC<FooterProps> = ({ onScrollToTop, onScrollToSection }) => {
   return (
     <footer className="bg-[#0b0d12] border-t border-[#262626] w-full pb-8 pt-16 md:pt-24">
       {/* Upper Grid */}
@@ -87,7 +86,7 @@ export const Footer: React.FC<FooterProps> = ({ onScrollToTop, onOpenTerminal, o
             <button onClick={() => onScrollToSection('support')} className="font-['JetBrains_Mono'] text-xs text-[#e5e2e1] hover:text-[#0080FB] transition-colors text-left uppercase tracking-wider">
               Support Channel
             </button>
-            <button onClick={onOpenTerminal} className="font-['JetBrains_Mono'] text-xs text-[#e5e2e1] hover:text-[#0080FB] transition-colors text-left uppercase tracking-wider">
+            <button onClick={() => onScrollToSection('support')} className="font-['JetBrains_Mono'] text-xs text-[#e5e2e1] hover:text-[#0080FB] transition-colors text-left uppercase tracking-wider">
               System Terminal
             </button>
             <button onClick={() => onScrollToSection('offer')} className="font-['JetBrains_Mono'] text-xs text-[#0080FB] hover:underline transition-colors text-left uppercase tracking-wider">
