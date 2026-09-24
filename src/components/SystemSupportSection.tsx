@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ArrowRight, CheckCircle2, Loader2, Calendar } from 'lucide-react';
+import { ArrowRight, CheckCircle2, Loader2, Calendar, Mail, AlertCircle } from 'lucide-react';
 
 interface SystemSupportSectionProps {
   onNotify: (msg: string) => void;
@@ -8,27 +8,62 @@ interface SystemSupportSectionProps {
 export const SystemSupportSection: React.FC<SystemSupportSectionProps> = ({ onNotify }) => {
   const [formData, setFormData] = useState({
     storeName: '',
+    email: '',
     phone: '',
     details: '',
   });
 
   const [submitting, setSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.storeName || !formData.phone) return;
+    if (!formData.storeName || !formData.email || !formData.phone) return;
 
     setSubmitting(true);
-    setTimeout(() => {
+    setErrorMessage('');
+
+    try {
+      const response = await fetch('https://formsubmit.co/ajax/info@chatradix.com', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        body: JSON.stringify({
+          'Store Name / Domain': formData.storeName,
+          'Work Email': formData.email,
+          'WhatsApp Phone Number': formData.phone,
+          'Additional Details': formData.details || 'None provided',
+          '_subject': `New System Support Inquiry from ${formData.storeName}`,
+          '_replyto': formData.email,
+          '_template': 'table',
+          '_captcha': 'false',
+        }),
+      });
+
+      const data = await response.json().catch(() => null);
+
+      if (response.ok && (!data || data.success === 'true' || data.success === true || response.status === 200)) {
+        setIsSuccess(true);
+        onNotify('Inquiry transmitted directly to info@chatradix.com!');
+      } else {
+        throw new Error((data && data.message) || 'Failed to submit inquiry.');
+      }
+    } catch (err: any) {
+      console.error('Submission error:', err);
+      setErrorMessage(
+        'Unable to send automatically right now. You can email us directly at info@chatradix.com.'
+      );
+    } finally {
       setSubmitting(false);
-      setIsSuccess(true);
-      onNotify('Inquiry submitted successfully! Support team will reach out.');
-    }, 1500);
+    }
   };
 
   const handleReset = () => {
-    setFormData({ storeName: '', phone: '', details: '' });
+    setFormData({ storeName: '', email: '', phone: '', details: '' });
+    setErrorMessage('');
     setIsSuccess(false);
   };
 
@@ -58,9 +93,20 @@ export const SystemSupportSection: React.FC<SystemSupportSectionProps> = ({ onNo
               <span className="text-[#0080FB] glow-text">SUPPORT</span>
             </h2>
 
-            <p className="font-['Hanken_Grotesk'] text-base md:text-lg text-[#888888] mb-10 max-w-md leading-relaxed">
+            <p className="font-['Hanken_Grotesk'] text-base md:text-lg text-[#888888] mb-8 max-w-md leading-relaxed">
               Fast and reliable WhatsApp infrastructure. Built for scale with 99.9% uptime.
             </p>
+
+            <div className="inline-flex items-center gap-2.5 px-3.5 py-2 bg-[#131313] border border-[#262626] text-xs font-['JetBrains_Mono'] text-[#c1c6d6] mb-8">
+              <Mail className="w-4 h-4 text-[#0080FB]" />
+              <span className="text-[#888888]">DISPATCH:</span>
+              <a 
+                href="mailto:info@chatradix.com" 
+                className="text-[#0080FB] hover:text-white transition-colors underline decoration-[#0080FB]/40"
+              >
+                info@chatradix.com
+              </a>
+            </div>
           </div>
 
           <button
@@ -79,7 +125,7 @@ export const SystemSupportSection: React.FC<SystemSupportSectionProps> = ({ onNo
               {/* Field 1: Store Name / Domain */}
               <div className="flex flex-col gap-2">
                 <label htmlFor="store-name" className="font-['JetBrains_Mono'] text-xs text-[#0080FB] uppercase tracking-[0.15em] font-semibold">
-                  STORE NAME / DOMAIN
+                  STORE NAME / DOMAIN *
                 </label>
                 <div className="border border-[#262626] p-4 focus-within:border-[#0080FB] transition-colors bg-[#131313]">
                   <input
@@ -94,10 +140,28 @@ export const SystemSupportSection: React.FC<SystemSupportSectionProps> = ({ onNo
                 </div>
               </div>
 
-              {/* Field 2: WhatsApp Phone Number */}
+              {/* Field 2: Work Email */}
+              <div className="flex flex-col gap-2">
+                <label htmlFor="work-email" className="font-['JetBrains_Mono'] text-xs text-[#0080FB] uppercase tracking-[0.15em] font-semibold">
+                  WORK EMAIL *
+                </label>
+                <div className="border border-[#262626] p-4 focus-within:border-[#0080FB] transition-colors bg-[#131313]">
+                  <input
+                    id="work-email"
+                    type="email"
+                    required
+                    value={formData.email}
+                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                    placeholder="alex@yourbrand.com"
+                    className="w-full bg-transparent border-none p-0 font-['JetBrains_Mono'] text-sm text-[#e5e2e1] focus:outline-none focus:ring-0 placeholder:text-[#353534]"
+                  />
+                </div>
+              </div>
+
+              {/* Field 3: WhatsApp Phone Number */}
               <div className="flex flex-col gap-2">
                 <label htmlFor="whatsapp-phone" className="font-['JetBrains_Mono'] text-xs text-[#0080FB] uppercase tracking-[0.15em] font-semibold">
-                  WHATSAPP PHONE NUMBER
+                  WHATSAPP PHONE NUMBER *
                 </label>
                 <div className="border border-[#262626] p-4 focus-within:border-[#0080FB] transition-colors bg-[#131313]">
                   <input
@@ -112,7 +176,7 @@ export const SystemSupportSection: React.FC<SystemSupportSectionProps> = ({ onNo
                 </div>
               </div>
 
-              {/* Field 3: Additional Details */}
+              {/* Field 4: Additional Details */}
               <div className="flex flex-col gap-2">
                 <label htmlFor="additional-details" className="font-['JetBrains_Mono'] text-xs text-[#0080FB] uppercase tracking-[0.15em] font-semibold">
                   ADDITIONAL DETAILS
@@ -129,6 +193,26 @@ export const SystemSupportSection: React.FC<SystemSupportSectionProps> = ({ onNo
                 </div>
               </div>
 
+              {/* Error Notice if any */}
+              {errorMessage && (
+                <div className="p-4 border border-[#ff4d4f]/40 bg-[#ff4d4f]/10 text-xs font-['JetBrains_Mono'] text-[#ffb4ab] flex flex-col gap-2">
+                  <div className="flex items-center gap-2">
+                    <AlertCircle className="w-4 h-4 text-[#ff4d4f] shrink-0" />
+                    <span>{errorMessage}</span>
+                  </div>
+                  <a
+                    href={`mailto:info@chatradix.com?subject=${encodeURIComponent(
+                      `Support Inquiry: ${formData.storeName}`
+                    )}&body=${encodeURIComponent(
+                      `Store: ${formData.storeName}\nEmail: ${formData.email}\nPhone: ${formData.phone}\n\nDetails:\n${formData.details}`
+                    )}`}
+                    className="text-[#0080FB] underline hover:text-white transition-colors uppercase font-bold mt-1"
+                  >
+                    Click to dispatch directly via your email client &rarr;
+                  </a>
+                </div>
+              )}
+
               {/* Submit Button */}
               <button
                 type="submit"
@@ -137,7 +221,7 @@ export const SystemSupportSection: React.FC<SystemSupportSectionProps> = ({ onNo
               >
                 {submitting ? (
                   <>
-                    <span>SUBMITTING...</span>
+                    <span>TRANSMITTING INQUIRY...</span>
                     <Loader2 className="w-4 h-4 animate-spin" />
                   </>
                 ) : (
@@ -153,10 +237,10 @@ export const SystemSupportSection: React.FC<SystemSupportSectionProps> = ({ onNo
             <div className="flex flex-col gap-6 py-8">
               <div className="flex items-center gap-3 text-[#25D366]">
                 <CheckCircle2 className="w-8 h-8" />
-                <h3 className="font-['Hanken_Grotesk'] text-2xl font-extrabold uppercase">Inquiry Received</h3>
+                <h3 className="font-['Hanken_Grotesk'] text-2xl font-extrabold uppercase">Inquiry Transmitted</h3>
               </div>
               <p className="font-['Hanken_Grotesk'] text-base text-[#888888] leading-relaxed">
-                Thank you. Our technical architecture team will analyze your store request and connect via WhatsApp within 24 hours.
+                Thank you! Your inquiry has been securely dispatched to <strong className="text-white">info@chatradix.com</strong>. Our technical architecture team will analyze your requirements and connect via WhatsApp/Email within 24 hours.
               </p>
               <button
                 onClick={handleReset}
