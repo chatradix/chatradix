@@ -51,7 +51,18 @@ export const App: React.FC = () => {
 
     gsap.ticker.lagSmoothing(0);
 
+    const handleLoad = () => {
+      ScrollTrigger.refresh();
+    };
+    window.addEventListener('load', handleLoad);
+
+    const refreshTimer = setTimeout(() => {
+      ScrollTrigger.refresh();
+    }, 250);
+
     return () => {
+      window.removeEventListener('load', handleLoad);
+      clearTimeout(refreshTimer);
       lenis.destroy();
     };
   }, []);
@@ -107,10 +118,7 @@ export const App: React.FC = () => {
       {/* Main Page Layout */}
       <main className="flex-grow pt-20">
         {/* 1. Hero Section */}
-        <HeroSection
-          onInitialize={() => handleScrollToSection('offer')}
-          onOpenManifesto={() => handleScrollToSection('support')}
-        />
+        <HeroSection />
 
         {/* 2. Ultimate Flows Section */}
         <UltimateFlows onNotify={handleNotify} />

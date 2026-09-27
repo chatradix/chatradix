@@ -6,12 +6,7 @@ import heroBgVideo from '../assets/videos/bg-video-new.mp4';
 
 gsap.registerPlugin(ScrollTrigger);
 
-interface HeroSectionProps {
-  onInitialize: () => void;
-  onOpenManifesto: () => void;
-}
-
-export const HeroSection: React.FC<HeroSectionProps> = ({ onInitialize, onOpenManifesto }) => {
+export const HeroSection: React.FC = () => {
   const heroRef = useRef<HTMLDivElement>(null);
   const titleLine1Ref = useRef<HTMLSpanElement>(null);
   const titleLine2Ref = useRef<HTMLSpanElement>(null);
@@ -61,6 +56,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onInitialize, onOpenMa
           loop
           muted
           playsInline
+          onLoadedData={() => ScrollTrigger.refresh()}
           className="absolute top-1/2 left-1/2 w-full h-full min-w-full min-h-full -translate-x-1/2 -translate-y-1/2 object-cover pointer-events-none"
         >
           <source src={heroBgVideo} type="video/mp4" />
@@ -113,7 +109,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onInitialize, onOpenMa
               className="border border-[#262626] bg-[#0e0e0e] text-[#e5e2e1] font-['JetBrains_Mono'] text-xs font-bold px-10 py-5 hover:border-[#0080FB] hover:text-[#0080FB] hover:bg-[#1c1b1b] transition-all duration-300 active:scale-95 inline-flex items-center gap-3 justify-center tracking-[0.15em] rounded-none"
             >
               <Calendar className="w-4 h-4 text-[#0080FB]" />
-              <span>VIEW 12 AUTOMATIONS</span>
+              <span>EXPLORE AUTOMATIONS</span>
             </button>
           </div>
         </div>

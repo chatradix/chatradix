@@ -1,26 +1,27 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { 
-  ShoppingCart, 
-  Truck, 
-  Megaphone, 
-  Package, 
   ShieldCheck, 
-  Star, 
-  ArrowUpRight,
-  TrendingUp,
-  ChevronLeft,
+  ShoppingCart, 
+  Package, 
+  ArrowRight, 
+  CheckCheck, 
+  Lock, 
+  Phone, 
+  Video, 
+  MoreVertical, 
+  TrendingUp, 
+  Sparkles, 
+  ArrowUpRight, 
+  Zap, 
+  CheckCircle2, 
+  ChevronLeft, 
   ChevronRight,
-  CheckCheck,
-  Lock,
-  Phone,
-  Video,
-  MoreVertical,
-  Paperclip,
-  Smile,
-  Mic,
-  Zap,
-  Sparkles,
-  ArrowRight
+  Tag,
+  Clock,
+  ExternalLink,
+  Layers,
+  Flame,
+  Check
 } from 'lucide-react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -31,720 +32,1004 @@ interface UltimateFlowsProps {
   onNotify: (msg: string) => void;
 }
 
-interface FlowItem {
-  id: string;
-  number: string;
-  seq: string;
-  tabLabel: string;
-  titleLine1: string;
-  titleLine2: string;
-  description: string;
-  triggerProtocol: string;
-  latency: string;
-  iconName: string;
-  kpiBadge: string;
-  productBadge: string;
-  storeName: string;
-  productPreviewTitle: string;
-  productPreviewSubtitle: string;
-  incomingMessage: string;
-  interactiveButtons: string[];
-  userReply: string;
-  timestamp: string;
-  accentColor: string;
-}
-
 export const UltimateFlows: React.FC<UltimateFlowsProps> = ({ onNotify }) => {
-  const [activeSlide, setActiveSlide] = useState<number>(0);
-  const [scrollProgress, setScrollProgress] = useState(0);
-  const [testedFlows, setTestedFlows] = useState<Record<string, boolean>>({});
-
   const containerRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
 
-  const flowsList: FlowItem[] = [
+  const [activeSlide, setActiveSlide] = useState<number>(0);
+  const [scrollProgress, setScrollProgress] = useState<number>(0);
+
+  // Interactive Simulator States
+  const [orderConfirmed, setOrderConfirmed] = useState<boolean>(false);
+  const [checkoutRecovered, setCheckoutRecovered] = useState<boolean>(false);
+  const [carouselIndex, setCarouselIndex] = useState<number>(0);
+
+  // 3 Rich Carousel Items for Slide 3
+  const carouselProducts = [
     {
-      id: 'flow-1',
-      number: '01',
-      seq: 'SEQ_01',
-      tabLabel: 'CONFIRM',
-      titleLine1: 'ORDER',
-      titleLine2: 'CONFIRMATION',
-      description: 'Sends instant order summaries with 2-way Quick Reply buttons. Automatically updates Shopify order tags (adds "✅ order-confirmed", removes "⏳ pending") the instant customers tap confirm.',
-      triggerProtocol: 'SHOPIFY.ORDERS_CREATE',
-      latency: '12ms',
-      iconName: 'shield',
-      kpiBadge: '2-WAY SHOPIFY ORDER TAGS',
-      productBadge: 'Order #1042 • $89.00 (COD)',
-      storeName: 'Your Brand Store',
-      productPreviewTitle: 'Order #1042 Summary',
-      productPreviewSubtitle: '1x Linen Overshirt • Cash on Delivery',
-      incomingMessage: 'Hi Alex! Thank you for ordering from our store. Your order #1042 for $89.00 has been received. Please confirm your order below to dispatch immediately.',
-      interactiveButtons: ['✅ Confirm Order', '❌ Cancel Order'],
-      userReply: '✅ Confirm Order',
-      timestamp: '10:14 AM',
-      accentColor: '#25D366',
+      id: 'p1',
+      title: 'Linen Overshirt',
+      category: 'SUMMER ESSENTIALS',
+      price: '$49.00',
+      tag: 'NEW ARRIVAL',
+      desc: '100% French linen weave with relaxed tailoring.',
+      accent: '#25D366'
     },
     {
-      id: 'flow-2',
-      number: '02',
-      seq: 'SEQ_02',
-      tabLabel: 'CHECKOUT',
-      titleLine1: 'ABANDONED',
-      titleLine2: 'CHECKOUT RECOVERY',
-      description: 'Multi-step recovery sequence triggered when shoppers leave checkout. Restores the exact cart and items via dynamic smart tracked recovery links (/r/:token) with opt-out compliance.',
-      triggerProtocol: 'SHOPIFY.CHECKOUT_UPDATE',
-      latency: '15ms',
-      iconName: 'cart',
-      kpiBadge: 'DYNAMIC CART RESTORE LINK',
-      productBadge: 'Cart: $120.00 • 2 Items',
-      storeName: 'Your Brand Store',
-      productPreviewTitle: 'Complete Your Order',
-      productPreviewSubtitle: 'Items reserved in cart • Code: SAVE10',
-      incomingMessage: 'Hey Alex! You left 2 items in your cart. We saved your bag—complete your checkout within 15 mins to claim 10% OFF with code SAVE10.',
-      interactiveButtons: ['🛍️ Complete Checkout ($108.00)', '💬 Ask Question'],
-      userReply: 'Claiming my 10% discount now! 🚀',
-      timestamp: '11:30 AM',
-      accentColor: '#0080FB',
+      id: 'p2',
+      title: 'Oxford Cotton Shirt',
+      category: 'CORE CLASSICS',
+      price: '$55.00',
+      tag: 'BESTSELLER',
+      desc: 'Heavyweight combed organic cotton, bespoke cut.',
+      accent: '#0080FB'
     },
     {
-      id: 'flow-3',
-      number: '03',
-      seq: 'SEQ_03',
-      tabLabel: 'SHIPPING',
-      titleLine1: 'FULFILLMENT &',
-      titleLine2: 'SHIPPING UPDATES',
-      description: 'Triggers automatically when a fulfillment is created in Shopify. Sends carrier name, tracking numbers, and interactive track buttons to eliminate WISMO support tickets.',
-      triggerProtocol: 'SHOPIFY.FULFILLMENTS_CREATE',
-      latency: '18ms',
-      iconName: 'truck',
-      kpiBadge: 'LIVE CARRIER TRACKING',
-      productBadge: 'Tracking #CR-78401',
-      storeName: 'Your Brand Store',
-      productPreviewTitle: 'Package On The Way',
-      productPreviewSubtitle: 'Express Delivery • Estimated in 2 days',
-      incomingMessage: 'Great news Alex! Order #1042 has shipped. Your tracking number is CR-78401. Tap below to track your delivery in real-time.',
-      interactiveButtons: ['📍 Track Shipment', '📦 Shipping Details'],
-      userReply: 'Thank you for the quick shipping update! 🙏',
-      timestamp: '02:45 PM',
-      accentColor: '#25D366',
-    },
-    {
-      id: 'flow-4',
-      number: '04',
-      seq: 'SEQ_04',
-      tabLabel: 'CAROUSEL',
-      titleLine1: 'PRODUCT SPOTLIGHT',
-      titleLine2: 'MEDIA CAROUSEL',
-      description: 'Broadcast interactive multi-card WhatsApp media carousels with up to 10 visual cards. Shoppers swipe cards horizontally and tap Buy Now directly inside WhatsApp chat.',
-      triggerProtocol: 'META.CAROUSEL_BROADCAST',
-      latency: '22ms',
-      iconName: 'package',
-      kpiBadge: 'UP TO 10 VISUAL CARDS',
-      productBadge: 'Catalog Showcase Drop',
-      storeName: 'Your Brand Store',
-      productPreviewTitle: 'New Season Collection',
-      productPreviewSubtitle: 'Swipe through 10 featured items',
-      incomingMessage: '✨ Explore our brand new Summer Collection! Swipe through the catalog below and tap any card to buy directly with instant checkout.',
-      interactiveButtons: ['🛍️ Buy Now ($49.00)', '👀 Browse Full Catalog'],
-      userReply: 'Just ordered the Oxford shirt from card 2! 🔥',
-      timestamp: '04:15 PM',
-      accentColor: '#0080FB',
-    },
-    {
-      id: 'flow-5',
-      number: '05',
-      seq: 'SEQ_05',
-      tabLabel: 'WIN-BACK',
-      titleLine1: 'WIN-BACK',
-      titleLine2: 'INACTIVE CUSTOMERS',
-      description: 'Background intelligence scanner automatically detects customers dormant for 60, 90, or 120 days. Delivers personalized re-engagement offers with anti-spam cooldown protection.',
-      triggerProtocol: 'CR_CRON.CUSTOMER_INACTIVE_90D',
-      latency: '28ms',
-      iconName: 'star',
-      kpiBadge: 'ANTI-SPAM COOLDOWN SHIELD',
-      productBadge: '$20 Loyalty Voucher',
-      storeName: 'Your Brand Store',
-      productPreviewTitle: 'Exclusive VIP Re-engagement',
-      productPreviewSubtitle: '$20 credit applied • Valid for 48h',
-      incomingMessage: 'We miss you Alex! As a valued customer, we have credited your store wallet with $20 towards your next purchase. Valid for the next 48 hours.',
-      interactiveButtons: ['🎁 Claim $20 Credit', '👟 Shop New Arrivals'],
-      userReply: 'Claimed! Checking out now. ✨',
-      timestamp: '05:30 PM',
-      accentColor: '#0080FB',
-    },
-    {
-      id: 'flow-6',
-      number: '06',
-      seq: 'SEQ_06',
-      tabLabel: 'STAFF ALERT',
-      titleLine1: 'ADMIN & STAFF',
-      titleLine2: 'ORDER NOTIFICATIONS',
-      description: 'Immediate high-priority WhatsApp alert sent to store owners and warehouse teams upon every order with order ID, customer details, payment method (COD vs Prepaid), and city.',
-      triggerProtocol: 'SHOPIFY.ORDER_ADMIN_DISPATCH',
-      latency: '8ms',
-      iconName: 'megaphone',
-      kpiBadge: 'INSTANT WAREHOUSE ALERT',
-      productBadge: 'New Order #1045 • Prepaid',
-      storeName: 'ChatRadix Admin Relay',
-      productPreviewTitle: 'New Shopify Order Alert',
-      productPreviewSubtitle: '$145.00 • 2 items • Express Shipping',
-      incomingMessage: '🚨 NEW ORDER #1045: Alex Morgan just placed an order for 2 items ($145.00). Payment: Prepaid. City: New York. Tap to view order in Shopify Admin.',
-      interactiveButtons: ['📦 Open in Shopify Admin', '🖨️ Print Packing Slip'],
-      userReply: 'Packing team notified. Dispatching today! ✅',
-      timestamp: '06:01 PM',
-      accentColor: '#25D366',
-    },
+      id: 'p3',
+      title: 'Canvas Weekender Bag',
+      category: 'TRAVEL & GEAR',
+      price: '$89.00',
+      tag: 'LIMITED DROP',
+      desc: 'Waxed waterproof canvas with solid brass clips.',
+      accent: '#f59e0b'
+    }
   ];
 
-  const activeSlideRef = useRef(activeSlide);
-  useEffect(() => {
-    activeSlideRef.current = activeSlide;
-  }, [activeSlide]);
-
-  const touchStartX = useRef<number>(0);
-  const touchStartY = useRef<number>(0);
-
-  const handleTouchStart = (e: React.TouchEvent) => {
-    touchStartX.current = e.touches[0].clientX;
-    touchStartY.current = e.touches[0].clientY;
-  };
-
-  const handleTouchEnd = (e: React.TouchEvent) => {
-    const deltaX = e.changedTouches[0].clientX - touchStartX.current;
-    const deltaY = e.changedTouches[0].clientY - touchStartY.current;
-    if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 40) {
-      if (deltaX < 0) {
-        handleJumpToSlide(activeSlideRef.current + 1);
-      } else {
-        handleJumpToSlide(activeSlideRef.current - 1);
-      }
-    }
-  };
-
-  // Click to scroll to a specific slide smoothly & accurately
+  // Jump smoothly to slide
   const handleJumpToSlide = (index: number) => {
-    const clampedIndex = Math.max(0, Math.min(flowsList.length - 1, index));
+    const clampedIndex = Math.max(0, Math.min(2, index));
     setActiveSlide(clampedIndex);
-    if (!containerRef.current || !trackRef.current) return;
-    const st = ScrollTrigger.getById('flows-scroll-trigger');
+    if (!containerRef.current) return;
+    const st = ScrollTrigger.getById('flows-horizontal-trigger');
     if (st) {
-      const targetScroll = st.start + (clampedIndex / (flowsList.length - 1)) * (st.end - st.start);
+      const targetScroll = st.start + (clampedIndex / 2) * (st.end - st.start);
       window.scrollTo({ top: targetScroll, behavior: 'smooth' });
     }
   };
 
-  // GSAP Horizontal Scroll Pin Slider with Snapping & Single-Scroll Advance
+  // GSAP Horizontal Parallax Scrub with Lenis harmony & Multi-Layer Depth
   useEffect(() => {
     const container = containerRef.current;
     const track = trackRef.current;
     if (!container || !track) return;
 
+    // Refresh ScrollTrigger once fonts and video dimensions settle
+    const refreshTimer = setTimeout(() => {
+      ScrollTrigger.refresh();
+    }, 200);
+
     const ctx = gsap.context(() => {
       const getScrollDistance = () => track.scrollWidth - window.innerWidth;
-      // Snappy distance per slide (around 400px) instead of huge screen width
-      const distancePerSlide = 400;
-      const totalScrollDistance = (flowsList.length - 1) * distancePerSlide;
 
-      gsap.to(track, {
-        x: () => -getScrollDistance(),
-        ease: 'none',
+      // Master horizontal pinned track
+      const horizontalTl = gsap.timeline({
         scrollTrigger: {
-          id: 'flows-scroll-trigger',
+          id: 'flows-horizontal-trigger',
           trigger: container,
           start: 'top top',
-          end: () => `+=${totalScrollDistance}`,
+          end: () => `+=${getScrollDistance()}`,
           pin: true,
-          scrub: 0.15,
-          snap: {
-            snapTo: 1 / (flowsList.length - 1),
-            duration: { min: 0.2, max: 0.4 },
-            delay: 0.05,
-            ease: 'power2.out',
-          },
+          scrub: 1,
           anticipatePin: 1,
           invalidateOnRefresh: true,
           onUpdate: (self) => {
             setScrollProgress(self.progress);
-            const index = Math.min(
-              flowsList.length - 1,
-              Math.max(0, Math.round(self.progress * (flowsList.length - 1)))
-            );
-            setActiveSlide(index);
+            const idx = Math.min(2, Math.max(0, Math.round(self.progress * 2)));
+            setActiveSlide(idx);
           },
+        },
+      });
+
+      horizontalTl.to(track, {
+        x: () => -getScrollDistance(),
+        ease: 'none',
+      });
+
+      // Internal Multi-layer Parallax Shift on Watermarks
+      gsap.to('.card-watermark', {
+        x: -90,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: container,
+          start: 'top top',
+          end: () => `+=${getScrollDistance()}`,
+          scrub: 1.2,
+        },
+      });
+
+      // Internal Multi-layer Parallax Shift on Visual Panels
+      gsap.to('.card-visual-panel', {
+        x: 45,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: container,
+          start: 'top top',
+          end: () => `+=${getScrollDistance()}`,
+          scrub: 1.4,
         },
       });
     }, container);
 
-    // Wheel listener: Single scroll flick immediately advances to the next full slide
-    let isNavigating = false;
-    let navCooldown: any = null;
-
-    const onWheel = (e: WheelEvent) => {
-      const st = ScrollTrigger.getById('flows-scroll-trigger');
-      if (!st || !st.isActive) return;
-
-      // Ignore micro noise
-      if (Math.abs(e.deltaY) < 18) return;
-
-      const currentSlide = activeSlideRef.current;
-
-      if (e.deltaY > 0) {
-        // Scrolling DOWN
-        if (currentSlide < flowsList.length - 1) {
-          e.preventDefault();
-          if (isNavigating) return;
-          isNavigating = true;
-          handleJumpToSlide(currentSlide + 1);
-          clearTimeout(navCooldown);
-          navCooldown = setTimeout(() => {
-            isNavigating = false;
-          }, 500);
-        }
-      } else if (e.deltaY < 0) {
-        // Scrolling UP
-        if (currentSlide > 0) {
-          e.preventDefault();
-          if (isNavigating) return;
-          isNavigating = true;
-          handleJumpToSlide(currentSlide - 1);
-          clearTimeout(navCooldown);
-          navCooldown = setTimeout(() => {
-            isNavigating = false;
-          }, 500);
-        }
-      }
-    };
-
-    container.addEventListener('wheel', onWheel, { passive: false });
-
     return () => {
-      container.removeEventListener('wheel', onWheel);
-      clearTimeout(navCooldown);
+      clearTimeout(refreshTimer);
       ctx.revert();
     };
-  }, [flowsList.length]);
+  }, []);
 
-  const handleTestInteractiveButton = (flowId: string, buttonText: string) => {
-    setTestedFlows(prev => ({ ...prev, [flowId]: true }));
-    onNotify(`WhatsApp Action Triggered: "${buttonText}". Instant webhook confirmation.`);
-  };
-
-  const renderIcon = (name: string) => {
-    switch (name) {
-      case 'cart': return <ShoppingCart className="w-5 h-5 text-[#0080FB]" />;
-      case 'truck': return <Truck className="w-5 h-5 text-[#25D366]" />;
-      case 'megaphone': return <Megaphone className="w-5 h-5 text-[#0080FB]" />;
-      case 'package': return <Package className="w-5 h-5 text-[#0080FB]" />;
-      case 'shield': return <ShieldCheck className="w-5 h-5 text-[#25D366]" />;
-      case 'star': return <Star className="w-5 h-5 text-[#0080FB]" />;
-      default: return <ShoppingCart className="w-5 h-5 text-[#0080FB]" />;
-    }
-  };
+  const flowTabs = [
+    { number: '01', title: 'ORDER CONFIRMATION' },
+    { number: '02', title: 'CHECKOUT RECOVERY' },
+    { number: '03', title: 'PRODUCT CAROUSEL' }
+  ];
 
   return (
     <section
       id="flows"
       ref={containerRef}
-      onTouchStart={handleTouchStart}
-      onTouchEnd={handleTouchEnd}
-      className="relative w-full bg-[#07080c] border-y border-[#1e222d] overflow-hidden"
+      className="relative w-full bg-[#06080d] border-y border-[#151c28] overflow-hidden select-none"
     >
-      {/* Pinned Viewport Container - Exactly 100vh */}
-      <div className="w-full h-screen flex flex-col justify-between relative overflow-hidden py-3 sm:py-4">
+      {/* Pinned Full Viewport Container - Generous Top and Bottom Padding & Luxury Breathing Room */}
+      <div className="w-full h-screen min-h-[780px] max-h-[1080px] flex flex-col justify-between relative overflow-hidden pt-28 sm:pt-32 lg:pt-36 pb-12 sm:pb-16 lg:pb-20">
         
-        {/* Ambient Backlight Dynamic Glow */}
+        {/* Consistent Electric Blue Ambient Backlight */}
         <div 
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[850px] h-[550px] pointer-events-none rounded-full blur-[170px] opacity-25 transition-all duration-700"
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1100px] h-[600px] pointer-events-none rounded-full blur-[200px] opacity-20 transition-all duration-700"
           style={{
-            background: activeSlide % 2 === 0
-              ? 'radial-gradient(circle, rgba(0,128,251,0.55) 0%, rgba(37,211,102,0.18) 45%, transparent 70%)'
-              : 'radial-gradient(circle, rgba(37,211,102,0.45) 0%, rgba(0,128,251,0.22) 45%, transparent 70%)'
+            background: 'radial-gradient(circle, rgba(0,128,251,0.55) 0%, rgba(0,80,200,0.18) 50%, transparent 70%)'
           }}
         />
 
-        {/* Top Header Bar inside Pinned Viewport */}
-        <div className="w-full px-4 sm:px-8 md:px-14 shrink-0 z-20 flex flex-col md:flex-row md:items-center justify-between gap-3">
-          <div className="flex items-center gap-5">
-            <div className="border-l-4 border-[#0080FB] pl-3 sm:pl-4">
-              <div className="flex items-center gap-3">
-                <h2 className="font-['Hanken_Grotesk'] font-black text-2xl sm:text-3xl md:text-4xl tracking-tighter uppercase leading-none text-white">
-                  ULTIMATE <span className="text-[#3b475d]">FLOWS</span>
-                </h2>
-                <span className="hidden sm:inline-block px-2.5 py-0.5 rounded-full bg-[#0080FB]/15 border border-[#0080FB]/30 text-[10px] font-['JetBrains_Mono'] text-[#0080FB] font-bold tracking-widest uppercase">
-                  v3.4 LIVE
-                </span>
-              </div>
-              <div className="font-['JetBrains_Mono'] text-[10px] sm:text-[11px] text-[#0080FB] tracking-[0.2em] uppercase font-semibold mt-1 flex items-center gap-2">
-                <span>// OFFICIAL STORE AUTOMATIONS ({flowsList.length})</span>
-                <span className="w-1.5 h-1.5 rounded-full bg-[#25D366] animate-pulse" />
-              </div>
+        {/* Ambient Subtle Cyber Grid */}
+        <div className="absolute inset-0 cyber-grid opacity-15 pointer-events-none" />
+
+        {/* ==============================================================
+            TOP CONTROL BAR: Header & Tab Switcher (Prominent & Premium)
+        ============================================================== */}
+        <div className="w-full max-w-[1580px] mx-auto px-4 sm:px-8 md:px-12 shrink-0 z-20 flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-5 sm:mb-8">
+          
+          {/* Header Title Stack - Large & Premium Authority */}
+          <div className="border-l-4 border-[#0080FB] pl-3.5 sm:pl-5">
+            <div className="flex items-center gap-3.5">
+              <h2 className="font-['Hanken_Grotesk'] font-black text-3xl sm:text-4xl lg:text-5xl tracking-tight uppercase leading-none text-white">
+                FLAGSHIP <span className="text-[#0080FB]">FLOWS</span>
+              </h2>
+              <span className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#0080FB]/15 border border-[#0080FB]/40 text-[10px] font-['JetBrains_Mono'] text-[#0080FB] font-bold tracking-widest uppercase">
+                <span className="w-2 h-2 rounded-full bg-[#0080FB] animate-pulse" />
+                <span>3 CORE ENGINES</span>
+              </span>
+            </div>
+            <div className="font-['JetBrains_Mono'] text-xs text-[#0080FB] tracking-[0.25em] uppercase font-bold mt-1.5">
+              // HIGH-CONVERTING WHATSAPP COMMERCE ARCHITECTURE
             </div>
           </div>
 
-          {/* Slide Navigation Tabs & Controls */}
-          <div className="flex items-center gap-2 self-start md:self-center">
-            {/* Arrow Prev */}
+          {/* Interactive Navigation Pills & Prev/Next Arrows */}
+          <div className="flex items-center gap-2 self-start sm:self-center">
+            {/* Prev Button */}
             <button
               onClick={() => handleJumpToSlide(activeSlide - 1)}
               disabled={activeSlide === 0}
-              className="w-8 h-8 rounded border border-[#1e222d] bg-[#0c1017]/90 text-white flex items-center justify-center hover:border-[#0080FB] hover:text-[#0080FB] disabled:opacity-30 disabled:hover:border-[#1e222d] disabled:hover:text-white transition-all shadow-sm"
-              aria-label="Previous Slide"
+              className="w-8 h-8 rounded-lg border border-[#20293a] bg-[#0b1018]/90 text-white flex items-center justify-center hover:border-[#0080FB] hover:text-[#0080FB] disabled:opacity-20 disabled:hover:border-[#20293a] disabled:hover:text-white transition-all shadow-sm"
+              aria-label="Previous Flow"
             >
               <ChevronLeft className="w-4 h-4" />
             </button>
 
-            {/* Tab Chips */}
-            <div className="flex items-center gap-1.5 bg-[#0c1017]/95 border border-[#1e222d] p-1 backdrop-blur-md overflow-x-auto max-w-[80vw] sm:max-w-none">
-              {flowsList.map((flow, i) => (
+            {/* Pill Tabs */}
+            <div className="flex items-center gap-1 bg-[#0a0e16]/95 border border-[#1b2333] p-1 rounded-xl backdrop-blur-md shadow-inner">
+              {flowTabs.map((tab, idx) => (
                 <button
-                  key={flow.id}
-                  onClick={() => handleJumpToSlide(i)}
-                  className={`px-2.5 sm:px-3 py-1 font-['JetBrains_Mono'] text-[11px] font-bold transition-all flex items-center gap-1.5 whitespace-nowrap ${
-                    activeSlide === i
-                      ? 'bg-[#0080FB] text-white shadow-[0_0_15px_rgba(0,128,251,0.45)]'
-                      : 'text-[#616c82] hover:text-white hover:bg-[#161c28]'
+                  key={tab.number}
+                  onClick={() => handleJumpToSlide(idx)}
+                  className={`px-3 py-1 font-['JetBrains_Mono'] text-xs font-bold transition-all flex items-center gap-2 rounded-lg ${
+                    activeSlide === idx
+                      ? 'bg-[#0080FB] text-white shadow-[0_0_15px_rgba(0,128,251,0.5)]'
+                      : 'text-[#63728f] hover:text-white hover:bg-[#141b27]'
                   }`}
                 >
-                  <span>{flow.number}</span>
-                  <span className="hidden sm:inline-block text-[10px] opacity-80">{flow.tabLabel}</span>
+                  <span className="opacity-90">{tab.number}</span>
+                  <span className="hidden md:inline-block text-[11px]">{tab.title}</span>
                 </button>
               ))}
             </div>
 
-            {/* Arrow Next */}
+            {/* Next Button */}
             <button
               onClick={() => handleJumpToSlide(activeSlide + 1)}
-              disabled={activeSlide === flowsList.length - 1}
-              className="w-8 h-8 rounded border border-[#1e222d] bg-[#0c1017]/90 text-white flex items-center justify-center hover:border-[#0080FB] hover:text-[#0080FB] disabled:opacity-30 disabled:hover:border-[#1e222d] disabled:hover:text-white transition-all shadow-sm"
-              aria-label="Next Slide"
+              disabled={activeSlide === 2}
+              className="w-8 h-8 rounded-lg border border-[#20293a] bg-[#0b1018]/90 text-white flex items-center justify-center hover:border-[#0080FB] hover:text-[#0080FB] disabled:opacity-20 disabled:hover:border-[#20293a] disabled:hover:text-white transition-all shadow-sm"
+              aria-label="Next Flow"
             >
               <ChevronRight className="w-4 h-4" />
             </button>
           </div>
         </div>
 
-        {/* Horizontal Track with Full Slides */}
+        {/* ==============================================================
+            HORIZONTAL PARALLAX TRACK: 3 Flagship Viewport Slides
+        ============================================================== */}
         <div
           ref={trackRef}
-          className="flex flex-nowrap h-full items-center will-change-transform z-10 my-auto"
-          style={{ width: `${flowsList.length * 100}vw` }}
+          className="flex flex-nowrap h-full items-center will-change-transform z-10 my-auto py-2"
+          style={{ width: '300vw' }}
         >
-          {flowsList.map((flow, index) => (
-            <div
-              key={flow.id}
-              className="w-screen shrink-0 h-full flex items-center justify-center px-3 sm:px-6 lg:px-8 py-2 relative"
-            >
-              {/* Card & Pipeline Container */}
-              <div className="w-full max-w-[1460px] xl:max-w-[1520px] 2xl:max-w-[1580px] relative my-auto">
+          {/* ==============================================================
+              SLIDE 1: TWO-WAY ORDER CONFIRMATION & COD VERIFICATION
+          ============================================================== */}
+          <div className="w-screen shrink-0 h-full flex items-center justify-center px-4 sm:px-8 lg:px-12 relative">
+            <div className="w-full max-w-[1360px] h-[calc(100vh-320px)] min-h-[420px] max-h-[520px] relative my-auto">
+              
+              {/* Grand Monolithic Glass Card */}
+              <div className="w-full h-full grid grid-cols-1 lg:grid-cols-12 border border-[#0080FB]/35 hover:border-[#0080FB]/60 bg-gradient-to-b from-[#0b1220]/95 via-[#070b14]/95 to-[#05070d]/98 backdrop-blur-2xl shadow-[0_20px_70px_rgba(0,128,251,0.12)] rounded-2xl sm:rounded-3xl overflow-hidden relative">
                 
-                {/* Glassmorphic Cyber Slide Card Container */}
-                <div className="w-full grid grid-cols-1 lg:grid-cols-12 border border-[#202636] bg-[#0a0d14]/95 backdrop-blur-2xl shadow-[0_30px_90px_rgba(0,0,0,0.95),inset_0_1px_0_rgba(255,255,255,0.06)] overflow-hidden items-center my-auto rounded-none relative">
+                {/* Glowing Blue Top Neon Rail */}
+                <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[#0080FB] to-transparent opacity-90" />
+
+                {/* LEFT COLUMN: Specifications & Value Proposition */}
+                <div className="lg:col-span-7 p-6 sm:p-8 lg:p-10 border-b lg:border-b-0 lg:border-r border-[#152033] flex flex-col justify-between relative overflow-hidden">
                   
-                  {/* Subtle top edge neon line indicator */}
-                  <div 
-                    className="absolute top-0 left-0 h-[2px] w-full bg-gradient-to-r from-transparent via-[#0080FB] to-transparent opacity-60" 
-                  />
+                  {/* Architectural Huge Watermark (Parallax Target) */}
+                  <span className="card-watermark font-['Hanken_Grotesk'] font-black text-[9rem] sm:text-[11rem] md:text-[13rem] leading-none text-[#0d1627]/80 select-none pointer-events-none absolute -bottom-8 -right-6 z-0 will-change-transform">
+                    01
+                  </span>
 
-                  {/* LEFT COLUMN: Flow Architectural Specs */}
-                  <div className="lg:col-span-7 p-6 sm:p-8 md:p-10 lg:p-11 border-b lg:border-b-0 lg:border-r border-[#1e2434] flex flex-col justify-between bg-[#080b11] relative overflow-hidden">
-                    
-                    {/* Huge Watermark Number in Background */}
-                    <span className="font-['Hanken_Grotesk'] font-black text-[9rem] sm:text-[11rem] md:text-[13rem] leading-none text-[#121722]/60 select-none pointer-events-none absolute -bottom-6 -right-6 z-0">
-                      {flow.number}
-                    </span>
-
-                    {/* Header Meta: Icon & Sequence */}
-                    <div className="flex justify-between items-center mb-4 sm:mb-6 relative z-10">
-                      <div className="flex items-center gap-3">
-                        <div className="w-11 h-11 sm:w-12 sm:h-12 border-2 border-[#0080FB] bg-[#0080FB]/10 flex items-center justify-center shadow-[0_0_20px_rgba(0,128,251,0.25)]">
-                          {renderIcon(flow.iconName)}
-                        </div>
-                        <div>
-                          <div className="font-['JetBrains_Mono'] text-[10px] text-[#0080FB] tracking-[0.2em] font-bold uppercase">
-                            {flow.seq} // PIPELINE
-                          </div>
-                          <div className="font-['JetBrains_Mono'] text-[10px] text-[#63728f] uppercase">
-                            Shopify Webhook Sync
-                          </div>
-                        </div>
+                  {/* Header Meta Badge Row */}
+                  <div className="flex justify-between items-center relative z-10">
+                    <div className="flex items-center gap-3">
+                      <div className="w-11 h-11 rounded-xl border border-[#0080FB]/40 bg-[#0080FB]/10 flex items-center justify-center shadow-[0_0_20px_rgba(0,128,251,0.25)]">
+                        <ShieldCheck className="w-5 h-5 text-[#0080FB]" />
                       </div>
-
-                      <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-[#101520] border border-[#232b3c] font-['JetBrains_Mono'] text-[10px] text-[#8695b0] uppercase font-semibold">
-                        <span className="w-1.5 h-1.5 rounded-full bg-[#25D366] animate-pulse" />
-                        <span>Sub-second: {flow.latency}</span>
-                      </div>
-                    </div>
-
-                    {/* Title & Core Copy */}
-                    <div className="my-auto relative z-10">
-                      <h3 className="font-['Hanken_Grotesk'] font-black text-2xl sm:text-3xl lg:text-4xl xl:text-[2.75rem] text-white uppercase tracking-tight mb-3 leading-[0.94]">
-                        {flow.titleLine1}<br />
-                        <span className="text-[#0080FB] glow-text">{flow.titleLine2}</span>
-                      </h3>
-
-                      <p className="font-['Hanken_Grotesk'] text-sm sm:text-base text-[#9aa5bb] leading-relaxed max-w-xl mb-5">
-                        {flow.description}
-                      </p>
-
-                      {/* High-Impact KPI Badge & Product Context */}
-                      <div className="flex flex-wrap items-center gap-3 mb-6">
-                        <div className="inline-flex items-center gap-2 bg-[#25D366]/15 border border-[#25D366]/40 px-3.5 py-1.5 text-[#25D366] font-['JetBrains_Mono'] text-xs font-bold tracking-wider shadow-[0_0_20px_rgba(37,211,102,0.15)]">
-                          <TrendingUp className="w-4 h-4 text-[#25D366]" />
-                          <span>{flow.kpiBadge}</span>
+                      <div>
+                        <div className="font-['JetBrains_Mono'] text-xs text-[#0080FB] font-bold uppercase tracking-widest flex items-center gap-2">
+                          <span>01 // CONFIRMATION ENGINE</span>
                         </div>
-
-                        <div className="inline-flex items-center gap-2 bg-[#121722] border border-[#232b3c] px-3.5 py-1.5 text-[#c1cbdc] font-['JetBrains_Mono'] text-[11px] font-semibold">
-                          <Sparkles className="w-3.5 h-3.5 text-[#0080FB]" />
-                          <span>{flow.productBadge}</span>
+                        <div className="font-['JetBrains_Mono'] text-[10px] text-[#63728f] uppercase">
+                          SHOPIFY.ORDERS_CREATE
                         </div>
                       </div>
                     </div>
 
-                    {/* Bottom: Trigger Protocol & Actions */}
-                    <div className="pt-4 border-t border-[#1e2434] flex flex-col sm:flex-row sm:items-center justify-between gap-4 relative z-10">
-                      <div className="border-l-2 border-[#0080FB] pl-3 py-0.5">
-                        <div className="font-['JetBrains_Mono'] text-[10px] text-[#55637d] uppercase tracking-wider font-semibold">
-                          EVENT TRIGGER PROTOCOL
-                        </div>
-                        <div className="font-['JetBrains_Mono'] text-xs font-bold text-[#0080FB] uppercase tracking-wide flex items-center gap-1.5">
-                          <code>{flow.triggerProtocol}</code>
-                        </div>
-                      </div>
+                    <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-[#0a1220] border border-[#0080FB]/30 font-['JetBrains_Mono'] text-xs text-[#8695b0] uppercase font-semibold">
+                      <span className="w-2 h-2 rounded-full bg-[#0080FB] animate-pulse" />
+                      <span>Sub-second: 12ms</span>
+                    </div>
+                  </div>
 
-                      <div className="flex items-center gap-3">
-                        <a
-                          href="https://apps.shopify.com/chatradix"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="bg-[#0080FB] hover:bg-white hover:text-[#0080FB] text-white font-['JetBrains_Mono'] text-xs font-bold px-5 py-3 tracking-widest uppercase flex items-center justify-center gap-2 transition-all shadow-[0_0_25px_rgba(0,128,251,0.35)] active:scale-95"
-                        >
-                          <span>ENABLE ON SHOPIFY</span>
-                          <ArrowUpRight className="w-4 h-4" />
-                        </a>
+                  {/* Headline & Narrative */}
+                  <div className="my-auto relative z-10 py-1.5 sm:py-2">
+                    <h3 className="font-['Hanken_Grotesk'] font-black text-2xl sm:text-3xl lg:text-[2.25rem] text-white uppercase tracking-tight leading-[1.02] mb-2 sm:mb-2.5">
+                      INSTANT 2-WAY <br />
+                      <span className="text-[#0080FB]">
+                        COD VERIFICATION
+                      </span>
+                    </h3>
+
+                    <p className="font-['Hanken_Grotesk'] text-xs sm:text-sm text-[#9aa5bb] leading-relaxed max-w-xl mb-3 font-normal">
+                      Eliminate fake Cash on Delivery (COD) orders and prevent shipping returns. Customers receive an instant summary on WhatsApp with 2-way Quick Reply buttons that immediately sync confirmed order tags to your Shopify admin.
+                    </p>
+
+                    {/* Live Synchronized Tagging Pipeline */}
+                    <div className="bg-[#090e17] border border-[#1b263b] rounded-xl p-2.5 mb-3">
+                      <div className="font-['JetBrains_Mono'] text-[10px] text-[#0080FB] font-bold tracking-widest uppercase mb-1.5 flex items-center gap-1.5">
+                        <Zap className="w-3.5 h-3.5 text-[#0080FB]" />
+                        <span>LIVE TWO-WAY SYNC PIPELINE</span>
+                      </div>
+                      <div className="flex flex-wrap items-center gap-2 text-xs font-['JetBrains_Mono']">
+                        <span className="px-2.5 py-1 rounded bg-[#101826] border border-[#1f2e47] text-white">
+                          Shopify Order
+                        </span>
+                        <ArrowRight className="w-3.5 h-3.5 text-[#4e6282]" />
+                        <span className="px-2.5 py-1 rounded bg-[#101826] border border-[#1f2e47] text-[#0080FB]">
+                          WhatsApp 2-Way Quick Reply
+                        </span>
+                        <ArrowRight className="w-3.5 h-3.5 text-[#4e6282]" />
+                        <span className="px-2.5 py-1 rounded bg-[#0080FB]/15 border border-[#0080FB]/50 text-[#0080FB] font-bold">
+                          Tag: ✅ order-confirmed
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* KPI Capability Pills */}
+                    <div className="flex flex-wrap items-center gap-2.5">
+                      <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#0080FB]/10 border border-[#0080FB]/30 text-xs font-['JetBrains_Mono'] text-[#0080FB] font-bold">
+                        <CheckCircle2 className="w-3.5 h-3.5" />
+                        <span>2-WAY SHOPIFY ORDER TAGS</span>
+                      </div>
+                      <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#0e1624] border border-[#1b273d] text-xs font-['JetBrains_Mono'] text-[#cbd5e1] font-semibold">
+                        <ShieldCheck className="w-3.5 h-3.5 text-[#0080FB]" />
+                        <span>DUPLICATE ORDER SHIELD</span>
                       </div>
                     </div>
                   </div>
 
-                  {/* RIGHT COLUMN: Realistic Live WhatsApp Interactive Device Simulator */}
-                  <div className="lg:col-span-5 bg-[#06080d] p-4 sm:p-6 md:p-8 flex flex-col items-center justify-center relative overflow-hidden min-h-[500px]">
+                  {/* Bottom Action Footer */}
+                  <div className="pt-3 border-t border-[#152033] flex flex-col sm:flex-row sm:items-center justify-between gap-3 relative z-10">
+                    <div className="border-l-2 border-[#0080FB] pl-3 py-0.5">
+                      <div className="font-['JetBrains_Mono'] text-[10px] text-[#55637d] uppercase tracking-wider font-semibold">
+                        EVENT TRIGGER PROTOCOL
+                      </div>
+                      <div className="font-['JetBrains_Mono'] text-xs font-bold text-[#0080FB] uppercase tracking-wide">
+                        <code>SHOPIFY.ORDERS_CREATE</code>
+                      </div>
+                    </div>
+
+                    <a
+                      href="https://apps.shopify.com/chatradix"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="bg-[#0080FB] hover:bg-white hover:text-[#0080FB] text-white font-['JetBrains_Mono'] text-xs font-bold px-6 py-3 tracking-widest uppercase flex items-center justify-center gap-2 transition-all shadow-[0_0_20px_rgba(0,128,251,0.35)] active:scale-95 rounded-lg"
+                    >
+                      <span>INSTALL ON SHOPIFY</span>
+                      <ArrowUpRight className="w-4 h-4" />
+                    </a>
+                  </div>
+                </div>
+
+                {/* RIGHT COLUMN: Meta Official Cloud API Interactive Template Console */}
+                <div className="card-visual-panel lg:col-span-5 bg-[#060a12] p-4 sm:p-6 lg:p-7 flex flex-col items-center justify-center relative overflow-hidden will-change-transform">
+                  
+                  {/* Subtle Spot Radial Light */}
+                  <div 
+                    className="absolute w-[360px] h-[360px] rounded-full blur-[100px] pointer-events-none opacity-20"
+                    style={{ background: 'radial-gradient(circle, #0080FB 0%, transparent 70%)' }}
+                  />
+
+                  {/* Meta Official Cloud API Template Window */}
+                  <div className="relative w-full max-w-[420px] rounded-2xl border border-[#0080FB]/35 bg-[#0a101d]/95 backdrop-blur-xl shadow-[0_20px_50px_rgba(0,0,0,0.9)] overflow-hidden flex flex-col">
                     
-                    {/* Spotlight behind phone */}
-                    <div 
-                      className="absolute w-[380px] h-[380px] rounded-full blur-[110px] pointer-events-none opacity-30"
-                      style={{
-                        background: 'radial-gradient(circle, #0080FB 0%, #25D366 50%, transparent 75%)'
-                      }}
-                    />
-
-                    {/* Floating HUD Telemetry Pill 1: Top Right */}
-                    <div className="hidden sm:flex absolute top-4 right-3 sm:right-6 lg:right-4 z-30 bg-[#0c121d]/90 border border-[#25D366]/40 px-3 py-1.5 rounded-md backdrop-blur-md items-center gap-2 shadow-[0_0_20px_rgba(37,211,102,0.2)]">
-                      <span className="w-2 h-2 rounded-full bg-[#25D366] animate-pulse" />
-                      <div className="text-[10px] font-['JetBrains_Mono']">
-                        <span className="text-white font-bold block leading-none">WEBHOOK DISPATCH</span>
-                        <span className="text-[#25D366] text-[9px]">Status: 200 OK • {flow.latency}</span>
+                    {/* Meta API Header Bar */}
+                    <div className="bg-[#0e1626] border-b border-[#1b263b] px-3.5 py-2.5 flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <div className="w-2 h-2 rounded-full bg-[#0080FB] animate-pulse" />
+                        <span className="font-['JetBrains_Mono'] text-[10px] text-[#0080FB] font-bold tracking-wider uppercase">
+                          META CLOUD API // TEMPLATE PREVIEW
+                        </span>
                       </div>
+                      <span className="px-2 py-0.5 rounded text-[9px] font-['JetBrains_Mono'] font-bold bg-[#0080FB]/15 border border-[#0080FB]/30 text-[#0080FB] uppercase">
+                        APPROVED
+                      </span>
                     </div>
 
-                    {/* Floating HUD Telemetry Pill 2: Bottom Left */}
-                    <div className="hidden sm:flex absolute bottom-4 left-3 sm:left-6 lg:left-4 z-30 bg-[#0c121d]/90 border border-[#0080FB]/40 px-3 py-1.5 rounded-md backdrop-blur-md items-center gap-2 shadow-[0_0_20px_rgba(0,128,251,0.2)]">
-                      <Zap className="w-3.5 h-3.5 text-[#0080FB]" />
-                      <div className="text-[10px] font-['JetBrains_Mono']">
-                        <span className="text-white font-bold block leading-none">OFFICIAL META API</span>
-                        <span className="text-[#8898b0] text-[9px]">{flow.kpiBadge}</span>
+                    {/* Verified WhatsApp Business Profile Row */}
+                    <div className="px-4 py-2.5 bg-[#0c1322] border-b border-[#182338] flex items-center justify-between">
+                      <div className="flex items-center gap-2.5">
+                        <div className="w-7 h-7 rounded-full bg-[#0080FB]/20 border border-[#0080FB]/40 flex items-center justify-center font-bold text-[10px] text-[#0080FB]">
+                          CR
+                        </div>
+                        <div>
+                          <div className="flex items-center gap-1.5 leading-none">
+                            <span className="font-['Hanken_Grotesk'] text-xs font-bold text-white">Your Brand Store</span>
+                            <span className="w-3.5 h-3.5 rounded-full bg-[#0080FB] flex items-center justify-center text-[8px] text-white font-black" title="Meta Verified Official Business">✓</span>
+                          </div>
+                          <span className="font-['JetBrains_Mono'] text-[9px] text-[#6b7c99] leading-none block mt-0.5">Official WhatsApp Business Account</span>
+                        </div>
                       </div>
+                      <span className="text-[10px] font-['JetBrains_Mono'] text-[#4f617d]">
+                        Cloud API v20.0
+                      </span>
                     </div>
 
-                    {/* Smartphone Hardware Frame */}
-                    <div className="relative w-full max-w-[340px] sm:max-w-[360px] h-[480px] sm:h-[510px] md:h-[530px] rounded-[38px] p-2.5 bg-gradient-to-b from-[#2a3242] via-[#161c26] to-[#0f131a] border-[2px] border-[#364154] shadow-[0_25px_70px_rgba(0,0,0,0.95),0_0_35px_rgba(0,128,251,0.2)] flex flex-col overflow-hidden">
+                    {/* Interactive Template Message Container */}
+                    <div className="p-4 flex flex-col gap-2.5 select-none">
                       
-                      {/* Inner Device Screen */}
-                      <div className="w-full h-full rounded-[28px] bg-[#0b141a] flex flex-col overflow-hidden relative border border-[#1e2736]">
+                      {/* WhatsApp Chat Bubble */}
+                      <div className="bg-[#121c2e] border border-[#1e2d47] rounded-xl p-3 text-white text-xs leading-relaxed relative shadow-md">
                         
-                        {/* Dynamic Island Notch */}
-                        <div className="w-24 h-4 bg-black rounded-full mx-auto my-1.5 flex items-center justify-end px-2 gap-1 z-30 shrink-0 shadow-inner">
-                          <span className="w-2 h-2 rounded-full bg-[#111928] border border-white/10" />
-                          <span className="w-1.5 h-1.5 rounded-full bg-[#0080FB]/50" />
-                        </div>
-
-                        {/* WhatsApp Header Bar */}
-                        <div className="bg-[#202c33] px-3 py-2 flex items-center justify-between border-b border-[#2a3942] shrink-0 z-20 shadow-sm">
-                          <div className="flex items-center gap-2">
-                            <div className="w-8 h-8 rounded-full bg-[#0080FB]/20 border border-[#0080FB]/40 flex items-center justify-center font-bold text-xs text-[#0080FB]">
-                              CR
+                        {/* Order Milestone Card */}
+                        <div className="bg-[#0a101b] border border-[#18253b] rounded-lg p-2.5 mb-2.5 flex items-center justify-between">
+                          <div>
+                            <div className="font-['JetBrains_Mono'] text-[9px] text-[#0080FB] font-bold uppercase tracking-wider">
+                              ORDER #1042 SUMMARY
                             </div>
-                            <div>
-                              <div className="flex items-center gap-1">
-                                <span className="font-['Hanken_Grotesk'] text-xs font-bold text-white tracking-tight leading-none">
-                                  {flow.storeName}
-                                </span>
-                                <span className="w-3.5 h-3.5 rounded-full bg-[#25D366] flex items-center justify-center text-[8px] text-black font-black">
-                                  ✓
-                                </span>
-                              </div>
-                              <span className="font-['JetBrains_Mono'] text-[9px] text-[#25D366] leading-none block mt-0.5 font-medium">
-                                Official WhatsApp Cloud API
-                              </span>
-                            </div>
+                            <div className="font-bold text-xs text-white mt-0.5">1x Linen Overshirt • Size L</div>
+                            <div className="text-[10px] text-[#6b7c99] mt-0.5">Alex Morgan • Cash on Delivery</div>
                           </div>
-
-                          <div className="flex items-center gap-2.5 text-[#aebac1]">
-                            <Video className="w-3.5 h-3.5" />
-                            <Phone className="w-3.5 h-3.5" />
-                            <MoreVertical className="w-3.5 h-3.5" />
+                          <div className="text-right">
+                            <div className="font-['JetBrains_Mono'] text-xs font-bold text-[#0080FB]">$89.00</div>
+                            <span className="px-1.5 py-0.5 rounded text-[8px] font-['JetBrains_Mono'] font-bold bg-[#1a263c] text-[#8ea4c8]">COD</span>
                           </div>
                         </div>
 
-                        {/* WhatsApp Chat Canvas */}
-                        <div className="flex-1 overflow-y-auto p-3 flex flex-col justify-end gap-2.5 bg-[#0b141a] text-xs relative select-none cyber-grid-dense opacity-95">
-                          
-                          {/* Security Disclaimer Banner */}
-                          <div className="mx-auto bg-[#182229]/90 border border-[#222e35] text-[9px] text-[#8696a0] px-2.5 py-1 rounded-md text-center max-w-[270px] flex items-center justify-center gap-1 shadow-sm shrink-0">
-                            <Lock className="w-2.5 h-2.5 text-[#ffd279] shrink-0" />
-                            <span>Messages are end-to-end encrypted.</span>
-                          </div>
+                        {/* Incoming Message Body */}
+                        <p className="text-[#c7d3e6] text-xs leading-normal">
+                          Hi Alex! Thank you for ordering. Your order #1042 ($89.00 COD) has been received. Please confirm below to dispatch immediately.
+                        </p>
 
-                          {/* Product / Milestone Card */}
-                          <div className="bg-[#182229] border border-[#2a3942] p-2.5 rounded-xl shadow-md max-w-[95%]">
-                            <div className="flex items-center gap-2 mb-1">
-                              <span className="w-2 h-2 rounded-full bg-[#0080FB] animate-ping" />
-                              <span className="font-['JetBrains_Mono'] text-[10px] text-[#0080FB] font-bold uppercase tracking-wider">
-                                AUTOMATED WEBHOOK DISPATCH
-                              </span>
-                            </div>
-                            <div className="font-bold text-[#e9edef] text-xs leading-snug">
-                              {flow.productPreviewTitle}
-                            </div>
-                            <div className="text-[10px] text-[#8696a0] mt-0.5">
-                              {flow.productPreviewSubtitle}
-                            </div>
-                          </div>
-
-                          {/* Store Message Bubble */}
-                          <div className="bg-[#202c33] text-[#e9edef] p-2.5 rounded-2xl rounded-tl-sm max-w-[95%] shadow-md border border-[#2a3942] text-xs leading-relaxed">
-                            <p>{flow.incomingMessage}</p>
-                            <div className="flex justify-end items-center gap-1 mt-1 text-[9px] text-[#8696a0]">
-                              <span>{flow.timestamp}</span>
-                              <CheckCheck className="w-3 h-3 text-[#53bdeb]" />
-                            </div>
-                          </div>
-
-                          {/* Interactive WhatsApp Quick-Reply Buttons */}
-                          <div className="flex flex-col gap-1.5 max-w-[95%]">
-                            {flow.interactiveButtons.map((btn, btnIdx) => (
-                              <button
-                                key={btnIdx}
-                                onClick={() => handleTestInteractiveButton(flow.id, btn)}
-                                className="w-full bg-[#202c33] hover:bg-[#00a884] text-[#00a884] hover:text-white border border-[#2a3942] hover:border-[#00a884] py-1.5 px-3 rounded-lg font-['JetBrains_Mono'] text-[11px] font-semibold flex items-center justify-center gap-1.5 transition-all active:scale-95 shadow-sm group"
-                              >
-                                <span>{btn}</span>
-                                <ArrowRight className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
-                              </button>
-                            ))}
-                          </div>
-
-                          {/* Customer Simulated Reply Bubble */}
-                          <div className="self-end bg-[#005c4b] text-[#e9edef] p-2.5 rounded-2xl rounded-tr-sm max-w-[85%] shadow-md text-xs leading-relaxed">
-                            <p>{flow.userReply}</p>
-                            <div className="flex justify-end items-center gap-1 mt-1 text-[9px] text-[#8696a0]">
-                              <span>{flow.timestamp}</span>
-                              <CheckCheck className="w-3 h-3 text-[#53bdeb]" />
-                            </div>
-                          </div>
-
+                        <div className="flex justify-end items-center gap-1 mt-1 text-[9px] text-[#556987]">
+                          <span>10:14 AM</span>
+                          <CheckCheck className="w-3.5 h-3.5 text-[#0080FB]" />
                         </div>
-
-                        {/* WhatsApp Bottom Input Bar */}
-                        <div className="bg-[#202c33] px-2.5 py-1.5 flex items-center gap-2 border-t border-[#2a3942] shrink-0 text-[#8696a0]">
-                          <Smile className="w-4 h-4 cursor-pointer hover:text-white transition-colors" />
-                          <Paperclip className="w-4 h-4 cursor-pointer hover:text-white transition-colors" />
-                          <div className="flex-1 bg-[#2a3942] rounded-full px-3 py-1 text-[11px] text-[#8696a0]">
-                            {testedFlows[flow.id] ? 'Reply dispatched ✓' : 'Type a message...'}
-                          </div>
-                          <div className="w-7 h-7 rounded-full bg-[#00a884] flex items-center justify-center text-white shadow">
-                            <Mic className="w-3.5 h-3.5" />
-                          </div>
-                        </div>
-
                       </div>
+
+                      {/* WhatsApp 2-Way Quick Reply Buttons */}
+                      <div className="flex flex-col gap-1.5">
+                        <button
+                          onClick={() => {
+                            setOrderConfirmed(true);
+                            onNotify("Order #1042 Confirmed! Shopify tag '✅ order-confirmed' applied.");
+                          }}
+                          className={`w-full py-2.5 px-4 rounded-xl font-['JetBrains_Mono'] text-xs font-bold flex items-center justify-center gap-2 transition-all active:scale-[0.98] border shadow-sm ${
+                            orderConfirmed
+                              ? 'bg-[#0080FB] text-white border-[#0080FB] shadow-[0_0_20px_rgba(0,128,251,0.5)]'
+                              : 'bg-[#10192a] hover:bg-[#0080FB] text-[#0080FB] hover:text-white border-[#1e2d47] hover:border-[#0080FB]'
+                          }`}
+                        >
+                          <CheckCircle2 className="w-4 h-4" />
+                          <span>{orderConfirmed ? '✅ Confirmed & Tagged in Shopify' : 'Confirm Order (Dispatch Now)'}</span>
+                        </button>
+
+                        <button
+                          onClick={() => {
+                            setOrderConfirmed(false);
+                            onNotify("Order #1042 Cancel Request Received. Shopify order tag updated.");
+                          }}
+                          className="w-full py-2 px-4 rounded-xl font-['JetBrains_Mono'] text-xs font-medium text-[#7d91b0] bg-[#0c1422] hover:bg-[#152033] hover:text-white border border-[#19243a] transition-all flex items-center justify-center gap-2"
+                        >
+                          <span>Edit Address / Cancel Order</span>
+                        </button>
+                      </div>
+
+                      {/* Live Shopify Order Tag Status */}
+                      <div className="bg-[#090e18] border border-[#182338] px-3 py-1.5 rounded-lg flex items-center justify-between text-[10px] font-['JetBrains_Mono']">
+                        <span className="text-[#6b7c99]">Shopify Tag Sync:</span>
+                        <span className="text-[#0080FB] font-bold">
+                          {orderConfirmed ? '✅ order-confirmed' : '⏳ confirmation-pending'}
+                        </span>
+                      </div>
+
                     </div>
+
                   </div>
 
                 </div>
 
-                {/* Between-Card Cyber Data Bridge (connecting this card to the next across the gap) */}
-                {index < flowsList.length - 1 && (
-                  <div 
-                    className="hidden xl:flex absolute top-1/2 -translate-y-1/2 z-20 items-center justify-center pointer-events-none"
-                    style={{
-                      right: 'calc((100vw - 100%) / -2)',
-                      transform: 'translate(50%, -50%)',
-                      width: 'calc(max(200px, (100vw - 100%)))',
-                    }}
-                  >
-                    {/* Glowing Laser Data Rails & Bridge Capsule */}
-                    <div className="w-full relative flex items-center justify-center py-6">
-                      {/* Top Neon Laser Rail */}
-                      <div className="absolute top-2 w-full h-[2px] bg-gradient-to-r from-[#0080FB] via-[#25D366] to-[#0080FB] shadow-[0_0_15px_#0080FB] opacity-65" />
-                      
-                      {/* Ambient Glow in the Gap */}
-                      <div className="absolute w-56 h-36 bg-[#0080FB]/15 rounded-full blur-[50px] pointer-events-none" />
+              </div>
+            </div>
+          </div>
 
-                      {/* High-Tech Telemetry Capsule */}
-                      <div className="relative z-10 px-4 py-2.5 bg-[#090d15]/95 border border-[#0080FB]/50 shadow-[0_0_35px_rgba(0,128,251,0.35)] backdrop-blur-xl flex flex-col items-center gap-1 rounded-sm">
-                        <div className="flex items-center gap-2 font-['JetBrains_Mono'] text-[10px] text-[#0080FB] font-bold tracking-widest uppercase">
-                          <span className="w-2 h-2 rounded-full bg-[#25D366] animate-ping" />
-                          <span>SYNAPSE 0{index + 1} ➔ 0{index + 2}</span>
+          {/* ==============================================================
+              SLIDE 2: SMART DYNAMIC CART RECOVERY (/r/:token)
+          ============================================================== */}
+          <div className="w-screen shrink-0 h-full flex items-center justify-center px-4 sm:px-8 lg:px-12 relative">
+            <div className="w-full max-w-[1360px] h-[calc(100vh-320px)] min-h-[420px] max-h-[520px] relative my-auto">
+              
+              {/* Grand Monolithic Glass Card */}
+              <div className="w-full h-full grid grid-cols-1 lg:grid-cols-12 border border-[#0080FB]/35 hover:border-[#0080FB]/60 bg-gradient-to-b from-[#0b1220]/95 via-[#070b14]/95 to-[#05070d]/98 backdrop-blur-2xl shadow-[0_20px_70px_rgba(0,128,251,0.12)] rounded-2xl sm:rounded-3xl overflow-hidden relative">
+                
+                {/* Glowing Blue Top Neon Rail */}
+                <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[#0080FB] to-transparent opacity-90" />
+
+                {/* LEFT COLUMN: Specifications & Value Proposition */}
+                <div className="lg:col-span-7 p-6 sm:p-8 lg:p-10 border-b lg:border-b-0 lg:border-r border-[#152033] flex flex-col justify-between relative overflow-hidden">
+                  
+                  {/* Architectural Huge Watermark (Parallax Target) */}
+                  <span className="card-watermark font-['Hanken_Grotesk'] font-black text-[9rem] sm:text-[11rem] md:text-[13rem] leading-none text-[#0d1627]/80 select-none pointer-events-none absolute -bottom-8 -right-6 z-0 will-change-transform">
+                    02
+                  </span>
+
+                  {/* Header Meta Badge Row */}
+                  <div className="flex justify-between items-center relative z-10">
+                    <div className="flex items-center gap-3">
+                      <div className="w-11 h-11 rounded-xl border border-[#0080FB]/40 bg-[#0080FB]/10 flex items-center justify-center shadow-[0_0_20px_rgba(0,128,251,0.25)]">
+                        <ShoppingCart className="w-5 h-5 text-[#0080FB]" />
+                      </div>
+                      <div>
+                        <div className="font-['JetBrains_Mono'] text-xs text-[#0080FB] font-bold uppercase tracking-widest flex items-center gap-2">
+                          <span>02 // CART RECOVERY ENGINE</span>
                         </div>
-                        <div className="flex items-center gap-1.5 font-['JetBrains_Mono'] text-[9px] text-[#25D366] font-semibold">
-                          <span>API DISPATCH BUS</span>
-                          <ArrowRight className="w-3 h-3 text-[#25D366] animate-pulse" />
+                        <div className="font-['JetBrains_Mono'] text-[10px] text-[#63728f] uppercase">
+                          SHOPIFY.CHECKOUT_UPDATE
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-[#0a1220] border border-[#0080FB]/30 font-['JetBrains_Mono'] text-xs text-[#8695b0] uppercase font-semibold">
+                      <span className="w-2 h-2 rounded-full bg-[#0080FB] animate-pulse" />
+                      <span>Sub-second: 15ms</span>
+                    </div>
+                  </div>
+
+                  {/* Headline & Narrative */}
+                  <div className="my-auto relative z-10 py-1.5 sm:py-2">
+                    <h3 className="font-['Hanken_Grotesk'] font-black text-2xl sm:text-3xl lg:text-[2.25rem] text-white uppercase tracking-tight leading-[1.02] mb-2 sm:mb-2.5">
+                      SMART DYNAMIC <br />
+                      <span className="text-[#0080FB]">
+                        CART RESTORATION
+                      </span>
+                    </h3>
+
+                    <p className="font-['Hanken_Grotesk'] text-xs sm:text-sm text-[#9aa5bb] leading-relaxed max-w-xl mb-3 font-normal">
+                      Trigger automated multi-step sequences when shoppers drop off at checkout. Restore the customer's exact items, quantities, and applied discount with single-tap dynamic recovery shortlinks (<code className="text-[#0080FB]">/r/:token</code>).
+                    </p>
+
+                    {/* Live Smart Link Architecture Pipeline */}
+                    <div className="bg-[#090e17] border border-[#1b263b] rounded-xl p-2.5 mb-3">
+                      <div className="font-['JetBrains_Mono'] text-[10px] text-[#0080FB] font-bold tracking-widest uppercase mb-1.5 flex items-center gap-1.5">
+                        <Tag className="w-3.5 h-3.5 text-[#0080FB]" />
+                        <span>DYNAMIC TOKEN RESOLUTION PIPELINE</span>
+                      </div>
+                      <div className="flex flex-wrap items-center gap-2 text-xs font-['JetBrains_Mono']">
+                        <span className="px-2.5 py-1 rounded bg-[#101826] border border-[#1f2e47] text-white">
+                          Cart Abandoned
+                        </span>
+                        <ArrowRight className="w-3.5 h-3.5 text-[#4e6282]" />
+                        <span className="px-2.5 py-1 rounded bg-[#101826] border border-[#1f2e47] text-[#0080FB]">
+                          /r/:token Dispatched
+                        </span>
+                        <ArrowRight className="w-3.5 h-3.5 text-[#4e6282]" />
+                        <span className="px-2.5 py-1 rounded bg-[#0080FB]/15 border border-[#0080FB]/50 text-[#0080FB] font-bold">
+                          10% OFF Restored
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* KPI Capability Pills */}
+                    <div className="flex flex-wrap items-center gap-2.5">
+                      <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#0080FB]/10 border border-[#0080FB]/30 text-xs font-['JetBrains_Mono'] text-[#0080FB] font-bold">
+                        <Tag className="w-3.5 h-3.5" />
+                        <span>DYNAMIC /r/:token SHORTLINKS</span>
+                      </div>
+                      <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#0e1624] border border-[#1b273d] text-xs font-['JetBrains_Mono'] text-[#cbd5e1] font-semibold">
+                        <Clock className="w-3.5 h-3.5 text-[#0080FB]" />
+                        <span>3-STEP SEQUENCES (30M, 24H, 48H)</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Bottom Action Footer */}
+                  <div className="pt-3 border-t border-[#152033] flex flex-col sm:flex-row sm:items-center justify-between gap-3 relative z-10">
+                    <div className="border-l-2 border-[#0080FB] pl-3 py-0.5">
+                      <div className="font-['JetBrains_Mono'] text-[10px] text-[#55637d] uppercase tracking-wider font-semibold">
+                        EVENT TRIGGER PROTOCOL
+                      </div>
+                      <div className="font-['JetBrains_Mono'] text-xs font-bold text-[#0080FB] uppercase tracking-wide">
+                        <code>SHOPIFY.CHECKOUT_UPDATE</code>
+                      </div>
+                    </div>
+
+                    <a
+                      href="https://apps.shopify.com/chatradix"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="bg-[#0080FB] hover:bg-white hover:text-[#0080FB] text-white font-['JetBrains_Mono'] text-xs font-bold px-6 py-3 tracking-widest uppercase flex items-center justify-center gap-2 transition-all shadow-[0_0_20px_rgba(0,128,251,0.35)] active:scale-95 rounded-lg"
+                    >
+                      <span>INSTALL ON SHOPIFY</span>
+                      <ArrowUpRight className="w-4 h-4" />
+                    </a>
+                  </div>
+                </div>
+
+                {/* RIGHT COLUMN: Meta Official Cloud API Interactive Template Console */}
+                <div className="card-visual-panel lg:col-span-5 bg-[#060a12] p-4 sm:p-6 lg:p-7 flex flex-col items-center justify-center relative overflow-hidden will-change-transform">
+                  
+                  {/* Subtle Spot Radial Light */}
+                  <div 
+                    className="absolute w-[360px] h-[360px] rounded-full blur-[100px] pointer-events-none opacity-20"
+                    style={{ background: 'radial-gradient(circle, #0080FB 0%, transparent 70%)' }}
+                  />
+
+                  {/* Meta Official Cloud API Template Window */}
+                  <div className="relative w-full max-w-[420px] rounded-2xl border border-[#0080FB]/35 bg-[#0a101d]/95 backdrop-blur-xl shadow-[0_20px_50px_rgba(0,0,0,0.9)] overflow-hidden flex flex-col">
+                    
+                    {/* Meta API Header Bar */}
+                    <div className="bg-[#0e1626] border-b border-[#1b263b] px-3.5 py-2.5 flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <div className="w-2 h-2 rounded-full bg-[#0080FB] animate-pulse" />
+                        <span className="font-['JetBrains_Mono'] text-[10px] text-[#0080FB] font-bold tracking-wider uppercase">
+                          META CLOUD API // TEMPLATE PREVIEW
+                        </span>
+                      </div>
+                      <span className="px-2 py-0.5 rounded text-[9px] font-['JetBrains_Mono'] font-bold bg-[#0080FB]/15 border border-[#0080FB]/30 text-[#0080FB] uppercase">
+                        APPROVED
+                      </span>
+                    </div>
+
+                    {/* Verified WhatsApp Business Profile Row */}
+                    <div className="px-4 py-2.5 bg-[#0c1322] border-b border-[#182338] flex items-center justify-between">
+                      <div className="flex items-center gap-2.5">
+                        <div className="w-7 h-7 rounded-full bg-[#0080FB]/20 border border-[#0080FB]/40 flex items-center justify-center font-bold text-[10px] text-[#0080FB]">
+                          CR
+                        </div>
+                        <div>
+                          <div className="flex items-center gap-1.5 leading-none">
+                            <span className="font-['Hanken_Grotesk'] text-xs font-bold text-white">Your Brand Store</span>
+                            <span className="w-3.5 h-3.5 rounded-full bg-[#0080FB] flex items-center justify-center text-[8px] text-white font-black" title="Meta Verified Official Business">✓</span>
+                          </div>
+                          <span className="font-['JetBrains_Mono'] text-[9px] text-[#6b7c99] leading-none block mt-0.5">Official WhatsApp Business Account</span>
+                        </div>
+                      </div>
+                      <span className="text-[10px] font-['JetBrains_Mono'] text-[#4f617d]">
+                        Cloud API v20.0
+                      </span>
+                    </div>
+
+                    {/* Interactive Template Message Container */}
+                    <div className="p-4 flex flex-col gap-2.5 select-none">
+                      
+                      {/* WhatsApp Chat Bubble */}
+                      <div className="bg-[#121c2e] border border-[#1e2d47] rounded-xl p-3 text-white text-xs leading-relaxed relative shadow-md">
+                        
+                        {/* Cart Reserved Voucher Card */}
+                        <div className="bg-[#0a101b] border border-[#18253b] rounded-lg p-2.5 mb-2.5 flex items-center justify-between">
+                          <div className="flex items-center gap-2.5">
+                            <div className="w-8 h-8 rounded-lg bg-[#0080FB]/15 border border-[#0080FB]/30 flex items-center justify-center text-[#0080FB]">
+                              <ShoppingCart className="w-4 h-4" />
+                            </div>
+                            <div>
+                              <div className="font-['JetBrains_Mono'] text-[9px] text-[#0080FB] font-bold uppercase tracking-wider">
+                                CART RECOVERY // RESERVED
+                              </div>
+                              <div className="font-bold text-xs text-white mt-0.5">2 Items in Cart • Subtotal $120.00</div>
+                            </div>
+                          </div>
+                          <span className="px-2 py-0.5 rounded text-[9px] font-['JetBrains_Mono'] font-bold bg-[#0080FB]/20 border border-[#0080FB]/40 text-[#0080FB]">
+                            10% OFF
+                          </span>
+                        </div>
+
+                        {/* Incoming Message Body */}
+                        <p className="text-[#c7d3e6] text-xs leading-normal mb-2">
+                          Hey Alex! You left 2 items in your cart. We saved your bag—complete your checkout within 15 mins to claim 10% OFF with code SAVE10.
+                        </p>
+
+                        {/* Dynamic Shortlink Pill */}
+                        <div className="p-2 rounded-lg bg-[#090e18] border border-[#1c2940] flex items-center justify-between text-[11px] font-['JetBrains_Mono']">
+                          <span className="text-[#8ea4c8] truncate">chatradix.store/r/tk_9f82a17c</span>
+                          <span className="text-[#0080FB] font-bold shrink-0 ml-2 flex items-center gap-1">
+                            Auto-Fill <ExternalLink className="w-3 h-3" />
+                          </span>
+                        </div>
+
+                        <div className="flex justify-end items-center gap-1 mt-1.5 text-[9px] text-[#556987]">
+                          <span>11:30 AM</span>
+                          <CheckCheck className="w-3.5 h-3.5 text-[#0080FB]" />
                         </div>
                       </div>
 
-                      {/* Bottom Neon Laser Rail */}
-                      <div className="absolute bottom-2 w-full h-[2px] bg-gradient-to-r from-[#25D366] via-[#0080FB] to-[#25D366] shadow-[0_0_15px_#25D366] opacity-65" />
+                      {/* Interactive Recovery Action Button */}
+                      <div className="flex flex-col gap-1.5">
+                        <button
+                          onClick={() => {
+                            setCheckoutRecovered(true);
+                            onNotify("Cart Rehydrated! Session restored via /r/:token link.");
+                          }}
+                          className={`w-full py-2.5 px-4 rounded-xl font-['JetBrains_Mono'] text-xs font-bold flex items-center justify-center gap-2 transition-all active:scale-[0.98] border shadow-sm ${
+                            checkoutRecovered
+                              ? 'bg-[#0080FB] text-white border-[#0080FB] shadow-[0_0_20px_rgba(0,128,251,0.5)]'
+                              : 'bg-[#10192a] hover:bg-[#0080FB] text-[#0080FB] hover:text-white border-[#1e2d47] hover:border-[#0080FB]'
+                          }`}
+                        >
+                          <ShoppingCart className="w-4 h-4" />
+                          <span>{checkoutRecovered ? '✅ Cart Restored ($108.00)' : 'Complete Checkout ($108.00)'}</span>
+                          <ArrowRight className="w-3.5 h-3.5" />
+                        </button>
+
+                        <button
+                          onClick={() => onNotify("Live WhatsApp Support chat initiated with Sarah.")}
+                          className="w-full py-2 px-4 rounded-xl font-['JetBrains_Mono'] text-xs font-medium text-[#7d91b0] bg-[#0c1422] hover:bg-[#152033] hover:text-white border border-[#19243a] transition-all flex items-center justify-center gap-2"
+                        >
+                          <span>Have Questions? Chat with Us</span>
+                        </button>
+                      </div>
+
+                      {/* Redirect Token Status */}
+                      <div className="bg-[#090e18] border border-[#182338] px-3 py-1.5 rounded-lg flex items-center justify-between text-[10px] font-['JetBrains_Mono']">
+                        <span className="text-[#6b7c99]">Dynamic Link:</span>
+                        <span className="text-[#0080FB] font-bold">
+                          chatradix.store/r/tk_9f82a17c
+                        </span>
+                      </div>
+
                     </div>
+
                   </div>
-                )}
+
+                </div>
 
               </div>
             </div>
-          ))}
-        </div>
-
-        {/* Bottom Pinned Footer: Visual Progress Line & Indicator */}
-        <div className="w-full px-4 sm:px-8 md:px-14 shrink-0 z-20 flex items-center justify-between gap-6 pt-1">
-          {/* Scroll instruction indicator */}
-          <div className="font-['JetBrains_Mono'] text-[10px] sm:text-[11px] text-[#63708a] flex items-center gap-2 uppercase">
-            <span className="text-[#0080FB] font-bold">SCROLL TO ROTATE FLOWS</span>
-            <span>• ARCHITECTURE {activeSlide + 1} OF {flowsList.length}</span>
           </div>
 
-          {/* Interactive Slide Dots */}
+          {/* ==============================================================
+              SLIDE 3: INTERACTIVE 10-CARD PRODUCT CAROUSEL CAMPAIGNS
+          ============================================================== */}
+          <div className="w-screen shrink-0 h-full flex items-center justify-center px-4 sm:px-8 lg:px-12 relative">
+            <div className="w-full max-w-[1360px] h-[calc(100vh-320px)] min-h-[420px] max-h-[520px] relative my-auto">
+              
+              {/* Grand Monolithic Glass Card */}
+              <div className="w-full h-full grid grid-cols-1 lg:grid-cols-12 border border-[#0080FB]/35 hover:border-[#0080FB]/60 bg-gradient-to-b from-[#0b1220]/95 via-[#070b14]/95 to-[#05070d]/98 backdrop-blur-2xl shadow-[0_20px_70px_rgba(0,128,251,0.12)] rounded-2xl sm:rounded-3xl overflow-hidden relative">
+                
+                {/* Glowing Blue Top Neon Rail */}
+                <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[#0080FB] to-transparent opacity-90" />
+
+                {/* LEFT COLUMN: Specifications & Value Proposition */}
+                <div className="lg:col-span-7 p-6 sm:p-8 lg:p-10 border-b lg:border-b-0 lg:border-r border-[#152033] flex flex-col justify-between relative overflow-hidden">
+                  
+                  {/* Architectural Huge Watermark (Parallax Target) */}
+                  <span className="card-watermark font-['Hanken_Grotesk'] font-black text-[9rem] sm:text-[11rem] md:text-[13rem] leading-none text-[#0d1627]/80 select-none pointer-events-none absolute -bottom-8 -right-6 z-0 will-change-transform">
+                    03
+                  </span>
+
+                  {/* Header Meta Badge Row */}
+                  <div className="flex justify-between items-center relative z-10">
+                    <div className="flex items-center gap-3">
+                      <div className="w-11 h-11 rounded-xl border border-[#0080FB]/40 bg-[#0080FB]/10 flex items-center justify-center shadow-[0_0_25px_rgba(0,128,251,0.25)]">
+                        <Package className="w-5 h-5 text-[#0080FB]" />
+                      </div>
+                      <div>
+                        <div className="font-['JetBrains_Mono'] text-xs text-[#0080FB] font-bold uppercase tracking-widest flex items-center gap-2">
+                          <span>03 // BROADCAST ENGINE</span>
+                        </div>
+                        <div className="font-['JetBrains_Mono'] text-[10px] text-[#63728f] uppercase">
+                          META.CAROUSEL_BROADCAST
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-[#0a1220] border border-[#0080FB]/30 font-['JetBrains_Mono'] text-xs text-[#8695b0] uppercase font-semibold">
+                      <span className="w-2 h-2 rounded-full bg-[#0080FB] animate-pulse" />
+                      <span>Capacity: 10 Cards</span>
+                    </div>
+                  </div>
+
+                  {/* Headline & Narrative */}
+                  <div className="my-auto relative z-10 py-1.5 sm:py-2">
+                    <h3 className="font-['Hanken_Grotesk'] font-black text-2xl sm:text-3xl lg:text-[2.25rem] text-white uppercase tracking-tight leading-[1.02] mb-2 sm:mb-2.5">
+                      INTERACTIVE 10-CARD <br />
+                      <span className="text-[#0080FB]">
+                        MEDIA CAROUSELS
+                      </span>
+                    </h3>
+
+                    <p className="font-['Hanken_Grotesk'] text-xs sm:text-sm text-[#9aa5bb] leading-relaxed max-w-xl mb-3 font-normal">
+                      Broadcast stunning multi-product catalog drops directly inside WhatsApp chat. Customers swipe through up to 10 interactive visual cards and tap native "Buy Now" buttons with pre-filled checkout.
+                    </p>
+
+                    {/* Live WhatsApp Carousel Pipeline */}
+                    <div className="bg-[#090e17] border border-[#1b263b] rounded-xl p-2.5 mb-3">
+                      <div className="font-['JetBrains_Mono'] text-[10px] text-[#0080FB] font-bold tracking-widest uppercase mb-1.5 flex items-center gap-1.5">
+                        <Layers className="w-3.5 h-3.5 text-[#0080FB]" />
+                        <span>INTERACTIVE CAROUSEL ARCHITECTURE</span>
+                      </div>
+                      <div className="flex flex-wrap items-center gap-2 text-xs font-['JetBrains_Mono']">
+                        <span className="px-2.5 py-1 rounded bg-[#101826] border border-[#1f2e47] text-white">
+                          Meta Broadcast
+                        </span>
+                        <ArrowRight className="w-3.5 h-3.5 text-[#4e6282]" />
+                        <span className="px-2.5 py-1 rounded bg-[#101826] border border-[#1f2e47] text-[#0080FB]">
+                          Horizontal In-Chat Swipe
+                        </span>
+                        <ArrowRight className="w-3.5 h-3.5 text-[#4e6282]" />
+                        <span className="px-2.5 py-1 rounded bg-[#0080FB]/15 border border-[#0080FB]/50 text-[#0080FB] font-bold">
+                          1-Tap Instant Checkout
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* KPI Capability Pills */}
+                    <div className="flex flex-wrap items-center gap-2.5">
+                      <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#0080FB]/10 border border-[#0080FB]/30 text-xs font-['JetBrains_Mono'] text-[#0080FB] font-bold">
+                        <Package className="w-3.5 h-3.5" />
+                        <span>10 VISUAL PRODUCT CARDS</span>
+                      </div>
+                      <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#0e1624] border border-[#1b273d] text-xs font-['JetBrains_Mono'] text-[#cbd5e1] font-semibold">
+                        <ShoppingCart className="w-3.5 h-3.5 text-[#0080FB]" />
+                        <span>1-TAP NATIVE BUY NOW</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Bottom Action Footer */}
+                  <div className="pt-3 border-t border-[#152033] flex flex-col sm:flex-row sm:items-center justify-between gap-3 relative z-10">
+                    <div className="border-l-2 border-[#0080FB] pl-3 py-0.5">
+                      <div className="font-['JetBrains_Mono'] text-[10px] text-[#55637d] uppercase tracking-wider font-semibold">
+                        EVENT TRIGGER PROTOCOL
+                      </div>
+                      <div className="font-['JetBrains_Mono'] text-xs font-bold text-[#0080FB] uppercase tracking-wide">
+                        <code>META.CAROUSEL_BROADCAST</code>
+                      </div>
+                    </div>
+
+                    <a
+                      href="https://apps.shopify.com/chatradix"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="bg-[#0080FB] hover:bg-white hover:text-[#0080FB] text-white font-['JetBrains_Mono'] text-xs font-bold px-6 py-3 tracking-widest uppercase flex items-center justify-center gap-2 transition-all shadow-[0_0_20px_rgba(0,128,251,0.35)] active:scale-95 rounded-lg"
+                    >
+                      <span>INSTALL ON SHOPIFY</span>
+                      <ArrowUpRight className="w-4 h-4" />
+                    </a>
+                  </div>
+                </div>
+
+                {/* RIGHT COLUMN: Meta Official Cloud API Interactive Template Console */}
+                <div className="card-visual-panel lg:col-span-5 bg-[#060a12] p-4 sm:p-6 lg:p-7 flex flex-col items-center justify-center relative overflow-hidden will-change-transform">
+                  
+                  {/* Subtle Spot Radial Light */}
+                  <div 
+                    className="absolute w-[360px] h-[360px] rounded-full blur-[100px] pointer-events-none opacity-20"
+                    style={{ background: 'radial-gradient(circle, #0080FB 0%, transparent 70%)' }}
+                  />
+
+                  {/* Meta Official Cloud API Template Window */}
+                  <div className="relative w-full max-w-[420px] rounded-2xl border border-[#0080FB]/35 bg-[#0a101d]/95 backdrop-blur-xl shadow-[0_20px_50px_rgba(0,0,0,0.9)] overflow-hidden flex flex-col">
+                    
+                    {/* Meta API Header Bar */}
+                    <div className="bg-[#0e1626] border-b border-[#1b263b] px-3.5 py-2.5 flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <div className="w-2 h-2 rounded-full bg-[#0080FB] animate-pulse" />
+                        <span className="font-['JetBrains_Mono'] text-[10px] text-[#0080FB] font-bold tracking-wider uppercase">
+                          META CLOUD API // TEMPLATE PREVIEW
+                        </span>
+                      </div>
+                      <span className="px-2 py-0.5 rounded text-[9px] font-['JetBrains_Mono'] font-bold bg-[#0080FB]/15 border border-[#0080FB]/30 text-[#0080FB] uppercase">
+                        APPROVED
+                      </span>
+                    </div>
+
+                    {/* Verified WhatsApp Business Profile Row */}
+                    <div className="px-4 py-2.5 bg-[#0c1322] border-b border-[#182338] flex items-center justify-between">
+                      <div className="flex items-center gap-2.5">
+                        <div className="w-7 h-7 rounded-full bg-[#0080FB]/20 border border-[#0080FB]/40 flex items-center justify-center font-bold text-[10px] text-[#0080FB]">
+                          CR
+                        </div>
+                        <div>
+                          <div className="flex items-center gap-1.5 leading-none">
+                            <span className="font-['Hanken_Grotesk'] text-xs font-bold text-white">Your Brand Store</span>
+                            <span className="w-3.5 h-3.5 rounded-full bg-[#0080FB] flex items-center justify-center text-[8px] text-white font-black" title="Meta Verified Official Business">✓</span>
+                          </div>
+                          <span className="font-['JetBrains_Mono'] text-[9px] text-[#6b7c99] leading-none block mt-0.5">Official WhatsApp Business Account</span>
+                        </div>
+                      </div>
+                      <span className="text-[10px] font-['JetBrains_Mono'] text-[#4f617d]">
+                        Cloud API v20.0
+                      </span>
+                    </div>
+
+                    {/* Interactive Template Message Container */}
+                    <div className="p-4 flex flex-col gap-2.5 select-none">
+                      
+                      {/* WhatsApp Chat Bubble */}
+                      <div className="bg-[#121c2e] border border-[#1e2d47] rounded-xl p-3 text-white text-xs leading-relaxed relative shadow-md">
+                        
+                        <div className="font-['JetBrains_Mono'] text-[9px] text-[#0080FB] font-bold uppercase tracking-wider mb-1">
+                          VIP CATALOG BROADCAST
+                        </div>
+                        <p className="text-[#c7d3e6] text-xs leading-normal">
+                          Swipe through our top 10 recommended pieces below and tap "Buy Now" for pre-filled checkout:
+                        </p>
+
+                        {/* Interactive Swipeable Carousel Card */}
+                        <div className="relative bg-[#0a101b] border border-[#1d2b42] rounded-xl p-3 mt-2.5 shadow-inner">
+                          
+                          {/* Navigation Arrows */}
+                          <button
+                            onClick={() => setCarouselIndex((prev) => (prev > 0 ? prev - 1 : carouselProducts.length - 1))}
+                            className="absolute -left-2.5 top-1/2 -translate-y-1/2 w-7 h-7 rounded-full bg-[#121d30] border border-[#253654] text-white flex items-center justify-center shadow-lg hover:bg-[#0080FB] transition-all z-20"
+                            aria-label="Previous card"
+                          >
+                            <ChevronLeft className="w-4 h-4" />
+                          </button>
+
+                          <button
+                            onClick={() => setCarouselIndex((prev) => (prev < carouselProducts.length - 1 ? prev + 1 : 0))}
+                            className="absolute -right-2.5 top-1/2 -translate-y-1/2 w-7 h-7 rounded-full bg-[#121d30] border border-[#253654] text-white flex items-center justify-center shadow-lg hover:bg-[#0080FB] transition-all z-20"
+                            aria-label="Next card"
+                          >
+                            <ChevronRight className="w-4 h-4" />
+                          </button>
+
+                          {/* Card Content */}
+                          <div className="flex flex-col gap-1.5">
+                            <div className="flex items-center justify-between">
+                              <span className="px-2 py-0.5 rounded text-[9px] font-['JetBrains_Mono'] font-bold bg-[#0080FB]/20 border border-[#0080FB]/40 text-[#0080FB]">
+                                {carouselProducts[carouselIndex].tag}
+                              </span>
+                              <span className="font-['JetBrains_Mono'] text-sm font-bold text-white">
+                                {carouselProducts[carouselIndex].price}
+                              </span>
+                            </div>
+
+                            <div className="text-white font-bold text-sm">
+                              {carouselProducts[carouselIndex].title}
+                            </div>
+
+                            <p className="text-[11px] text-[#8ea4c8] leading-snug">
+                              {carouselProducts[carouselIndex].desc}
+                            </p>
+
+                            <button
+                              onClick={() => onNotify(`Redirecting to Shopify Checkout for ${carouselProducts[carouselIndex].title} (${carouselProducts[carouselIndex].price})`)}
+                              className="w-full mt-2 py-2 px-3 rounded-lg font-['JetBrains_Mono'] text-xs font-bold bg-[#0080FB] hover:bg-white hover:text-[#0080FB] text-white flex items-center justify-center gap-2 transition-all shadow-[0_0_15px_rgba(0,128,251,0.35)] active:scale-95"
+                            >
+                              <ShoppingCart className="w-3.5 h-3.5" />
+                              <span>Buy Now • {carouselProducts[carouselIndex].price}</span>
+                            </button>
+                          </div>
+
+                          {/* Carousel Dots & Card indicator */}
+                          <div className="flex items-center justify-between mt-2.5 pt-2 border-t border-[#18253b]">
+                            <div className="flex items-center gap-1.5">
+                              {carouselProducts.map((_, dotIdx) => (
+                                <button
+                                  key={dotIdx}
+                                  onClick={() => setCarouselIndex(dotIdx)}
+                                  className={`transition-all rounded-full ${
+                                    carouselIndex === dotIdx 
+                                      ? 'w-4 h-1.5 bg-[#0080FB]' 
+                                      : 'w-1.5 h-1.5 bg-[#253654]'
+                                  }`}
+                                  aria-label={`Go to product ${dotIdx + 1}`}
+                                />
+                              ))}
+                            </div>
+                            <span className="text-[9px] font-['JetBrains_Mono'] text-[#6b7c99]">
+                              Card {carouselIndex + 1} of 10
+                            </span>
+                          </div>
+
+                        </div>
+
+                        <div className="flex justify-end items-center gap-1 mt-1 text-[9px] text-[#556987]">
+                          <span>3:45 PM</span>
+                          <CheckCheck className="w-3.5 h-3.5 text-[#0080FB]" />
+                        </div>
+                      </div>
+
+                      {/* Meta Payload Status Footer */}
+                      <div className="bg-[#090e18] border border-[#182338] px-3 py-1.5 rounded-lg flex items-center justify-between text-[10px] font-['JetBrains_Mono']">
+                        <span className="text-[#6b7c99]">Broadcast Engine:</span>
+                        <span className="text-[#0080FB] font-bold">10 Interactive Cards Active</span>
+                      </div>
+
+                    </div>
+
+                  </div>
+
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        {/* ==============================================================
+            BOTTOM STATUS BAR: Progress Line & Flow Counter (Balanced)
+        ============================================================== */}
+        <div className="w-full max-w-[1580px] mx-auto px-4 sm:px-8 md:px-12 shrink-0 z-20 flex items-center justify-between gap-6 mt-4 sm:mt-6 pt-2">
+          {/* Active Flow Indicator */}
+          <div className="font-['JetBrains_Mono'] text-xs text-[#63708a] flex items-center gap-2.5 uppercase">
+            <span className="text-[#0080FB] font-bold">FLOW 0{activeSlide + 1} OF 03</span>
+            <span className="hidden sm:inline-block text-[#3d4b66]">•</span>
+            <span className="hidden sm:inline-block font-medium text-[#93a2bd]">{flowTabs[activeSlide]?.title}</span>
+          </div>
+
+          {/* Interactive Step Dots */}
           <div className="hidden sm:flex items-center gap-2">
-            {flowsList.map((_, dotIdx) => (
+            {[0, 1, 2].map((dotIdx) => (
               <button
                 key={dotIdx}
                 onClick={() => handleJumpToSlide(dotIdx)}
                 className={`transition-all duration-300 rounded-full ${
                   activeSlide === dotIdx
-                    ? 'w-6 h-1.5 bg-[#0080FB] shadow-[0_0_10px_#0080FB]'
-                    : 'w-1.5 h-1.5 bg-[#2c364c] hover:bg-[#526388]'
+                    ? 'w-7 h-2 bg-[#0080FB] shadow-[0_0_12px_#0080FB]'
+                    : 'w-2 h-2 bg-[#20293a] hover:bg-[#3d4d6b]'
                 }`}
-                aria-label={`Go to slide ${dotIdx + 1}`}
+                aria-label={`Go to flow ${dotIdx + 1}`}
               />
             ))}
           </div>
 
-          {/* Scrub Progress Bar */}
-          <div className="w-32 sm:w-56 md:w-72 h-1.5 bg-[#171d28] rounded-full overflow-hidden">
+          {/* Precision Smooth Scrub Progress Bar */}
+          <div className="w-36 sm:w-56 md:w-72 h-1.5 bg-[#141a26] rounded-full overflow-hidden shadow-inner">
             <div
-              className="h-full bg-gradient-to-r from-[#0080FB] via-[#00a884] to-[#25D366] transition-all duration-150"
-              style={{ width: `${Math.max(10, scrollProgress * 100)}%` }}
+              className="h-full bg-gradient-to-r from-[#0080FB] via-[#38bdf8] to-[#0080FB] transition-all duration-150"
+              style={{ width: `${Math.max(12, scrollProgress * 100)}%` }}
             />
           </div>
         </div>
+
       </div>
     </section>
   );

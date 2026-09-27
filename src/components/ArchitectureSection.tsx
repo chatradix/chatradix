@@ -109,7 +109,7 @@ export const ArchitectureSection: React.FC = () => {
   ];
 
   return (
-    <section id="architecture" ref={sectionRef} className="max-w-[1440px] mx-auto px-6 md:px-16 mb-24 md:mb-32 perspective-1000">
+    <section id="architecture" ref={sectionRef} className="max-w-[1440px] mx-auto px-6 md:px-16 pt-24 sm:pt-32 lg:pt-36 mb-24 md:mb-32 perspective-1000">
       {/* Header Row */}
       <div className="mb-16 md:mb-20 flex flex-col md:flex-row md:items-end justify-between gap-8 border-b border-[#262626] pb-8 relative">
         <div className="absolute bottom-[-1px] left-0 w-32 h-[2px] bg-[#0080FB] shadow-[0_0_10px_#0080FB]" />
