@@ -1,4 +1,10 @@
 
+@import url('https://fonts.googleapis.com/css2?family=Black+Ops+One&display=swap');
+
+.font-black-ops {
+  font-family: 'Black Ops One', cursive, sans-serif !important;
+}
+
 .hide-scroll::-webkit-scrollbar {
   display: none;
 }

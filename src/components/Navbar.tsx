@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Mail, Menu, X, ArrowUpRight } from 'lucide-react';
+import headerLogo from '../assets/headerlogo.png';
 
 interface NavbarProps {
   onScrollToSection: (id: string) => void;
@@ -31,9 +32,9 @@ export const Navbar: React.FC<NavbarProps> = ({ onScrollToSection }) => {
           aria-label="ChatRadix"
         >
           <img 
-            src="./header-logo.svg" 
-            alt="ChatRadix Logo" 
-            className="h-10 sm:h-11 md:h-12 w-auto object-contain group-hover:opacity-90 group-hover:scale-105 transition-all duration-300"
+            src={headerLogo} 
+            alt="ChatRadix" 
+            className="h-8 sm:h-9 md:h-10 w-auto object-contain group-hover:opacity-90 group-hover:scale-[1.02] transition-all duration-300"
           />
         </a>
 
@@ -46,36 +47,36 @@ export const Navbar: React.FC<NavbarProps> = ({ onScrollToSection }) => {
               className="font-['JetBrains_Mono'] text-xs font-semibold uppercase tracking-[0.2em] text-[#888888] hover:text-[#0080FB] transition-colors py-1 relative group"
             >
               <span>{link.label}</span>
-              <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-[#0080FB] group-hover:w-full transition-all duration-300" />
+              <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-[#0080FB] group-hover:w-full transition-all duration-300 shadow-[0_0_8px_#0080FB]" />
             </button>
           ))}
         </nav>
 
         {/* Action Controls */}
         <div className="flex items-center gap-4">
+
+          {/* Quick Support Dispatch Icon */}
           <button
             onClick={() => handleNavClick('support')}
-            title="Contact Support"
-            className="hidden sm:flex items-center justify-center w-10 h-10 border border-[#262626] hover:border-[#0080FB] text-[#e5e2e1] hover:text-[#0080FB] transition-colors bg-[#131313]"
+            title="Contact Support & Onboarding"
+            className="hidden sm:flex items-center justify-center w-10 h-10 border border-[#262626] hover:border-[#0080FB] text-[#e5e2e1] hover:text-[#0080FB] transition-all bg-[#131313] hover:shadow-[0_0_15px_rgba(0,128,251,0.25)] relative group"
           >
             <Mail className="w-4 h-4" />
+            <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 rounded-full bg-[#0080FB] opacity-80" />
           </button>
 
-          <button
-            onClick={() => handleNavClick('offer')}
-            className="hidden sm:block font-['JetBrains_Mono'] text-xs font-semibold uppercase tracking-[0.15em] text-[#e5e2e1] hover:text-[#0080FB] px-4 py-2 transition-colors"
-          >
-            LAUNCH OFFER
-          </button>
-
+          {/* High-Impact Creative Install CTA Button */}
           <a
             href="https://apps.shopify.com/chatradix"
             target="_blank"
             rel="noopener noreferrer"
-            className="bg-[#0080FB] border border-[#0080FB] text-white font-['JetBrains_Mono'] text-xs font-bold uppercase tracking-[0.15em] px-6 py-3 hover:bg-white hover:text-[#0080FB] transition-all duration-300 active:scale-95 flex items-center gap-2 shadow-[0_0_20px_rgba(0,128,251,0.3)]"
+            className="relative inline-flex items-center gap-2.5 px-6 py-3 bg-[#0080FB] text-white font-['JetBrains_Mono'] text-xs font-bold uppercase tracking-[0.15em] border border-[#0090ff] shadow-[0_0_20px_rgba(0,128,251,0.35)] hover:shadow-[0_0_30px_rgba(0,128,251,0.55)] hover:bg-white hover:text-[#0080FB] hover:border-white transition-all duration-300 active:scale-95 group overflow-hidden"
           >
-            <span>INSTALL APP</span>
-            <ArrowUpRight className="w-4 h-4" />
+            <span className="relative z-10 flex items-center gap-2">
+              <span>INSTALL APP</span>
+              <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+            </span>
+            <span className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 bg-gradient-to-r from-transparent via-white/25 to-transparent" />
           </a>
 
           {/* Mobile Menu Toggle */}

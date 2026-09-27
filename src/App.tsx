@@ -76,6 +76,9 @@ export const App: React.FC = () => {
 
   return (
     <div className="bg-[#0b0d12] text-[#e5e2e1] min-h-screen flex flex-col font-['Hanken_Grotesk'] selection:bg-[#0080FB] selection:text-white relative overflow-x-hidden">
+      {/* Sleek Minimal Initial Page Loader */}
+      <Preloader />
+
       {/* Dynamic Ambient Mouse Glow Tracking Light */}
       <div
         className="fixed w-[600px] h-[600px] rounded-full pointer-events-none z-0 transition-transform duration-700 ease-out will-change-transform opacity-35 blur-[120px]"
@@ -87,9 +90,6 @@ export const App: React.FC = () => {
 
       {/* Cyber Technical Grid Overlay */}
       <div className="fixed inset-0 pointer-events-none z-0 cyber-grid opacity-30" />
-
-      {/* Porsche Style Preloader */}
-      <Preloader />
 
       {/* Toast Notification Banner */}
       {toastMessage && (

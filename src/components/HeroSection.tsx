@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { ArrowRight, Calendar } from 'lucide-react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import heroBgVideo from '../assets/videos/bg-video-new.mp4';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -14,33 +15,13 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onInitialize, onOpenMa
   const heroRef = useRef<HTMLDivElement>(null);
   const titleLine1Ref = useRef<HTMLSpanElement>(null);
   const titleLine2Ref = useRef<HTMLSpanElement>(null);
-  const titleLine3Ref = useRef<HTMLSpanElement>(null);
 
   // GSAP ScrollTrigger Multi-Speed Parallax Scrub
   useEffect(() => {
     if (!heroRef.current) return;
 
     const ctx = gsap.context(() => {
-      // Entry Animation
-      gsap.fromTo(
-        '.hero-anim-title',
-        { opacity: 0, y: 30 },
-        { opacity: 1, y: 0, duration: 1, ease: 'power3.out', delay: 0.2 }
-      );
-
-      gsap.fromTo(
-        '.hero-anim-sub',
-        { opacity: 0, y: 20 },
-        { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out', delay: 0.4 }
-      );
-
-      gsap.fromTo(
-        '.hero-anim-cta',
-        { opacity: 0, scale: 0.95 },
-        { opacity: 1, scale: 1, duration: 0.8, ease: 'power3.out', delay: 0.6 }
-      );
-
-      // Parallax Scrub on Scroll
+      // Lightweight Parallax Scrub on Scroll
       const scrubTl = gsap.timeline({
         scrollTrigger: {
           trigger: heroRef.current,
@@ -55,10 +36,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onInitialize, onOpenMa
         scrubTl.to(titleLine1Ref.current, { y: -60, opacity: 0.3, letterSpacing: '0.04em' }, 0);
       }
       if (titleLine2Ref.current) {
-        scrubTl.to(titleLine2Ref.current, { y: -90, scale: 0.94, opacity: 0.2 }, 0);
-      }
-      if (titleLine3Ref.current) {
-        scrubTl.to(titleLine3Ref.current, { y: -120, opacity: 0.15 }, 0);
+        scrubTl.to(titleLine2Ref.current, { y: -100, scale: 0.94, opacity: 0.15 }, 0);
       }
     }, heroRef);
 
@@ -68,7 +46,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onInitialize, onOpenMa
   return (
     <section
       ref={heroRef}
-      className="relative w-full overflow-hidden flex flex-col items-center text-center pt-8 pb-20 md:pt-12 md:pb-28 z-10 perspective-1000"
+      className="relative w-full min-h-[calc(100vh-5rem)] overflow-hidden flex flex-col items-center justify-center text-center py-16 md:py-24 z-10 perspective-1000"
     >
       {/* Background Video */}
       <div className="absolute inset-0 z-[-2] overflow-hidden pointer-events-none select-none">
@@ -85,47 +63,38 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onInitialize, onOpenMa
           playsInline
           className="absolute top-1/2 left-1/2 w-full h-full min-w-full min-h-full -translate-x-1/2 -translate-y-1/2 object-cover pointer-events-none"
         >
-          <source src="./bg-video.mp4" type="video/mp4" />
+          <source src={heroBgVideo} type="video/mp4" />
         </video>
+        {/* Soft dark vignette so text remains crisp and edges blend into background */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[#0b0d12]/80 via-transparent to-[#0b0d12] pointer-events-none" />
       </div>
 
-      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 md:px-16 flex flex-col items-center text-center w-full relative z-10">
-        {/* Glassmorphic Container for Hero Text & Actions */}
-        <div className="w-full max-w-6xl mx-auto px-6 sm:px-12 md:px-16 py-10 sm:py-14 md:py-16 bg-[#080a0f]/75 backdrop-blur-xl border border-white/10 shadow-[0_30px_90px_rgba(0,0,0,0.85),inset_0_1px_0_rgba(255,255,255,0.12)] relative">
-          {/* Subtle Cyber Corner Accents */}
-          <div className="absolute top-0 left-0 w-3 h-3 border-t-2 border-l-2 border-[#0080FB]" />
-          <div className="absolute top-0 right-0 w-3 h-3 border-t-2 border-r-2 border-[#0080FB]" />
-          <div className="absolute bottom-0 left-0 w-3 h-3 border-b-2 border-l-2 border-[#0080FB]" />
-          <div className="absolute bottom-0 right-0 w-3 h-3 border-b-2 border-r-2 border-[#0080FB]" />
-
-          {/* Massive Bold Headline Stack with Multi-Speed Parallax Lines */}
-          <h1 className="hero-anim-title font-['Hanken_Grotesk'] text-5xl sm:text-7xl md:text-8xl lg:text-[7.5rem] font-black text-white mb-8 uppercase max-w-6xl tracking-tighter leading-[0.88] select-none drop-shadow-[0_4px_24px_rgba(0,0,0,0.9)]">
-            <span ref={titleLine1Ref} className="inline-block will-change-transform">
-              OFFICIAL
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 md:px-16 flex flex-col items-center justify-center text-center w-full relative z-10 my-auto">
+        <div className="w-full max-w-7xl mx-auto flex flex-col items-center justify-center text-center relative py-6 md:py-10">
+          {/* Exact 2 Lines Headline (Increased size, no glow) */}
+          <h1 className="font-black-ops text-[clamp(2.2rem,6.8vw,7.2rem)] text-white mb-4 sm:mb-5 uppercase max-w-full tracking-tight leading-[1.04] select-none">
+            <span ref={titleLine1Ref} className="inline-block whitespace-nowrap will-change-transform">
+              <span>OFFICIAL</span>{' '}
+              <span className="text-[#0080FB]">
+                WHATSAPP
+              </span>
             </span>
             <br />
             <span
               ref={titleLine2Ref}
-              className="text-[#0080FB] glow-text inline-block my-1 will-change-transform drop-shadow-[0_0_30px_rgba(0,128,251,0.5)]"
-            >
-              WHATSAPP
-            </span>
-            <br />
-            <span
-              ref={titleLine3Ref}
-              className="text-[#25D366] glow-green-text inline-block will-change-transform drop-shadow-[0_0_30px_rgba(37,211,102,0.5)]"
+              className="text-[#25D366] inline-block whitespace-nowrap will-change-transform mt-1 sm:mt-2"
             >
               AUTOMATION
             </span>
           </h1>
 
           {/* Subtitle */}
-          <p className="hero-anim-sub font-['Hanken_Grotesk'] text-base sm:text-lg md:text-xl text-[#e5e2e1] max-w-3xl mb-12 mx-auto leading-relaxed drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)] font-normal">
+          <p className="font-['Hanken_Grotesk'] text-base sm:text-lg md:text-xl text-[#e5e2e1] max-w-3xl mb-12 sm:mb-16 mx-auto leading-relaxed drop-shadow-[0_2px_12px_rgba(0,0,0,0.95)]">
             Automate your Shopify store with Meta's official WhatsApp Business Cloud API. Recover abandoned checkouts, verify COD orders with instant two-way tags, and broadcast 10-card product carousels with zero phone ban risk.
           </p>
 
           {/* Action Buttons */}
-          <div className="hero-anim-cta flex flex-col sm:flex-row gap-5 md:gap-6 justify-center w-full sm:w-auto">
+          <div className="flex flex-col sm:flex-row gap-5 md:gap-6 justify-center w-full sm:w-auto">
             <a
               href="https://apps.shopify.com/chatradix"
               target="_blank"
