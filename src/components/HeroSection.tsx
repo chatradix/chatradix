@@ -101,45 +101,50 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onInitialize, onOpenMa
           {/* Massive Bold Headline Stack with Multi-Speed Parallax Lines */}
           <h1 className="hero-anim-title font-['Hanken_Grotesk'] text-5xl sm:text-7xl md:text-8xl lg:text-[7.5rem] font-black text-white mb-8 uppercase max-w-6xl tracking-tighter leading-[0.88] select-none drop-shadow-[0_4px_24px_rgba(0,0,0,0.9)]">
             <span ref={titleLine1Ref} className="inline-block will-change-transform">
-              Architect
+              OFFICIAL
             </span>
             <br />
             <span
               ref={titleLine2Ref}
               className="text-[#0080FB] glow-text inline-block my-1 will-change-transform drop-shadow-[0_0_30px_rgba(0,128,251,0.5)]"
             >
-              Intelligent
+              WHATSAPP
             </span>
             <br />
             <span
               ref={titleLine3Ref}
               className="text-[#25D366] glow-green-text inline-block will-change-transform drop-shadow-[0_0_30px_rgba(37,211,102,0.5)]"
             >
-              WhatsApp Flows
+              AUTOMATION
             </span>
           </h1>
 
           {/* Subtitle */}
           <p className="hero-anim-sub font-['Hanken_Grotesk'] text-base sm:text-lg md:text-xl text-[#e5e2e1] max-w-3xl mb-12 mx-auto leading-relaxed drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)] font-normal">
-            Freedom is a luxury modern brand line needs. Deploy conversion-driven e-commerce journeys directly inside WhatsApp with native custom integration for Shopify/Shopline.
+            Automate your Shopify store with Meta's official WhatsApp Business Cloud API. Recover abandoned checkouts, verify COD orders with instant two-way tags, and broadcast 10-card product carousels with zero phone ban risk.
           </p>
 
           {/* Action Buttons */}
           <div className="hero-anim-cta flex flex-col sm:flex-row gap-5 md:gap-6 justify-center w-full sm:w-auto">
-            <button
-              onClick={onInitialize}
+            <a
+              href="https://apps.shopify.com/chatradix"
+              target="_blank"
+              rel="noopener noreferrer"
               className="bg-[#0080FB] border border-[#0080FB] text-white font-['JetBrains_Mono'] text-xs font-bold px-10 py-5 hover:bg-white hover:text-[#0080FB] transition-all duration-300 active:scale-95 inline-flex items-center gap-3 justify-center tracking-[0.15em] rounded-none group shadow-[0_0_30px_rgba(0,128,251,0.35)]"
             >
-              <span>GET STARTED NOW</span>
+              <span>INSTALL ON SHOPIFY</span>
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-            </button>
+            </a>
 
             <button
-              onClick={onOpenManifesto}
+              onClick={() => {
+                const el = document.getElementById('flows');
+                if (el) el.scrollIntoView({ behavior: 'smooth' });
+              }}
               className="border border-[#262626] bg-[#0e0e0e] text-[#e5e2e1] font-['JetBrains_Mono'] text-xs font-bold px-10 py-5 hover:border-[#0080FB] hover:text-[#0080FB] hover:bg-[#1c1b1b] transition-all duration-300 active:scale-95 inline-flex items-center gap-3 justify-center tracking-[0.15em] rounded-none"
             >
-              <Calendar className="w-4 h-4" />
-              <span>BOOK A DEMO</span>
+              <Calendar className="w-4 h-4 text-[#0080FB]" />
+              <span>VIEW 12 AUTOMATIONS</span>
             </button>
           </div>
         </div>

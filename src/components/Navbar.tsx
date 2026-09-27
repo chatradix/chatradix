@@ -9,10 +9,10 @@ export const Navbar: React.FC<NavbarProps> = ({ onScrollToSection }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const navLinks = [
-    { label: 'FEATURES', id: 'flows' },
-    { label: 'ATTRIBUTES', id: 'attributes' },
+    { label: 'AUTOMATIONS', id: 'flows' },
     { label: 'ARCHITECTURE', id: 'architecture' },
-    { label: 'CONTACT US', id: 'support' },
+    { label: 'META API', id: 'meta-partner' },
+    { label: 'SUPPORT', id: 'support' },
   ];
 
   const handleNavClick = (id: string) => {
@@ -65,16 +65,18 @@ export const Navbar: React.FC<NavbarProps> = ({ onScrollToSection }) => {
             onClick={() => handleNavClick('offer')}
             className="hidden sm:block font-['JetBrains_Mono'] text-xs font-semibold uppercase tracking-[0.15em] text-[#e5e2e1] hover:text-[#0080FB] px-4 py-2 transition-colors"
           >
-            LOG IN
+            LAUNCH OFFER
           </button>
 
-          <button
-            onClick={() => handleNavClick('offer')}
+          <a
+            href="https://apps.shopify.com/chatradix"
+            target="_blank"
+            rel="noopener noreferrer"
             className="bg-[#0080FB] border border-[#0080FB] text-white font-['JetBrains_Mono'] text-xs font-bold uppercase tracking-[0.15em] px-6 py-3 hover:bg-white hover:text-[#0080FB] transition-all duration-300 active:scale-95 flex items-center gap-2 shadow-[0_0_20px_rgba(0,128,251,0.3)]"
           >
-            <span>TRY FOR FREE</span>
+            <span>INSTALL APP</span>
             <ArrowUpRight className="w-4 h-4" />
-          </button>
+          </a>
 
           {/* Mobile Menu Toggle */}
           <button

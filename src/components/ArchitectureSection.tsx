@@ -87,24 +87,24 @@ export const ArchitectureSection: React.FC = () => {
   const steps = [
     {
       num: '01',
-      title: 'ESTABLISH LINK',
-      description: 'Connect your store/platform API in seconds. Seamless webhook & real-time bidirectional data sync.',
+      title: 'EMBEDDED SIGNUP',
+      description: 'Connect your WhatsApp Business in under 60 seconds with Meta Embedded Signup. Supports Coexistence Mode to keep using your phone app alongside Cloud API.',
       icon: Cpu,
-      meta: 'API_HOOK // 12ms',
+      meta: 'META_EMBED // <60s',
     },
     {
       num: '02',
-      title: 'DEFINE LOGIC',
-      description: 'Configure flow logic with drag-and-drop triggers, customized timing & condition branch rules.',
+      title: '2-WAY ORDER TAGS',
+      description: 'Configure automated flows with interactive quick replies. When customers tap confirm on WhatsApp, Shopify order tags update automatically in real-time.',
       icon: Terminal,
-      meta: 'LOGIC_ENGINE // v3',
+      meta: 'TAG_SYNC // BIDIRECTIONAL',
     },
     {
       num: '03',
-      title: 'EXECUTE',
-      description: 'Receive customer responses in single-threaded dashboard, driving highly targeted WhatsApp conversions.',
+      title: 'SHOPIFY ADMIN 1-CLICK',
+      description: 'Dispatch updates directly from native Shopify Orders screens with 1-click admin action extensions, smart tracked /r/:token links, and anti-spam duplicate shields.',
       icon: ShieldCheck,
-      meta: 'DISPATCH // 99.9%',
+      meta: 'ADMIN_EXT // NATIVE',
     },
   ];
 
@@ -118,11 +118,11 @@ export const ArchitectureSection: React.FC = () => {
             ARCHITECTURE
           </h2>
           <p className="font-['JetBrains_Mono'] text-xs text-[#0080FB] uppercase tracking-[0.2em] font-semibold">
-            /// WORKFLOW LOGIC / HIGH CONVERSION ///
+            /// OFFICIAL META CLOUD API / SHOPIFY NATIVE ///
           </p>
         </div>
         <div className="font-['JetBrains_Mono'] text-xs text-[#888888] max-w-md border-l-2 border-[#262626] pl-4 py-2 leading-relaxed">
-          It's a one-stop-shop to create smart flows whether for abandoned carts or custom workflows.
+          Engineered natively for Shopify with official Meta Cloud API protocols, 2-way interactive order tags, and sub-second webhook execution.
         </div>
       </div>
 

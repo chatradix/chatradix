@@ -63,7 +63,7 @@ export const RevenueBoostSection: React.FC = () => {
           >
             <TrendingUp className="w-4 h-4 text-[#25D366]" />
             <span className="font-['JetBrains_Mono'] text-xs text-white font-bold tracking-wider">
-              94% BRANDS SEE 14-DAY BOOST
+              98% AVERAGE MESSAGE OPEN RATE
             </span>
           </div>
 
@@ -81,7 +81,7 @@ export const RevenueBoostSection: React.FC = () => {
           {/* Protocol Tag */}
           <div className="font-['JetBrains_Mono'] text-xs text-[#25D366] mb-10 md:mb-12 tracking-[0.4em] uppercase font-semibold flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-[#25D366] animate-ping" />
-            <span>/// HIGH ROI / MAXIMIZE CONVERSION / SHOPIFY ///</span>
+            <span>/// HIGH CONVERSION / SHOPIFY AUTOMATION ///</span>
           </div>
 
           {/* Massive Stacked Headline with Kinetic Parallax Lines */}
@@ -120,19 +120,18 @@ export const RevenueBoostSection: React.FC = () => {
               className="max-w-md border-l-4 border-[#25D366] bg-[#131313] p-8 border border-[#262626] shadow-2xl will-change-transform hover:border-[#25D366]/60 transition-colors"
             >
               <p className="font-['Hanken_Grotesk'] text-base md:text-lg text-[#888888] mb-8 leading-relaxed">
-                Out of 100+ Brands we've onboarded, 94% noticed a measurable sales increase within their first 14 days of WhatsApp launch.
+                WhatsApp messages achieve up to 98% open rates compared to ~20% for standard marketing emails. Recover abandoned checkouts, verify COD orders, and engage customers directly where they chat daily.
               </p>
 
-              <button
-                onClick={() => {
-                  const el = document.getElementById('offer');
-                  if (el) el.scrollIntoView({ behavior: 'smooth' });
-                }}
-                className="bg-[#25D366] text-black font-['JetBrains_Mono'] text-xs font-bold px-8 py-4 hover:bg-white hover:text-black transition-all flex items-center gap-3 uppercase tracking-[0.15em] group shadow-[0_0_20px_rgba(37,211,102,0.3)] hover:shadow-[0_0_30px_rgba(255,255,255,0.4)]"
+              <a
+                href="https://apps.shopify.com/chatradix"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-[#25D366] text-black font-['JetBrains_Mono'] text-xs font-bold px-8 py-4 hover:bg-white hover:text-black transition-all inline-flex items-center gap-3 uppercase tracking-[0.15em] group shadow-[0_0_20px_rgba(37,211,102,0.3)] hover:shadow-[0_0_30px_rgba(255,255,255,0.4)]"
               >
-                <span>START FREE TRIAL</span>
+                <span>INSTALL ON SHOPIFY</span>
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-              </button>
+              </a>
             </div>
           </div>
         </div>

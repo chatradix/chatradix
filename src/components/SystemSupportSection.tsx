@@ -84,7 +84,7 @@ export const SystemSupportSection: React.FC<SystemSupportSectionProps> = ({ onNo
               <div className="w-3 h-3 rounded-full bg-[#ffbd2e]" />
               <div className="w-3 h-3 rounded-full bg-[#27c93f]" />
               <span className="ml-3 font-['JetBrains_Mono'] text-xs text-[#888888] uppercase tracking-[0.15em]">
-                /// SYSTEM SUPPORT / INQUIRY
+                /// ONBOARDING & TECHNICAL SUPPORT
               </span>
             </div>
 
@@ -94,12 +94,12 @@ export const SystemSupportSection: React.FC<SystemSupportSectionProps> = ({ onNo
             </h2>
 
             <p className="font-['Hanken_Grotesk'] text-base md:text-lg text-[#888888] mb-8 max-w-md leading-relaxed">
-              Fast and reliable WhatsApp infrastructure. Built for scale with 99.9% uptime.
+              Need assistance connecting your Meta WhatsApp Business Account (WABA) or configuring custom flows? Our technical team is here to assist.
             </p>
 
             <div className="inline-flex items-center gap-2.5 px-3.5 py-2 bg-[#131313] border border-[#262626] text-xs font-['JetBrains_Mono'] text-[#c1c6d6] mb-8">
               <Mail className="w-4 h-4 text-[#0080FB]" />
-              <span className="text-[#888888]">DISPATCH:</span>
+              <span className="text-[#888888]">DIRECT DISPATCH:</span>
               <a 
                 href="mailto:info@chatradix.com" 
                 className="text-[#0080FB] hover:text-white transition-colors underline decoration-[#0080FB]/40"
@@ -109,13 +109,13 @@ export const SystemSupportSection: React.FC<SystemSupportSectionProps> = ({ onNo
             </div>
           </div>
 
-          <button
-            onClick={() => onNotify('Redirecting to demo scheduling calendar...')}
+          <a
+            href="mailto:info@chatradix.com?subject=ChatRadix%20Onboarding%20Assistance"
             className="relative z-10 border border-[#262626] bg-[#131313] text-[#e5e2e1] font-['JetBrains_Mono'] text-xs font-semibold px-6 py-4 hover:border-[#0080FB] hover:text-[#0080FB] hover:shadow-[0_0_20px_rgba(0,128,251,0.2)] transition-all uppercase tracking-[0.15em] inline-flex items-center gap-3 self-start"
           >
             <Calendar className="w-4 h-4 text-[#0080FB]" />
-            <span>&lt; Schedule a Demo Call &gt;</span>
-          </button>
+            <span>&lt; Request Setup Assistance &gt;</span>
+          </a>
         </div>
 
         {/* Right Form Column */}

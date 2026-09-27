@@ -83,17 +83,17 @@ export const MetaPartnerSection: React.FC = () => {
               <span className="relative inline-flex rounded-full h-3 w-3 bg-[#25D366]" />
             </span>
             <span className="font-['JetBrains_Mono'] text-xs font-semibold text-[#25D366] tracking-[0.25em] uppercase">
-              /// META APPROVED ///
+              /// OFFICIAL META INTEGRATION ///
             </span>
           </div>
 
           <h2 className="font-['Hanken_Grotesk'] font-black text-4xl sm:text-6xl lg:text-[4.5rem] leading-none text-[#e5e2e1] uppercase tracking-tighter mb-6">
-            VERIFIED META<br />
-            PARTNER
+            OFFICIAL META<br />
+            CLOUD API
           </h2>
 
           <p className="font-['Hanken_Grotesk'] text-base md:text-lg text-[#888888] leading-relaxed max-w-xl">
-            Operating on official WhatsApp Cloud API infrastructure. Ensuring high deliverability, zero phone number risk, and instantaneous processing speed at global scale.
+            Operating directly on Meta's official WhatsApp Business Platform. Experience 100% compliance, zero phone ban risk, verified business sender trust, and sub-second webhook execution.
           </p>
         </div>
 
@@ -107,10 +107,10 @@ export const MetaPartnerSection: React.FC = () => {
           >
             <ShieldCheck className="w-14 h-14 md:w-16 md:h-16 text-[#25D366] group-hover:scale-110 transition-transform" />
             <span className="font-['Hanken_Grotesk'] font-extrabold text-xl md:text-2xl text-[#e5e2e1] tracking-wider uppercase">
-              META TECH PARTNER
+              OFFICIAL META API
             </span>
             <span className="font-['JetBrains_Mono'] text-[10px] text-[#25D366] tracking-[0.2em] uppercase font-semibold">
-              OFFICIAL BSP INFRASTRUCTURE
+              WHATSAPP BUSINESS PLATFORM
             </span>
           </div>
         </div>

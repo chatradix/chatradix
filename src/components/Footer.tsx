@@ -24,74 +24,88 @@ export const Footer: React.FC<FooterProps> = ({ onScrollToTop, onScrollToSection
             />
           </button>
           <p className="font-['JetBrains_Mono'] text-xs text-[#888888] uppercase tracking-[0.15em] leading-relaxed">
-            HIGH-PRECISION CONVERSATIONAL COMMERCE ARCHITECTURE FOR SHOPIFY.
+            OFFICIAL META WHATSAPP CLOUD API AUTOMATION FOR SHOPIFY.
           </p>
         </div>
 
         {/* Nav Columns Grid */}
         <nav className="grid grid-cols-2 sm:grid-cols-4 gap-8 lg:gap-16 w-full lg:w-auto">
-          {/* Column 1: FEATURES */}
+          {/* Column 1: AUTOMATIONS */}
           <div className="flex flex-col gap-4">
             <span className="font-['JetBrains_Mono'] text-xs text-[#888888] border-b border-[#262626] pb-2 uppercase tracking-[0.2em] font-semibold">
-              FEATURES
+              AUTOMATIONS
             </span>
+            <button onClick={() => onScrollToSection('flows')} className="font-['JetBrains_Mono'] text-xs text-[#e5e2e1] hover:text-[#0080FB] transition-colors text-left uppercase tracking-wider">
+              Order Confirmation
+            </button>
             <button onClick={() => onScrollToSection('flows')} className="font-['JetBrains_Mono'] text-xs text-[#e5e2e1] hover:text-[#0080FB] transition-colors text-left uppercase tracking-wider">
               Abandoned Checkout
             </button>
             <button onClick={() => onScrollToSection('flows')} className="font-['JetBrains_Mono'] text-xs text-[#e5e2e1] hover:text-[#0080FB] transition-colors text-left uppercase tracking-wider">
-              Shipping Alerts
+              Shipping & Delivery
             </button>
             <button onClick={() => onScrollToSection('flows')} className="font-['JetBrains_Mono'] text-xs text-[#e5e2e1] hover:text-[#0080FB] transition-colors text-left uppercase tracking-wider">
-              Upsell Engine
+              Media Carousels
             </button>
           </div>
 
-          {/* Column 2: ATTRIBUTES */}
+          {/* Column 2: FEATURES */}
           <div className="flex flex-col gap-4">
             <span className="font-['JetBrains_Mono'] text-xs text-[#888888] border-b border-[#262626] pb-2 uppercase tracking-[0.2em] font-semibold">
-              ATTRIBUTES
+              FEATURES
+            </span>
+            <button onClick={() => onScrollToSection('architecture')} className="font-['JetBrains_Mono'] text-xs text-[#e5e2e1] hover:text-[#0080FB] transition-colors text-left uppercase tracking-wider">
+              2-Way Order Tagging
+            </button>
+            <button onClick={() => onScrollToSection('architecture')} className="font-['JetBrains_Mono'] text-xs text-[#e5e2e1] hover:text-[#0080FB] transition-colors text-left uppercase tracking-wider">
+              60s Embedded Signup
+            </button>
+            <button onClick={() => onScrollToSection('architecture')} className="font-['JetBrains_Mono'] text-xs text-[#e5e2e1] hover:text-[#0080FB] transition-colors text-left uppercase tracking-wider">
+              Shopify Admin 1-Click
+            </button>
+            <button onClick={() => onScrollToSection('architecture')} className="font-['JetBrains_Mono'] text-xs text-[#e5e2e1] hover:text-[#0080FB] transition-colors text-left uppercase tracking-wider">
+              Anti-Spam Shield
+            </button>
+          </div>
+
+          {/* Column 3: PLATFORM */}
+          <div className="flex flex-col gap-4">
+            <span className="font-['JetBrains_Mono'] text-xs text-[#888888] border-b border-[#262626] pb-2 uppercase tracking-[0.2em] font-semibold">
+              PLATFORM
             </span>
             <button onClick={() => onScrollToSection('meta-partner')} className="font-['JetBrains_Mono'] text-xs text-[#25D366] hover:text-[#0080FB] transition-colors text-left uppercase tracking-wider">
-              Meta Approved
+              Official Meta API
             </button>
+            <a 
+              href="https://apps.shopify.com/chatradix"
+              target="_blank"
+              rel="noopener noreferrer" 
+              className="font-['JetBrains_Mono'] text-xs text-[#0080FB] hover:underline transition-colors text-left uppercase tracking-wider"
+            >
+              Shopify App Store
+            </a>
             <button onClick={() => onScrollToSection('architecture')} className="font-['JetBrains_Mono'] text-xs text-[#e5e2e1] hover:text-[#0080FB] transition-colors text-left uppercase tracking-wider">
-              99.98% Deliverability
-            </button>
-            <button onClick={() => onScrollToSection('architecture')} className="font-['JetBrains_Mono'] text-xs text-[#e5e2e1] hover:text-[#0080FB] transition-colors text-left uppercase tracking-wider">
-              Sub-50ms Latency
+              Sub-second Webhooks
             </button>
           </div>
 
-          {/* Column 3: ARCHITECTURE */}
+          {/* Column 4: CONNECT */}
           <div className="flex flex-col gap-4">
             <span className="font-['JetBrains_Mono'] text-xs text-[#888888] border-b border-[#262626] pb-2 uppercase tracking-[0.2em] font-semibold">
-              ARCHITECTURE
-            </span>
-            <button onClick={() => onScrollToSection('architecture')} className="font-['JetBrains_Mono'] text-xs text-[#e5e2e1] hover:text-[#0080FB] transition-colors text-left uppercase tracking-wider">
-              Establish Link
-            </button>
-            <button onClick={() => onScrollToSection('architecture')} className="font-['JetBrains_Mono'] text-xs text-[#e5e2e1] hover:text-[#0080FB] transition-colors text-left uppercase tracking-wider">
-              Define Logic
-            </button>
-            <button onClick={() => onScrollToSection('architecture')} className="font-['JetBrains_Mono'] text-xs text-[#e5e2e1] hover:text-[#0080FB] transition-colors text-left uppercase tracking-wider">
-              Execution
-            </button>
-          </div>
-
-          {/* Column 4: CONTACT US */}
-          <div className="flex flex-col gap-4">
-            <span className="font-['JetBrains_Mono'] text-xs text-[#888888] border-b border-[#262626] pb-2 uppercase tracking-[0.2em] font-semibold">
-              CONTACT US
+              CONNECT
             </span>
             <button onClick={() => onScrollToSection('support')} className="font-['JetBrains_Mono'] text-xs text-[#e5e2e1] hover:text-[#0080FB] transition-colors text-left uppercase tracking-wider">
-              Support Channel
-            </button>
-            <button onClick={() => onScrollToSection('support')} className="font-['JetBrains_Mono'] text-xs text-[#e5e2e1] hover:text-[#0080FB] transition-colors text-left uppercase tracking-wider">
-              System Terminal
+              Technical Support
             </button>
             <button onClick={() => onScrollToSection('offer')} className="font-['JetBrains_Mono'] text-xs text-[#0080FB] hover:underline transition-colors text-left uppercase tracking-wider">
-              Claim 2 Months Free
+              2 Months Free Launch
             </button>
+            <a 
+              href="mailto:info@chatradix.com" 
+              className="font-['JetBrains_Mono'] text-xs text-[#e5e2e1] hover:text-[#0080FB] transition-colors text-left uppercase tracking-wider"
+            >
+              info@chatradix.com
+            </a>
           </div>
         </nav>
       </div>
@@ -99,15 +113,25 @@ export const Footer: React.FC<FooterProps> = ({ onScrollToTop, onScrollToSection
       {/* Bottom Legal Bar */}
       <div className="max-w-[1440px] mx-auto px-6 md:px-16 flex flex-col sm:flex-row justify-between items-center gap-4">
         <p className="font-['JetBrains_Mono'] text-[11px] text-[#888888] tracking-wider uppercase text-center sm:text-left">
-          SAN JOSE, CALIFORNIA, UNITED STATES • ©2026 CHATRADIX SYSTEMS
+          ©2026 CHATRADIX • OFFICIAL META WHATSAPP CLOUD API AUTOMATION
         </p>
 
         <nav className="flex gap-6">
-          <a href="#" onClick={(e) => { e.preventDefault(); alert('Terms of Service: ChatRadix Architectural Systems'); }} className="font-['JetBrains_Mono'] text-[11px] text-[#888888] hover:text-[#e5e2e1] transition-colors tracking-wider uppercase">
-            Terms
+          <a 
+            href="https://chatradix.com/privacy-policy" 
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-['JetBrains_Mono'] text-[11px] text-[#888888] hover:text-[#e5e2e1] transition-colors tracking-wider uppercase"
+          >
+            Privacy Policy
           </a>
-          <a href="#" onClick={(e) => { e.preventDefault(); alert('Privacy Policy: WhatsApp Cloud API Data Privacy Protocol'); }} className="font-['JetBrains_Mono'] text-[11px] text-[#888888] hover:text-[#e5e2e1] transition-colors tracking-wider uppercase">
-            Privacy
+          <a 
+            href="https://apps.shopify.com/chatradix" 
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-['JetBrains_Mono'] text-[11px] text-[#0080FB] hover:text-white transition-colors tracking-wider uppercase"
+          >
+            Shopify App Listing
           </a>
         </nav>
       </div>

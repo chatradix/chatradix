@@ -74,7 +74,7 @@ export const OfferBanner: React.FC<OfferBannerProps> = ({ onNotify }) => {
         {/* Top Protocol Pill */}
         <div className="font-['JetBrains_Mono'] text-xs text-white/90 font-semibold tracking-[0.25em] uppercase mb-8 flex items-center gap-2">
           <Gift className="w-4 h-4 text-white" />
-          <span>/// SPECIAL INTRO OFFER / 2026 ///</span>
+          <span>/// EARLY LAUNCH INTRODUCTORY OFFER ///</span>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
@@ -90,7 +90,7 @@ export const OfferBanner: React.FC<OfferBannerProps> = ({ onNotify }) => {
               </span>{' '}
               FOR <br />
               <span ref={line3Ref} className="inline-block will-change-transform text-white">
-                ALL USERS
+                ALL STORES
               </span>
             </h2>
           </div>
@@ -99,17 +99,19 @@ export const OfferBanner: React.FC<OfferBannerProps> = ({ onNotify }) => {
           <div ref={cardCtaRef} className="lg:col-span-4 flex flex-col items-start lg:items-end justify-center will-change-transform">
             <div className="border-l-2 border-white/40 pl-6 lg:pl-8 py-3 mb-10 max-w-md bg-white/5 backdrop-blur-sm">
               <p className="font-['Hanken_Grotesk'] text-base md:text-lg text-white/90 leading-relaxed">
-                Lifetime deployment retention access. Tax bill and historical data sync stored for 90 days. Claim before offer expires.
+                Enjoy full unrestricted access to all 12 automations, rich media carousels, and 1-click Shopify admin messaging. Install directly from the Shopify App Store.
               </p>
             </div>
 
-            <button
-              onClick={handleCopyCode}
+            <a
+              href="https://apps.shopify.com/chatradix"
+              target="_blank"
+              rel="noopener noreferrer"
               className="bg-[#0b0d12] text-white border border-black font-['JetBrains_Mono'] text-xs font-bold px-10 py-5 hover:bg-white hover:text-[#0075FF] transition-all duration-300 active:scale-95 inline-flex items-center gap-4 justify-center tracking-[0.2em] rounded-none group shadow-2xl hover:shadow-[0_0_30px_rgba(255,255,255,0.4)]"
             >
-              <span>{copiedCode ? 'CODE COPIED: CHATRADIX60FREE' : 'CLAIM OFFER (CODE: CHATRADIX60FREE)'}</span>
+              <span>CLAIM ON SHOPIFY</span>
               <ArrowUpRight className="w-5 h-5 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
-            </button>
+            </a>
           </div>
         </div>
       </div>

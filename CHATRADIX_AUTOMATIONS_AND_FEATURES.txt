@@ -1,0 +1,182 @@
+================================================================================
+                    CHATRADIX - OFFICIAL WHATSAPP AUTOMATION
+                     12 AUTOMATIONS & CORE FEATURE GUIDE
+================================================================================
+
+--------------------------------------------------------------------------------
+PART 1: THE 12 STORE AUTOMATIONS & FUNCTIONALITY
+--------------------------------------------------------------------------------
+
+1. ORDER CONFIRMATION
+   -------------------
+   • Trigger: Fires immediately (or after a configured delay) when a customer
+     places an order on your Shopify store.
+   • Functionality:
+     - Sends an order summary with customer name, order number, and total price.
+     - Supports 2-way interactive Quick Reply buttons ("Confirm order" / "Cancel order").
+     - Automatically updates Shopify order tags (e.g., adds "✅ order-confirmed" and
+       removes "⏳ Order-Confirmation-Pending" when the customer taps Confirm).
+     - Instantly delivers automated follow-up messages based on the customer's choice.
+     - Includes Duplicate Order Protection (flags or suppresses duplicate orders placed
+       within customizable time windows like 1h, 6h, 12h, 24h, or same calendar day).
+     - Filterable by payment status (all, paid only, or pending/COD).
+     - Excludes specific phone numbers or fraud-risk accounts.
+
+2. ABANDONED CHECKOUT RECOVERY
+   ---------------------------
+   • Trigger: Fires when a shopper enters their phone number in checkout but abandons
+     without completing the purchase.
+   • Functionality:
+     - Multi-step recovery sequence (e.g., Step 1 at 30 mins, Step 2 at 24 hours,
+       Step 3 at 48 hours).
+     - Employs dynamic tracked recovery links (/r/:token) that restore the customer's
+       exact cart, items, and checkout session upon clicking.
+     - Automatically ceases subsequent follow-ups the moment the order is completed.
+     - Includes single-click "Unsubscribe" / opt-out quick reply for Meta compliance.
+
+3. ORDER FULFILLMENT (SHIPPING UPDATES)
+   -----------------------------------
+   • Trigger: Triggers automatically when a fulfillment is created or updated in Shopify.
+   • Functionality:
+     - Notifies the customer that their package is packed and on the way.
+     - Dynamically sends carrier name, tracking numbers, and live tracking URLs.
+     - Features an interactive "Track Shipment" button that directs customers to the
+       carrier portal or your branded store tracking page.
+
+4. ORDER DELIVERED
+   ----------------
+   • Trigger: Triggered when carrier tracking reports the order status as "Delivered"
+     in Shopify.
+   • Functionality:
+     - Confirms package drop-off to give peace of mind and minimize delivery disputes.
+     - Invites the customer to unbox and inspect their items.
+     - Sets the stage for feedback and repeat purchases while excitement is highest.
+
+5. ORDER CANCELLATION
+   ------------------
+   • Trigger: Fires when an order is cancelled or voided in Shopify.
+   • Functionality:
+     - Delivers immediate reassurance and transparency to the buyer.
+     - Confirms cancellation status and outlines refund or credit timelines.
+     - Reduces customer support inquiries and chargeback risks.
+
+6. ORDER NOTIFICATION
+   ------------------
+   • Trigger: Universal lifecycle update for important order events or modifications.
+   • Functionality:
+     - Sends tailored transaction notices, order edits, or specialized customer alerts.
+     - Flexible variable mapping for order items, address updates, and fulfillment details.
+
+7. DRAFT ORDER RECOVERY
+   --------------------
+   • Trigger: Initiated for B2B, wholesale, custom quote, or manual phone-order drafts
+     created in Shopify that remain unpaid.
+   • Functionality:
+     - Multi-sequence automated reminders sent to wholesale or invoice buyers.
+     - Delivers secure, tracked invoice payment links directly to the client on WhatsApp.
+     - Halts follow-ups as soon as the invoice is paid and converted into a live order.
+
+8. PRODUCT REVIEW REQUEST
+   ----------------------
+   • Trigger: Fires N days after an order achieves "Delivered" status in Shopify.
+   • Functionality:
+     - Verifies actual delivery before counting down (avoiding asking for reviews
+       on packages still in transit).
+     - Prompts satisfied buyers to leave reviews on your store or product pages.
+     - Drives social proof and user-generated content organically.
+
+9. PRODUCT SPOTLIGHT CAMPAIGN (MEDIA CAROUSEL)
+   -------------------------------------------
+   • Trigger: On-demand or scheduled broadcast campaigns for catalog showcases.
+   • Functionality:
+     - Sends interactive multi-card WhatsApp media carousels (up to 10 visual cards).
+     - Each card displays a product image, title, price, and dedicated "Buy Now" button.
+     - Customers swipe horizontally on WhatsApp to browse your catalog and tap to purchase.
+
+10. CUSTOMER CAMPAIGN (SEGMENTED RE-ENGAGEMENT)
+    -------------------------------------------
+    • Trigger: Scheduled bulk campaigns tailored to customer lists and loyalty tiers.
+    • Functionality:
+      - Targets customer tiers (e.g., Regular, Loyal, Platinum, VIP).
+      - Filterable by minimum customer spend thresholds.
+      - Personalizes greetings with first names, order history, and exclusive discount codes.
+
+11. WIN-BACK INACTIVE CUSTOMERS
+    ---------------------------
+    • Trigger: Background intelligence scanner that identifies customers who have not
+      purchased within a set inactivity window (e.g., 60, 90, or 120 days).
+    • Functionality:
+      - Automatically delivers re-engagement offers and discount vouchers to lapsed buyers.
+      - Built-in cooldown periods (e.g., 90 days) prevent message fatigue and spamming.
+      - Minimum spend filters ensure offers target historically profitable customers.
+      - Dynamically pulls previous order date, last order name, and days since last purchase.
+
+12. ADMIN / STAFF NOTIFICATION
+    --------------------------
+    • Trigger: Immediate alert sent upon every new order placement.
+    • Functionality:
+      - Sends high-priority WhatsApp notifications directly to store owners, managers,
+        or warehouse staff phone numbers.
+      - Contains order ID, customer name, total amount, payment method (COD vs Prepaid),
+        and shipping city for rapid fulfillment preparation.
+
+
+--------------------------------------------------------------------------------
+PART 2: MAIN FEATURES & CAPABILITIES OF CHATRADIX
+--------------------------------------------------------------------------------
+
+1. OFFICIAL META WHATSAPP CLOUD API INTEGRATION
+   - Direct, high-speed connection through Meta's Official Cloud API.
+   - Embedded Signup allows merchants to connect their WhatsApp Business in under 60 seconds.
+   - Supports both Coexistence Mode (use WhatsApp Business App and API simultaneously)
+     and full Cloud API mode.
+   - Self-healing WABA ID discovery automatically validates and auto-subscribes webhooks.
+
+2. FULL-FEATURED TEMPLATE BUILDER & TEMPLATE SHOP
+   - In-app template creator supporting Single message and Carousel layouts.
+   - Rich headers (Text, Image, Video, Documents) with sample uploads for Meta approval.
+   - Dynamic Shopify variables for customers, orders, fulfillments, and line items.
+   - Interactive Buttons: URL buttons, Phone Number buttons, Copy Offer Code buttons,
+     and Quick Reply buttons.
+   - Pre-built "Template Shop" offering pre-approved, high-converting eCommerce templates.
+
+3. TWO-WAY INTERACTIVE REPLIES & SHOPIFY ORDER TAGGING
+   - Seamless two-way conversational automation.
+   - Quick reply actions on WhatsApp automatically transition Shopify order tags:
+     • "Confirm order" -> adds "✅ order-confirmed", removes "⏳ Order-Confirmation-Pending"
+     • "Cancel order" -> adds "❌ order-cancelled", removes pending tags
+   - Automatically sends instant custom follow-up replies on WhatsApp.
+
+4. 24/7 INBOUND AUTO REPLIER
+   - Automated intelligent responder for incoming WhatsApp messages from customers.
+   - Define keyword triggers (e.g., "track", "help", "order status", "return") with
+     automated answers to resolve customer questions 24/7 without manual staff overhead.
+
+5. SMART TRACKED SHORT LINKS (/r/:token)
+   - Built-in URL redirect engine compliant with Meta's strict dynamic URL policies.
+   - Restores Shopify abandoned checkouts and draft orders with full tracking.
+   - Tracks click-throughs and attributes recovered sales directly in analytics.
+
+6. 1-CLICK MANUAL WHATSAPP MESSAGING FROM SHOPIFY ADMIN
+   - Integrated Shopify Admin Action Extensions.
+   - Send manual order confirmations, fulfillment updates, or checkout recovery links
+     directly from Shopify's native Orders and Draft Orders admin screens with 1 click.
+
+7. COMPREHENSIVE ANTI-SPAM & RELIABILITY SHIELD
+   - Duplicate Order Detection: Prevents duplicate messages or flags spam checkout floods.
+   - Non-WhatsApp Recipient Detection: Identifies unregistered numbers and tags Shopify
+     orders (e.g., "WhatsApp Not Registered") so fulfillment teams can use SMS or phone calls.
+   - Payment Issue Safeguard: Flags Meta billing issues with descriptive order tags.
+   - Automatic Unsubscribe Processing: Instantly respects customer opt-out requests.
+
+8. STOREFRONT WHATSAPP LIVE CHAT WIDGET
+   - Customizable floating WhatsApp chat widget for your Shopify storefront.
+   - Configure widget position (bottom-right / bottom-left), branding colors, greeting text,
+     and pre-filled message prompts so visitors can initiate presale chats with 1 tap.
+
+9. REAL-TIME ANALYTICS DASHBOARD
+   - Live visual charts tracking message volume, delivery rates, and read rates.
+   - Revenue attribution tracking total sales and recovered revenue driven by WhatsApp.
+   - Automation performance breakdown ranking which automations generate the highest ROI.
+
+================================================================================
