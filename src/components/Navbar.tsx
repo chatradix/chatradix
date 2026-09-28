@@ -3,22 +3,47 @@ import { Mail, Menu, X, ArrowUpRight } from 'lucide-react';
 import headerLogo from '../assets/headerlogo.png';
 
 interface NavbarProps {
+  currentPage?: 'home' | 'pricing';
+  onNavigatePage?: (page: 'home' | 'pricing', targetSection?: string) => void;
   onScrollToSection: (id: string) => void;
 }
 
-export const Navbar: React.FC<NavbarProps> = ({ onScrollToSection }) => {
+export const Navbar: React.FC<NavbarProps> = ({ 
+  currentPage = 'home', 
+  onNavigatePage, 
+  onScrollToSection 
+}) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const navLinks = [
-    { label: 'AUTOMATIONS', id: 'flows' },
-    { label: 'ARCHITECTURE', id: 'architecture' },
-    { label: 'META API', id: 'meta-partner' },
-    { label: 'SUPPORT', id: 'support' },
+    { label: 'AUTOMATIONS', id: 'flows', page: 'home' as const },
+    { label: 'ARCHITECTURE', id: 'architecture', page: 'home' as const },
+    { label: 'META API', id: 'meta-partner', page: 'home' as const },
+    { label: 'PRICING', id: 'pricing', page: 'pricing' as const },
+    { label: 'SUPPORT', id: 'support', page: 'home' as const },
   ];
 
-  const handleNavClick = (id: string) => {
-    onScrollToSection(id);
+  const handleNavClick = (link: typeof navLinks[0]) => {
+    if (link.page === 'pricing') {
+      if (onNavigatePage) {
+        onNavigatePage('pricing');
+      }
+    } else {
+      if (onNavigatePage) {
+        onNavigatePage('home', link.id);
+      } else {
+        onScrollToSection(link.id);
+      }
+    }
     setMobileMenuOpen(false);
+  };
+
+  const handleLogoClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (onNavigatePage) {
+      onNavigatePage('home');
+    }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   return (
@@ -27,7 +52,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onScrollToSection }) => {
         {/* Brand Logo */}
         <a 
           href="#" 
-          onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+          onClick={handleLogoClick}
           className="flex items-center group py-1"
           aria-label="ChatRadix"
         >
@@ -40,16 +65,24 @@ export const Navbar: React.FC<NavbarProps> = ({ onScrollToSection }) => {
 
         {/* Desktop Navigation */}
         <nav className="hidden lg:flex items-center gap-10">
-          {navLinks.map((link) => (
-            <button
-              key={link.label}
-              onClick={() => handleNavClick(link.id)}
-              className="font-['JetBrains_Mono'] text-xs font-semibold uppercase tracking-[0.2em] text-[#888888] hover:text-[#0080FB] transition-colors py-1 relative group"
-            >
-              <span>{link.label}</span>
-              <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-[#0080FB] group-hover:w-full transition-all duration-300 shadow-[0_0_8px_#0080FB]" />
-            </button>
-          ))}
+          {navLinks.map((link) => {
+            const isActive = link.page === 'pricing' && currentPage === 'pricing';
+
+            return (
+              <button
+                key={link.label}
+                onClick={() => handleNavClick(link)}
+                className={`font-['JetBrains_Mono'] text-xs font-semibold uppercase tracking-[0.2em] transition-colors py-1 relative group ${
+                  isActive ? 'text-[#0080FB]' : 'text-[#888888] hover:text-[#0080FB]'
+                }`}
+              >
+                <span>{link.label}</span>
+                <span className={`absolute bottom-0 left-0 h-[2px] bg-[#0080FB] transition-all duration-300 shadow-[0_0_8px_#0080FB] ${
+                  isActive ? 'w-full' : 'w-0 group-hover:w-full'
+                }`} />
+              </button>
+            );
+          })}
         </nav>
 
         {/* Action Controls */}
@@ -57,7 +90,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onScrollToSection }) => {
 
           {/* Quick Support Dispatch Icon */}
           <button
-            onClick={() => handleNavClick('support')}
+            onClick={() => handleNavClick({ label: 'SUPPORT', id: 'support', page: 'home' })}
             title="Contact Support & Onboarding"
             className="hidden sm:flex items-center justify-center w-10 h-10 border border-[#262626] hover:border-[#0080FB] text-[#e5e2e1] hover:text-[#0080FB] transition-all bg-[#131313] hover:shadow-[0_0_15px_rgba(0,128,251,0.25)] relative group"
           >
@@ -95,7 +128,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onScrollToSection }) => {
           {navLinks.map((link) => (
             <button
               key={link.label}
-              onClick={() => handleNavClick(link.id)}
+              onClick={() => handleNavClick(link)}
               className="font-['JetBrains_Mono'] text-sm uppercase tracking-[0.15em] text-[#c1c6d6] hover:text-[#0080FB] py-2 text-left border-b border-[#262626]/50"
             >
               {link.label}
@@ -103,7 +136,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onScrollToSection }) => {
           ))}
           <button
             onClick={() => {
-              handleNavClick('support');
+              handleNavClick({ label: 'SUPPORT', id: 'support', page: 'home' });
             }}
             className="flex items-center gap-3 font-['JetBrains_Mono'] text-sm uppercase tracking-[0.15em] text-[#0080FB] py-2"
           >

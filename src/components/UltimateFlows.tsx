@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useLayoutEffect, useRef } from 'react';
 import { 
   ShieldCheck, 
   ShoppingCart, 
@@ -88,7 +88,7 @@ export const UltimateFlows: React.FC<UltimateFlowsProps> = ({ onNotify }) => {
   };
 
   // GSAP Horizontal Parallax Scrub with Lenis harmony & Multi-Layer Depth
-  useEffect(() => {
+  useLayoutEffect(() => {
     const container = containerRef.current;
     const track = trackRef.current;
     if (!container || !track) return;
@@ -165,11 +165,12 @@ export const UltimateFlows: React.FC<UltimateFlowsProps> = ({ onNotify }) => {
   return (
     <section
       id="flows"
-      ref={containerRef}
       className="relative w-full bg-[#06080d] border-y border-[#151c28] overflow-hidden select-none"
     >
-      {/* Pinned Full Viewport Container - Generous Top and Bottom Padding & Luxury Breathing Room */}
-      <div className="w-full h-screen min-h-[780px] max-h-[1080px] flex flex-col justify-between relative overflow-hidden pt-28 sm:pt-32 lg:pt-36 pb-12 sm:pb-16 lg:pb-20">
+      {/* Inner Pin Container - GSAP pins this inner wrapper so root section is never reparented */}
+      <div ref={containerRef} className="w-full relative">
+        {/* Pinned Full Viewport Container - Generous Top and Bottom Padding & Luxury Breathing Room */}
+        <div className="w-full h-screen min-h-[780px] max-h-[1080px] flex flex-col justify-between relative overflow-hidden pt-28 sm:pt-32 lg:pt-36 pb-12 sm:pb-16 lg:pb-20">
         
         {/* Consistent Electric Blue Ambient Backlight */}
         <div 
@@ -1030,6 +1031,7 @@ export const UltimateFlows: React.FC<UltimateFlowsProps> = ({ onNotify }) => {
           </div>
         </div>
 
+      </div>
       </div>
     </section>
   );
