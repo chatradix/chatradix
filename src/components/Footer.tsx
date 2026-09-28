@@ -3,7 +3,7 @@ import React from 'react';
 interface FooterProps {
   onScrollToTop: () => void;
   onScrollToSection: (id: string) => void;
-  onNavigatePage?: (page: 'home' | 'pricing', targetSection?: string) => void;
+  onNavigatePage?: (page: 'home' | 'pricing' | 'meta-rates', targetSection?: string) => void;
 }
 
 export const Footer: React.FC<FooterProps> = ({ onScrollToTop, onScrollToSection, onNavigatePage }) => {
@@ -85,6 +85,12 @@ export const Footer: React.FC<FooterProps> = ({ onScrollToTop, onScrollToSection
             >
               Shopify App Store
             </a>
+            <button 
+              onClick={() => onNavigatePage ? onNavigatePage('meta-rates') : null} 
+              className="font-['JetBrains_Mono'] text-xs text-[#0080FB] hover:underline transition-colors text-left uppercase tracking-wider font-semibold"
+            >
+              Meta Rates by Country
+            </button>
             <button 
               onClick={() => onNavigatePage ? onNavigatePage('pricing') : null} 
               className="font-['JetBrains_Mono'] text-xs text-[#0080FB] hover:underline transition-colors text-left uppercase tracking-wider font-semibold"

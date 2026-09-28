@@ -3,8 +3,8 @@ import { Mail, Menu, X, ArrowUpRight } from 'lucide-react';
 import headerLogo from '../assets/headerlogo.png';
 
 interface NavbarProps {
-  currentPage?: 'home' | 'pricing';
-  onNavigatePage?: (page: 'home' | 'pricing', targetSection?: string) => void;
+  currentPage?: 'home' | 'pricing' | 'meta-rates';
+  onNavigatePage?: (page: 'home' | 'pricing' | 'meta-rates', targetSection?: string) => void;
   onScrollToSection: (id: string) => void;
 }
 
@@ -18,15 +18,15 @@ export const Navbar: React.FC<NavbarProps> = ({
   const navLinks = [
     { label: 'AUTOMATIONS', id: 'flows', page: 'home' as const },
     { label: 'ARCHITECTURE', id: 'architecture', page: 'home' as const },
-    { label: 'META API', id: 'meta-partner', page: 'home' as const },
+    { label: 'META RATES', id: 'meta-rates', page: 'meta-rates' as const },
     { label: 'PRICING', id: 'pricing', page: 'pricing' as const },
     { label: 'SUPPORT', id: 'support', page: 'home' as const },
   ];
 
   const handleNavClick = (link: typeof navLinks[0]) => {
-    if (link.page === 'pricing') {
+    if (link.page === 'pricing' || link.page === 'meta-rates') {
       if (onNavigatePage) {
-        onNavigatePage('pricing');
+        onNavigatePage(link.page);
       }
     } else {
       if (onNavigatePage) {
@@ -66,7 +66,7 @@ export const Navbar: React.FC<NavbarProps> = ({
         {/* Desktop Navigation */}
         <nav className="hidden lg:flex items-center gap-10">
           {navLinks.map((link) => {
-            const isActive = link.page === 'pricing' && currentPage === 'pricing';
+            const isActive = (link.page === 'pricing' && currentPage === 'pricing') || (link.page === 'meta-rates' && currentPage === 'meta-rates');
 
             return (
               <button
