@@ -11,7 +11,7 @@
 // 6. Paste your 3 values below:
 
 export const EMAILJS_CONFIG = {
-  serviceId: 'YOUR_SERVICE_ID', // Replace with your Service ID from EmailJS
-  templateId: 'YOUR_TEMPLATE_ID', // Replace with your Template ID from EmailJS
-  publicKey: 'YOUR_PUBLIC_KEY', // Replace with your Public Key from EmailJS
+  serviceId: 'service_1erkt7h', // Replace with your Service ID from EmailJS
+  templateId: 'template_9zdz2zk', // Replace with your Template ID from EmailJS
+  publicKey: 'e6s7E4LPJTaOE5XIg', // Replace with your Public Key from EmailJS
 };
