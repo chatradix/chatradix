@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { ArrowRight, CheckCircle2, Loader2, Calendar, Mail, AlertCircle } from 'lucide-react';
+import emailjs from '@emailjs/browser';
+import { EMAILJS_CONFIG } from '../config/emailjs';
 
 interface SystemSupportSectionProps {
   onNotify: (msg: string) => void;
@@ -24,41 +26,53 @@ export const SystemSupportSection: React.FC<SystemSupportSectionProps> = ({ onNo
     setSubmitting(true);
     setErrorMessage('');
 
-    try {
-      const response = await fetch('https://formsubmit.co/ajax/info@chatradix.com', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-        },
-        body: JSON.stringify({
-          'Store Name / Domain': formData.storeName,
-          'Work Email': formData.email,
-          'WhatsApp Phone Number': formData.phone,
-          'Additional Details': formData.details || 'None provided',
-          '_subject': `New System Support Inquiry from ${formData.storeName}`,
-          '_replyto': formData.email,
-          '_template': 'table',
-          '_captcha': 'false',
-        }),
-      });
+    // Check if EmailJS keys have been configured in src/config/emailjs.ts
+    const isEmailJSConfigured =
+      EMAILJS_CONFIG.publicKey &&
+      EMAILJS_CONFIG.publicKey !== 'YOUR_PUBLIC_KEY' &&
+      EMAILJS_CONFIG.serviceId !== 'YOUR_SERVICE_ID' &&
+      EMAILJS_CONFIG.templateId !== 'YOUR_TEMPLATE_ID';
 
-      const data = await response.json().catch(() => null);
+    if (isEmailJSConfigured) {
+      try {
+        const templateParams = {
+          store_name: formData.storeName,
+          work_email: formData.email,
+          whatsapp_phone: formData.phone,
+          whatsapp_phone_clean: formData.phone.replace(/[^0-9]/g, ''),
+          additional_details: formData.details || 'None provided',
+          submitted_at: new Date().toLocaleString(),
+        };
 
-      if (response.ok && (!data || data.success === 'true' || data.success === true || response.status === 200)) {
-        setIsSuccess(true);
-        onNotify('Inquiry transmitted directly to info@chatradix.com!');
-      } else {
-        throw new Error((data && data.message) || 'Failed to submit inquiry.');
+        const result = await emailjs.send(
+          EMAILJS_CONFIG.serviceId,
+          EMAILJS_CONFIG.templateId,
+          templateParams,
+          EMAILJS_CONFIG.publicKey
+        );
+
+        if (result.status === 200 || result.text === 'OK') {
+          setIsSuccess(true);
+          onNotify('Inquiry transmitted directly to info@chatradix.com!');
+        } else {
+          throw new Error(result.text || 'Failed to submit inquiry.');
+        }
+      } catch (err: any) {
+        console.error('EmailJS submission error:', err);
+        setErrorMessage(
+          err?.text || err?.message || 'Unable to transmit inquiry automatically. Click below to email directly.'
+        );
+      } finally {
+        setSubmitting(false);
       }
-    } catch (err: any) {
-      console.error('Submission error:', err);
-      setErrorMessage(
-        'Unable to send automatically right now. You can email us directly at info@chatradix.com.'
-      );
-    } finally {
-      setSubmitting(false);
+      return;
     }
+
+    // If EmailJS credentials are not yet entered, explain how to activate:
+    setErrorMessage(
+      'To receive emails formatted as wp-emailer.html, please add your EmailJS keys in src/config/emailjs.ts.'
+    );
+    setSubmitting(false);
   };
 
   const handleReset = () => {
