@@ -199,7 +199,7 @@ export const CHATRADIX_AUTOMATIONS: AutomationItem[] = [
 ];
 
 export const UltimateFlows: React.FC<UltimateFlowsProps> = ({ onNotify }) => {
-  const [activeIndex, setActiveIndex] = useState<number>(8); // Defaults to Slide 09: Review Requests (from user screenshot)
+  const [activeIndex, setActiveIndex] = useState<number>(0); // Starts on Slide 01: Order Confirmation
   const [isAutoplay, setIsAutoplay] = useState<boolean>(true);
   const deckScrollRef = useRef<HTMLDivElement | null>(null);
 
@@ -220,12 +220,19 @@ export const UltimateFlows: React.FC<UltimateFlowsProps> = ({ onNotify }) => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  // Autoplay timer - Disabled on mobile, runs on desktop only
+  // Autoplay timer - Plays through all slides once, then stops autoplay and opens first slide
   useEffect(() => {
     if (!isAutoplay || isMobile) return;
 
     const timer = setInterval(() => {
-      setActiveIndex((prev) => (prev + 1) % CHATRADIX_AUTOMATIONS.length);
+      setActiveIndex((prev) => {
+        if (prev >= CHATRADIX_AUTOMATIONS.length - 1) {
+          // All slides have opened! Stop autoplay and return to slide 01
+          setIsAutoplay(false);
+          return 0;
+        }
+        return prev + 1;
+      });
     }, AUTOPLAY_DURATION);
 
     return () => clearInterval(timer);
@@ -236,6 +243,12 @@ export const UltimateFlows: React.FC<UltimateFlowsProps> = ({ onNotify }) => {
     const container = deckScrollRef.current;
     if (!container) return;
 
+    // Slide 01 always docks firmly at the left edge
+    if (activeIndex === 0) {
+      container.scrollTo({ left: 0, behavior: 'smooth' });
+      return;
+    }
+
     const timer = setTimeout(() => {
       const cardEl = document.getElementById(`acc-card-${activeIndex}`);
       if (!cardEl) return;
@@ -243,23 +256,22 @@ export const UltimateFlows: React.FC<UltimateFlowsProps> = ({ onNotify }) => {
       const containerWidth = container.clientWidth;
       const cardLeft = cardEl.offsetLeft;
       const cardWidth = cardEl.offsetWidth;
-      const currentScroll = container.scrollLeft;
 
-      // If full card is already visible within viewport, do not scroll
+      // If active card fits from the beginning of the viewport (e.g. slides 01-04), keep left: 0
+      if (cardLeft + cardWidth + 24 <= containerWidth) {
+        container.scrollTo({ left: 0, behavior: 'smooth' });
+        return;
+      }
+
+      const currentScroll = container.scrollLeft;
       const isLeftVisible = cardLeft >= currentScroll;
       const isRightVisible = (cardLeft + cardWidth) <= (currentScroll + containerWidth);
 
       if (isLeftVisible && isRightVisible) return;
 
-      let targetScroll = 0;
-      if (cardLeft + cardWidth + 24 <= containerWidth) {
-        targetScroll = 0;
-      } else {
-        targetScroll = Math.max(0, cardLeft - 20);
-      }
-
-      // Never scroll past card's left boundary
-      targetScroll = Math.max(0, Math.min(targetScroll, cardLeft));
+      // Scroll so active card has 20px breathing room, NEVER cutting off card's left boundary
+      let targetScroll = Math.max(0, cardLeft - 20);
+      targetScroll = Math.min(targetScroll, cardLeft);
 
       container.scrollTo({ left: targetScroll, behavior: 'smooth' });
     }, 60);

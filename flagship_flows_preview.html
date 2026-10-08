@@ -1335,7 +1335,7 @@
       }
     ];
 
-    let activeIndex = 8; // Start on Slide 09: Product Review Requests (matches user's visual reference)
+    let activeIndex = 0; // Starts on Slide 01: Order Confirmation
     let isAutoplay = true;
     let autoplayTimer = null;
     const AUTOPLAY_DURATION = 5000;
@@ -1736,33 +1736,35 @@
         }
       });
 
-      // Ensure active card is ALWAYS 100% fully visible (NEVER cut off on left or right)
-      setTimeout(() => {
-        const activeEl = document.getElementById(`card-${activeIndex}`);
-        if (activeEl && deckScrollContainer) {
-          const containerWidth = deckScrollContainer.clientWidth;
-          const cardLeft = activeEl.offsetLeft;
-          const cardWidth = activeEl.offsetWidth;
-          const currentScroll = deckScrollContainer.scrollLeft;
+      // Slide 01 always docks firmly at the left edge
+      if (activeIndex === 0 && deckScrollContainer) {
+        deckScrollContainer.scrollTo({ left: 0, behavior: "smooth" });
+      } else {
+        setTimeout(() => {
+          const activeEl = document.getElementById(`card-${activeIndex}`);
+          if (activeEl && deckScrollContainer) {
+            const containerWidth = deckScrollContainer.clientWidth;
+            const cardLeft = activeEl.offsetLeft;
+            const cardWidth = activeEl.offsetWidth;
 
-          // If full card is already visible within viewport, do not scroll
-          const isLeftVisible = cardLeft >= currentScroll;
-          const isRightVisible = (cardLeft + cardWidth) <= (currentScroll + containerWidth);
+            // If active card fits from the beginning of viewport (e.g. slides 01-04), keep left: 0
+            if (cardLeft + cardWidth + 24 <= containerWidth) {
+              deckScrollContainer.scrollTo({ left: 0, behavior: "smooth" });
+              return;
+            }
 
-          if (isLeftVisible && isRightVisible) return;
+            const currentScroll = deckScrollContainer.scrollLeft;
+            const isLeftVisible = cardLeft >= currentScroll;
+            const isRightVisible = (cardLeft + cardWidth) <= (currentScroll + containerWidth);
 
-          let targetScroll = 0;
-          if (cardLeft + cardWidth + 24 <= containerWidth) {
-            targetScroll = 0;
-          } else {
-            targetScroll = Math.max(0, cardLeft - 20);
+            if (isLeftVisible && isRightVisible) return;
+
+            let targetScroll = Math.max(0, cardLeft - 20);
+            targetScroll = Math.min(targetScroll, cardLeft);
+            deckScrollContainer.scrollTo({ left: targetScroll, behavior: "smooth" });
           }
-
-          // Never scroll past card's left boundary
-          targetScroll = Math.max(0, Math.min(targetScroll, cardLeft));
-          deckScrollContainer.scrollTo({ left: targetScroll, behavior: "smooth" });
-        }
-      }, 60);
+        }, 60);
+      }
 
       currentSlideNum.textContent = (activeIndex + 1).toString().padStart(2, "0");
       renderPills();
@@ -1798,6 +1800,24 @@
       resetAutoplay();
     }
 
+    // Autoplay Next: Stops when reaching the end, and opens slide 01
+    function nextAutoCard() {
+      if (activeIndex >= dataset.length - 1) {
+        // When all slides have opened, stop autoplay and reset to slide 01
+        isAutoplay = false;
+        stopAutoplay();
+        const icon = document.getElementById("autoplayIconSvg");
+        const label = document.getElementById("autoplayLabelText");
+        if (icon && label) {
+          icon.innerHTML = `<polygon points="6 4 20 12 6 20 6 4"></polygon>`;
+          label.textContent = "Play";
+        }
+        setActive(0);
+        return;
+      }
+      setActive(activeIndex + 1);
+    }
+
     // Autoplay Engine
     function toggleAutoplay() {
       isAutoplay = !isAutoplay;
@@ -1820,7 +1840,7 @@
       // On mobile (< 1024px), accordion does NOT run auto, only advances on click
       if (window.innerWidth < 1024) return;
       if (isAutoplay) {
-        autoplayTimer = setInterval(nextCard, AUTOPLAY_DURATION);
+        autoplayTimer = setInterval(nextAutoCard, AUTOPLAY_DURATION);
       }
     }
 
