@@ -330,7 +330,7 @@
     /* Desktop Widths */
     @media (min-width: 1024px) {
       .acc-card.collapsed {
-        flex: 0 0 82px;
+        flex: 0 0 60px;
         cursor: pointer;
       }
       .acc-card.expanded {
@@ -343,10 +343,10 @@
 
     @media (min-width: 1400px) {
       .acc-card.collapsed {
-        flex: 0 0 88px;
+        flex: 0 0 64px;
       }
       .acc-card.expanded {
-        flex: 1 0 690px;
+        flex: 1 0 680px;
       }
     }
 
@@ -1736,12 +1736,33 @@
         }
       });
 
-      // Center active card horizontally strictly inside the deck scroll container (NEVER scroll the page)
-      const activeEl = document.getElementById(`card-${activeIndex}`);
-      if (activeEl && deckScrollContainer) {
-        const scrollOffset = activeEl.offsetLeft - (deckScrollContainer.clientWidth / 2) + (activeEl.clientWidth / 2);
-        deckScrollContainer.scrollTo({ left: Math.max(0, scrollOffset), behavior: "smooth" });
-      }
+      // Ensure active card is ALWAYS 100% fully visible (NEVER cut off on left or right)
+      setTimeout(() => {
+        const activeEl = document.getElementById(`card-${activeIndex}`);
+        if (activeEl && deckScrollContainer) {
+          const containerWidth = deckScrollContainer.clientWidth;
+          const cardLeft = activeEl.offsetLeft;
+          const cardWidth = activeEl.offsetWidth;
+          const currentScroll = deckScrollContainer.scrollLeft;
+
+          // If full card is already visible within viewport, do not scroll
+          const isLeftVisible = cardLeft >= currentScroll;
+          const isRightVisible = (cardLeft + cardWidth) <= (currentScroll + containerWidth);
+
+          if (isLeftVisible && isRightVisible) return;
+
+          let targetScroll = 0;
+          if (cardLeft + cardWidth + 24 <= containerWidth) {
+            targetScroll = 0;
+          } else {
+            targetScroll = Math.max(0, cardLeft - 20);
+          }
+
+          // Never scroll past card's left boundary
+          targetScroll = Math.max(0, Math.min(targetScroll, cardLeft));
+          deckScrollContainer.scrollTo({ left: targetScroll, behavior: "smooth" });
+        }
+      }, 60);
 
       currentSlideNum.textContent = (activeIndex + 1).toString().padStart(2, "0");
       renderPills();

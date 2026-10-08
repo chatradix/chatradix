@@ -231,14 +231,40 @@ export const UltimateFlows: React.FC<UltimateFlowsProps> = ({ onNotify }) => {
     return () => clearInterval(timer);
   }, [isAutoplay, isMobile]);
 
-  // Center active card horizontally strictly inside the deck scroll container (NEVER scrolls page)
+  // Ensure active card is ALWAYS 100% fully visible (NEVER cut off on left or right)
   useEffect(() => {
-    const cardEl = document.getElementById(`acc-card-${activeIndex}`);
     const container = deckScrollRef.current;
-    if (cardEl && container) {
-      const scrollOffset = cardEl.offsetLeft - (container.clientWidth / 2) + (cardEl.clientWidth / 2);
-      container.scrollTo({ left: Math.max(0, scrollOffset), behavior: 'smooth' });
-    }
+    if (!container) return;
+
+    const timer = setTimeout(() => {
+      const cardEl = document.getElementById(`acc-card-${activeIndex}`);
+      if (!cardEl) return;
+
+      const containerWidth = container.clientWidth;
+      const cardLeft = cardEl.offsetLeft;
+      const cardWidth = cardEl.offsetWidth;
+      const currentScroll = container.scrollLeft;
+
+      // If full card is already visible within viewport, do not scroll
+      const isLeftVisible = cardLeft >= currentScroll;
+      const isRightVisible = (cardLeft + cardWidth) <= (currentScroll + containerWidth);
+
+      if (isLeftVisible && isRightVisible) return;
+
+      let targetScroll = 0;
+      if (cardLeft + cardWidth + 24 <= containerWidth) {
+        targetScroll = 0;
+      } else {
+        targetScroll = Math.max(0, cardLeft - 20);
+      }
+
+      // Never scroll past card's left boundary
+      targetScroll = Math.max(0, Math.min(targetScroll, cardLeft));
+
+      container.scrollTo({ left: targetScroll, behavior: 'smooth' });
+    }, 60);
+
+    return () => clearTimeout(timer);
   }, [activeIndex]);
 
   const handleSelectCard = (index: number) => {
@@ -433,7 +459,7 @@ export const UltimateFlows: React.FC<UltimateFlowsProps> = ({ onNotify }) => {
                 id={`acc-card-${i}`}
                 onClick={() => !isExpanded && handleSelectCard(i)}
                 style={{
-                  flex: isExpanded ? '1 0 630px' : '0 0 82px',
+                  flex: isExpanded ? '1 0 630px' : '0 0 60px',
                   transition: 'flex-basis 0.65s cubic-bezier(0.2, 0.9, 0.2, 1), flex-grow 0.65s cubic-bezier(0.2, 0.9, 0.2, 1), border-color 0.3s ease, box-shadow 0.5s ease'
                 }}
                 className={`relative rounded-3xl overflow-hidden border bg-[#070D14] will-change-[flex-basis,flex-grow] cursor-pointer ${
