@@ -3,7 +3,7 @@ import React from 'react';
 interface FooterProps {
   onScrollToTop: () => void;
   onScrollToSection: (id: string) => void;
-  onNavigatePage?: (page: 'home' | 'pricing' | 'meta-rates', targetSection?: string) => void;
+  onNavigatePage?: (page: 'home' | 'pricing' | 'meta-rates' | 'automations', targetSection?: string) => void;
 }
 
 export const Footer: React.FC<FooterProps> = ({ onScrollToTop, onScrollToSection, onNavigatePage }) => {
@@ -36,13 +36,28 @@ export const Footer: React.FC<FooterProps> = ({ onScrollToTop, onScrollToSection
             <span className="font-['JetBrains_Mono'] text-xs text-[#888888] border-b border-[#262626] pb-2 uppercase tracking-[0.2em] font-semibold">
               AUTOMATIONS
             </span>
-            <button onClick={() => onScrollToSection('flows')} className="font-['JetBrains_Mono'] text-xs text-[#e5e2e1] hover:text-[#0080FB] transition-colors text-left uppercase tracking-wider">
+            <button 
+              onClick={() => onNavigatePage ? onNavigatePage('automations') : onScrollToSection('flows')} 
+              className="font-['JetBrains_Mono'] text-xs text-[#e5e2e1] hover:text-[#0080FB] transition-colors text-left uppercase tracking-wider"
+            >
+              All 12 Automations
+            </button>
+            <button 
+              onClick={() => onNavigatePage ? onNavigatePage('automations') : onScrollToSection('flows')} 
+              className="font-['JetBrains_Mono'] text-xs text-[#e5e2e1] hover:text-[#0080FB] transition-colors text-left uppercase tracking-wider"
+            >
               Order Confirmation
             </button>
-            <button onClick={() => onScrollToSection('flows')} className="font-['JetBrains_Mono'] text-xs text-[#e5e2e1] hover:text-[#0080FB] transition-colors text-left uppercase tracking-wider">
+            <button 
+              onClick={() => onNavigatePage ? onNavigatePage('automations') : onScrollToSection('flows')} 
+              className="font-['JetBrains_Mono'] text-xs text-[#e5e2e1] hover:text-[#0080FB] transition-colors text-left uppercase tracking-wider"
+            >
               Abandoned Checkout
             </button>
-            <button onClick={() => onScrollToSection('flows')} className="font-['JetBrains_Mono'] text-xs text-[#e5e2e1] hover:text-[#0080FB] transition-colors text-left uppercase tracking-wider">
+            <button 
+              onClick={() => onNavigatePage ? onNavigatePage('automations') : onScrollToSection('flows')} 
+              className="font-['JetBrains_Mono'] text-xs text-[#e5e2e1] hover:text-[#0080FB] transition-colors text-left uppercase tracking-wider"
+            >
               Shipping & Delivery
             </button>
             <button onClick={() => onScrollToSection('flows')} className="font-['JetBrains_Mono'] text-xs text-[#e5e2e1] hover:text-[#0080FB] transition-colors text-left uppercase tracking-wider">

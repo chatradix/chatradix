@@ -5,12 +5,17 @@
   font-family: 'Black Ops One', cursive, sans-serif !important;
 }
 
-.hide-scroll::-webkit-scrollbar {
-  display: none;
+.hide-scroll::-webkit-scrollbar,
+.no-scrollbar::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  background: transparent !important;
 }
-.hide-scroll {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
+.hide-scroll,
+.no-scrollbar {
+  -ms-overflow-style: none !important;
+  scrollbar-width: none !important;
 }
 
 .glow-text {

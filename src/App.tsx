@@ -13,6 +13,7 @@ import { SystemSupportSection } from './components/SystemSupportSection';
 import { RevenueBoostSection } from './components/RevenueBoostSection';
 import { PricingPage } from './components/PricingPage';
 import { MetaRatesPage } from './components/MetaRatesPage';
+import { AutomationsPage } from './components/AutomationsPage';
 import { Footer } from './components/Footer';
 import { CheckCircle } from 'lucide-react';
 
@@ -70,9 +71,10 @@ export const App: React.FC = () => {
   const lenisRef = useRef<Lenis | null>(null);
 
   // Initialize currentPage directly from URL hash on first render
-  const [currentPage, setCurrentPage] = useState<'home' | 'pricing' | 'meta-rates'>(() => {
+  const [currentPage, setCurrentPage] = useState<'home' | 'pricing' | 'meta-rates' | 'automations'>(() => {
     if (typeof window !== 'undefined') {
       const hash = window.location.hash.toLowerCase();
+      if (hash.includes('automations')) return 'automations';
       if (hash.includes('meta-rates') || hash.includes('rates')) return 'meta-rates';
       if (hash.includes('pricing')) return 'pricing';
     }
@@ -128,11 +130,18 @@ export const App: React.FC = () => {
     };
   }, []);
 
-  // Handle URL hash changes (e.g. #pricing, #meta-rates)
+  // Handle URL hash changes (e.g. #pricing, #meta-rates, #automations)
   useEffect(() => {
     const handleHashChange = () => {
       const hash = window.location.hash.toLowerCase();
-      if (hash.includes('meta-rates') || hash.includes('rates')) {
+      if (hash.includes('automations')) {
+        setCurrentPage('automations');
+        if (lenisRef.current) {
+          lenisRef.current.scrollTo(0, { immediate: true });
+        } else {
+          window.scrollTo(0, 0);
+        }
+      } else if (hash.includes('meta-rates') || hash.includes('rates')) {
         setCurrentPage('meta-rates');
         if (lenisRef.current) {
           lenisRef.current.scrollTo(0, { immediate: true });
@@ -187,9 +196,16 @@ export const App: React.FC = () => {
     }
   };
 
-  const handleNavigatePage = (page: 'home' | 'pricing' | 'meta-rates', targetSection?: string) => {
+  const handleNavigatePage = (page: 'home' | 'pricing' | 'meta-rates' | 'automations', targetSection?: string) => {
     setCurrentPage(page);
-    if (page === 'meta-rates') {
+    if (page === 'automations') {
+      window.location.hash = 'automations';
+      if (lenisRef.current) {
+        lenisRef.current.scrollTo(0, { immediate: true });
+      } else {
+        window.scrollTo(0, 0);
+      }
+    } else if (page === 'meta-rates') {
       window.location.hash = 'meta-rates';
       if (lenisRef.current) {
         lenisRef.current.scrollTo(0, { immediate: true });
@@ -207,7 +223,7 @@ export const App: React.FC = () => {
         ScrollTrigger.refresh();
       }, 100);
     } else {
-      if (window.location.hash.includes('pricing') || window.location.hash.includes('meta-rates')) {
+      if (window.location.hash.includes('pricing') || window.location.hash.includes('meta-rates') || window.location.hash.includes('automations')) {
         window.history.replaceState(null, '', ' ');
       }
       if (targetSection) {
@@ -260,6 +276,13 @@ export const App: React.FC = () => {
 
       {/* Main Page Layout */}
       <main className="flex-grow pt-20">
+        <div style={{ display: currentPage === 'automations' ? 'block' : 'none' }}>
+          <AutomationsPage 
+            onNotify={handleNotify} 
+            onNavigateHome={(sec) => handleNavigatePage('home', sec)} 
+          />
+        </div>
+
         <div style={{ display: currentPage === 'meta-rates' ? 'block' : 'none' }}>
           <MetaRatesPage 
             onNotify={handleNotify} 

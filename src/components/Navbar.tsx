@@ -3,8 +3,8 @@ import { Mail, Menu, X, ArrowUpRight } from 'lucide-react';
 import headerLogo from '../assets/headerlogo.png';
 
 interface NavbarProps {
-  currentPage?: 'home' | 'pricing' | 'meta-rates';
-  onNavigatePage?: (page: 'home' | 'pricing' | 'meta-rates', targetSection?: string) => void;
+  currentPage?: 'home' | 'pricing' | 'meta-rates' | 'automations';
+  onNavigatePage?: (page: 'home' | 'pricing' | 'meta-rates' | 'automations', targetSection?: string) => void;
   onScrollToSection: (id: string) => void;
 }
 
@@ -16,7 +16,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const navLinks = [
-    { label: 'AUTOMATIONS', id: 'flows', page: 'home' as const },
+    { label: 'AUTOMATIONS', id: 'automations', page: 'automations' as const },
     { label: 'ARCHITECTURE', id: 'architecture', page: 'home' as const },
     { label: 'META RATES', id: 'meta-rates', page: 'meta-rates' as const },
     { label: 'PRICING', id: 'pricing', page: 'pricing' as const },
@@ -24,7 +24,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   ];
 
   const handleNavClick = (link: typeof navLinks[0]) => {
-    if (link.page === 'pricing' || link.page === 'meta-rates') {
+    if (link.page === 'pricing' || link.page === 'meta-rates' || link.page === 'automations') {
       if (onNavigatePage) {
         onNavigatePage(link.page);
       }
@@ -66,7 +66,10 @@ export const Navbar: React.FC<NavbarProps> = ({
         {/* Desktop Navigation */}
         <nav className="hidden lg:flex items-center gap-10">
           {navLinks.map((link) => {
-            const isActive = (link.page === 'pricing' && currentPage === 'pricing') || (link.page === 'meta-rates' && currentPage === 'meta-rates');
+            const isActive = 
+              (link.page === 'pricing' && currentPage === 'pricing') || 
+              (link.page === 'meta-rates' && currentPage === 'meta-rates') ||
+              (link.page === 'automations' && currentPage === 'automations');
 
             return (
               <button
