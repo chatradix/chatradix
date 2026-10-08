@@ -111,6 +111,11 @@
       gap: 6px;
     }
 
+    @media (max-width: 640px) {
+      .btn-install-text { display: none; }
+      .btn-nav-install { padding: 8px 10px; border-radius: 8px; }
+    }
+
     .btn-nav-install:hover {
       background: #006dd4;
       box-shadow: 0 0 16px rgba(0, 128, 251, 0.4);
@@ -460,7 +465,7 @@
       .vertical-title-desktop {
         writing-mode: vertical-rl;
         transform: rotate(180deg);
-        font-size: 12px;
+        font-size: 1rem;
         font-weight: 800;
         text-transform: uppercase;
         letter-spacing: 0.2em;
@@ -511,15 +516,12 @@
       flex-direction: column;
       justify-content: space-between;
       opacity: 0;
-      transform: translateY(14px);
-      transition: opacity 0.4s var(--ease-custom) 0.15s,
-                  transform 0.45s var(--ease-custom) 0.15s;
+      transition: opacity 0.45s ease-out 0.1s;
       pointer-events: none;
     }
 
     .acc-card.expanded .expanded-content {
       opacity: 1;
-      transform: translateY(0);
       pointer-events: auto;
     }
 
@@ -689,30 +691,19 @@
       100% { transform: translateY(0px) rotate(0deg); }
     }
 
-    /* Cool Flicking / Neon Shimmer Light Animation */
+    /* Cool Neon Shimmer Light Animation - Smooth Breathing Glow, No Flickering */
     .cool-flicker-glow {
-      animation: coolFlicker 3.2s ease-in-out infinite;
+      animation: coolSmoothGlow 4s ease-in-out infinite;
     }
 
-    @keyframes coolFlicker {
+    @keyframes coolSmoothGlow {
       0%, 100% {
         opacity: 0.95;
-        filter: drop-shadow(0 0 18px rgba(37, 211, 102, 0.5)) drop-shadow(0 0 30px rgba(0, 128, 251, 0.3));
-      }
-      48% {
-        opacity: 0.88;
-        filter: drop-shadow(0 0 12px rgba(37, 211, 102, 0.4)) drop-shadow(0 0 22px rgba(0, 128, 251, 0.25));
+        filter: drop-shadow(0 0 20px rgba(37, 211, 102, 0.5)) drop-shadow(0 0 32px rgba(0, 128, 251, 0.3));
       }
       50% {
         opacity: 1;
-        filter: drop-shadow(0 0 32px rgba(37, 211, 102, 0.85)) drop-shadow(0 0 44px rgba(56, 189, 248, 0.6));
-      }
-      52% {
-        opacity: 0.92;
-      }
-      54% {
-        opacity: 1;
-        filter: drop-shadow(0 0 26px rgba(37, 211, 102, 0.7));
+        filter: drop-shadow(0 0 30px rgba(37, 211, 102, 0.75)) drop-shadow(0 0 45px rgba(56, 189, 248, 0.5));
       }
     }
 
@@ -1040,7 +1031,10 @@
     </ul>
 
     <div class="nav-actions">
-      <a href="https://apps.shopify.com" target="_blank" class="btn-nav-install">INSTALL ON SHOPIFY</a>
+      <a href="https://apps.shopify.com" target="_blank" class="btn-nav-install" title="Install on Shopify">
+        <span class="btn-install-text">INSTALL ON SHOPIFY</span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
+      </a>
     </div>
   </header>
 
@@ -1742,10 +1736,11 @@
         }
       });
 
-      // Smooth auto-centering in scroll deck
+      // Center active card horizontally strictly inside the deck scroll container (NEVER scroll the page)
       const activeEl = document.getElementById(`card-${activeIndex}`);
       if (activeEl && deckScrollContainer) {
-        activeEl.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
+        const scrollOffset = activeEl.offsetLeft - (deckScrollContainer.clientWidth / 2) + (activeEl.clientWidth / 2);
+        deckScrollContainer.scrollTo({ left: Math.max(0, scrollOffset), behavior: "smooth" });
       }
 
       currentSlideNum.textContent = (activeIndex + 1).toString().padStart(2, "0");
@@ -1801,6 +1796,8 @@
 
     function startAutoplay() {
       stopAutoplay();
+      // On mobile (< 1024px), accordion does NOT run auto, only advances on click
+      if (window.innerWidth < 1024) return;
       if (isAutoplay) {
         autoplayTimer = setInterval(nextCard, AUTOPLAY_DURATION);
       }
@@ -1814,6 +1811,15 @@
     function resetAutoplay() {
       if (isAutoplay) startAutoplay();
     }
+
+    // Auto-disable autoplay on mobile resize
+    window.addEventListener("resize", () => {
+      if (window.innerWidth < 1024) {
+        stopAutoplay();
+      } else if (isAutoplay && !autoplayTimer) {
+        startAutoplay();
+      }
+    });
 
     // Keyboard Arrow Keys
     document.addEventListener("keydown", (e) => {

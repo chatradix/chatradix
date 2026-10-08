@@ -101,15 +101,16 @@ export const Navbar: React.FC<NavbarProps> = ({
             <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 rounded-full bg-[#0080FB] opacity-80" />
           </button>
 
-          {/* High-Impact Creative Install CTA Button */}
+          {/* High-Impact Creative Install CTA Button - Icon only on mobile, Full text on desktop */}
           <a
             href="https://apps.shopify.com/chatradix"
             target="_blank"
             rel="noopener noreferrer"
-            className="relative inline-flex items-center gap-2.5 px-6 py-3 bg-[#0080FB] text-white font-['JetBrains_Mono'] text-xs font-bold uppercase tracking-[0.15em] border border-[#0090ff] shadow-[0_0_20px_rgba(0,128,251,0.35)] hover:shadow-[0_0_30px_rgba(0,128,251,0.55)] hover:bg-white hover:text-[#0080FB] hover:border-white transition-all duration-300 active:scale-95 group overflow-hidden"
+            title="Install on Shopify"
+            className="relative inline-flex items-center justify-center w-10 h-10 sm:w-auto sm:h-auto sm:px-6 sm:py-3 bg-[#0080FB] text-white font-['JetBrains_Mono'] text-xs font-bold uppercase tracking-[0.15em] border border-[#0090ff] shadow-[0_0_20px_rgba(0,128,251,0.35)] hover:shadow-[0_0_30px_rgba(0,128,251,0.55)] hover:bg-white hover:text-[#0080FB] hover:border-white transition-all duration-300 active:scale-95 group overflow-hidden"
           >
-            <span className="relative z-10 flex items-center gap-2">
-              <span>INSTALL APP</span>
+            <span className="relative z-10 flex items-center justify-center gap-2">
+              <span className="hidden sm:inline">INSTALL APP</span>
               <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
             </span>
             <span className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 bg-gradient-to-r from-transparent via-white/25 to-transparent" />

@@ -205,22 +205,39 @@ export const UltimateFlows: React.FC<UltimateFlowsProps> = ({ onNotify }) => {
 
   const AUTOPLAY_DURATION = 5000;
 
-  // Autoplay timer
+  const [isMobile, setIsMobile] = useState<boolean>(() => {
+    if (typeof window !== 'undefined') {
+      return window.innerWidth < 1024;
+    }
+    return false;
+  });
+
   useEffect(() => {
-    if (!isAutoplay) return;
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 1024);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  // Autoplay timer - Disabled on mobile, runs on desktop only
+  useEffect(() => {
+    if (!isAutoplay || isMobile) return;
 
     const timer = setInterval(() => {
       setActiveIndex((prev) => (prev + 1) % CHATRADIX_AUTOMATIONS.length);
     }, AUTOPLAY_DURATION);
 
     return () => clearInterval(timer);
-  }, [isAutoplay]);
+  }, [isAutoplay, isMobile]);
 
-  // Center active card smoothly in scroll container
+  // Center active card horizontally strictly inside the deck scroll container (NEVER scrolls page)
   useEffect(() => {
     const cardEl = document.getElementById(`acc-card-${activeIndex}`);
-    if (cardEl && deckScrollRef.current) {
-      cardEl.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+    const container = deckScrollRef.current;
+    if (cardEl && container) {
+      const scrollOffset = cardEl.offsetLeft - (container.clientWidth / 2) + (cardEl.clientWidth / 2);
+      container.scrollTo({ left: Math.max(0, scrollOffset), behavior: 'smooth' });
     }
   }, [activeIndex]);
 
@@ -445,16 +462,16 @@ export const UltimateFlows: React.FC<UltimateFlowsProps> = ({ onNotify }) => {
                     {item.title}
                   </span>
 
-                  {/* Desktop Vertical Rotated Title ANCHORED TO BOTTOM */}
-                  <span className="hidden lg:block [writing-mode:vertical-rl] rotate-180 text-xs font-bold uppercase tracking-[0.2em] text-white/80 whitespace-nowrap mt-auto pb-1 hover:text-[#25D366] transition-colors">
+                  {/* Desktop Vertical Rotated Title ANCHORED TO BOTTOM - 1rem font size */}
+                  <span className="hidden lg:block [writing-mode:vertical-rl] rotate-180 text-[1rem] font-bold uppercase tracking-[0.2em] text-white/80 whitespace-nowrap mt-auto pb-2 hover:text-[#25D366] transition-colors">
                     {item.title}
                   </span>
                 </div>
 
-                {/* Expanded Rich State */}
+                {/* Expanded Rich State - Smooth fade in without layout flicker */}
                 <div 
-                  className={`relative z-20 h-full p-6 md:p-8 flex flex-col justify-between transition-all duration-500 ${
-                    isExpanded ? 'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 translate-y-4 pointer-events-none'
+                  className={`relative z-20 h-full p-6 md:p-8 flex flex-col justify-between w-full min-w-full lg:min-w-[580px] transition-opacity duration-500 ease-out delay-100 ${
+                    isExpanded ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
                   }`}
                 >
                   {/* Top Header */}
