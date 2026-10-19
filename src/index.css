@@ -18,12 +18,18 @@
   scrollbar-width: none !important;
 }
 
+/* Global reset: remove all glow and shadows */
+*, ::before, ::after {
+  box-shadow: none !important;
+  text-shadow: none !important;
+}
+
 .glow-text {
-  text-shadow: 0 0 35px rgba(0, 128, 251, 0.45);
+  text-shadow: none !important;
 }
 
 .glow-green-text {
-  text-shadow: 0 0 35px rgba(37, 211, 102, 0.45);
+  text-shadow: none !important;
 }
 
 .bento-grid {

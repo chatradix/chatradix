@@ -3,8 +3,8 @@ import { Mail, Menu, X, ArrowUpRight } from 'lucide-react';
 import headerLogo from '../assets/headerlogo.png';
 
 interface NavbarProps {
-  currentPage?: 'home' | 'pricing' | 'meta-rates' | 'automations';
-  onNavigatePage?: (page: 'home' | 'pricing' | 'meta-rates' | 'automations', targetSection?: string) => void;
+  currentPage?: 'home' | 'pricing' | 'meta-rates' | 'automations' | 'privacy-policy';
+  onNavigatePage?: (page: 'home' | 'pricing' | 'meta-rates' | 'automations' | 'privacy-policy', targetSection?: string) => void;
   onScrollToSection: (id: string) => void;
 }
 
@@ -51,7 +51,7 @@ export const Navbar: React.FC<NavbarProps> = ({
       <div className="flex justify-between items-center h-20 px-6 md:px-16 w-full mx-auto max-w-[1440px]">
         {/* Brand Logo */}
         <a 
-          href="#" 
+          href="/" 
           onClick={handleLogoClick}
           className="flex items-center group py-1"
           aria-label="ChatRadix"
@@ -80,7 +80,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 }`}
               >
                 <span>{link.label}</span>
-                <span className={`absolute bottom-0 left-0 h-[2px] bg-[#0080FB] transition-all duration-300 shadow-[0_0_8px_#0080FB] ${
+                <span className={`absolute bottom-0 left-0 h-[2px] bg-[#0080FB] transition-all duration-300 ${
                   isActive ? 'w-full' : 'w-0 group-hover:w-full'
                 }`} />
               </button>
@@ -95,7 +95,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           <button
             onClick={() => handleNavClick({ label: 'SUPPORT', id: 'support', page: 'home' })}
             title="Contact Support & Onboarding"
-            className="hidden sm:flex items-center justify-center w-10 h-10 border border-[#262626] hover:border-[#0080FB] text-[#e5e2e1] hover:text-[#0080FB] transition-all bg-[#131313] hover:shadow-[0_0_15px_rgba(0,128,251,0.25)] relative group"
+            className="hidden sm:flex items-center justify-center w-10 h-10 border border-[#262626] hover:border-[#0080FB] text-[#e5e2e1] hover:text-[#0080FB] transition-all bg-[#131313] relative group"
           >
             <Mail className="w-4 h-4" />
             <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 rounded-full bg-[#0080FB] opacity-80" />
@@ -107,7 +107,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             target="_blank"
             rel="noopener noreferrer"
             title="Install on Shopify"
-            className="relative inline-flex items-center justify-center w-10 h-10 sm:w-auto sm:h-auto sm:px-6 sm:py-3 bg-[#0080FB] text-white font-['JetBrains_Mono'] text-xs font-bold uppercase tracking-[0.15em] border border-[#0090ff] shadow-[0_0_20px_rgba(0,128,251,0.35)] hover:shadow-[0_0_30px_rgba(0,128,251,0.55)] hover:bg-white hover:text-[#0080FB] hover:border-white transition-all duration-300 active:scale-95 group overflow-hidden"
+            className="relative inline-flex items-center justify-center w-10 h-10 sm:w-auto sm:h-auto sm:px-6 sm:py-3 bg-[#0080FB] text-white font-['JetBrains_Mono'] text-xs font-bold uppercase tracking-[0.15em] border border-[#0090ff] hover:bg-white hover:text-[#0080FB] hover:border-white transition-all duration-300 active:scale-95 group overflow-hidden"
           >
             <span className="relative z-10 flex items-center justify-center gap-2">
               <span className="hidden sm:inline">INSTALL APP</span>

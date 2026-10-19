@@ -64,18 +64,12 @@ export const OfferBanner: React.FC<OfferBannerProps> = ({ onNotify }) => {
       ref={bannerRef}
       className="mb-24 md:mb-32 w-full bg-[#0075FF] text-white py-20 md:py-28 relative overflow-hidden perspective-1000"
     >
-      {/* Radial Gradient Subtle Glow */}
-      <div 
-        className="absolute inset-0 opacity-25 pointer-events-none" 
-        style={{ backgroundImage: 'radial-gradient(circle at 30% 50%, #ffffff 0%, transparent 65%)' }}
-      />
-
       <div className="max-w-[1440px] mx-auto px-6 md:px-16 relative z-10">
         {/* Top Protocol Pill */}
-        <div className="font-['JetBrains_Mono'] text-xs text-white/90 font-semibold tracking-[0.25em] uppercase mb-8 flex items-center gap-2">
+        {/* <div className="font-['JetBrains_Mono'] text-xs text-white/90 font-semibold tracking-[0.25em] uppercase mb-8 flex items-center gap-2">
           <Gift className="w-4 h-4 text-white" />
           <span>/// EARLY LAUNCH INTRODUCTORY OFFER ///</span>
-        </div>
+        </div> */}
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
           {/* Headline Column with Kinetic Parallax */}
@@ -107,7 +101,7 @@ export const OfferBanner: React.FC<OfferBannerProps> = ({ onNotify }) => {
               href="https://apps.shopify.com/chatradix"
               target="_blank"
               rel="noopener noreferrer"
-              className="bg-[#0b0d12] text-white border border-black font-['JetBrains_Mono'] text-xs font-bold px-10 py-5 hover:bg-white hover:text-[#0075FF] transition-all duration-300 active:scale-95 inline-flex items-center gap-4 justify-center tracking-[0.2em] rounded-none group shadow-2xl hover:shadow-[0_0_30px_rgba(255,255,255,0.4)]"
+              className="bg-[#0b0d12] text-white border border-black font-['JetBrains_Mono'] text-xs font-bold px-10 py-5 hover:bg-white hover:text-[#0075FF] transition-all duration-300 active:scale-95 inline-flex items-center gap-4 justify-center tracking-[0.2em] rounded-none group"
             >
               <span>CLAIM ON SHOPIFY</span>
               <ArrowUpRight className="w-5 h-5 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />

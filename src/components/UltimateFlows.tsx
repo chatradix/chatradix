@@ -300,7 +300,7 @@ export const UltimateFlows: React.FC<UltimateFlowsProps> = ({ onNotify }) => {
     if (type === "stars") {
       return (
         <div className="relative w-full h-[270px] flex items-center justify-center animate-[float_4.8s_ease-in-out_infinite_alternate]">
-          <svg className="absolute inset-0 w-full h-full pointer-events-none drop-shadow-[0_0_20px_rgba(37,211,102,0.4)]" viewBox="0 0 300 280" fill="none">
+          <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 300 280" fill="none">
             <path d="M 40,240 C 120,260 220,180 200,90 C 180,20 80,40 100,140 C 120,220 260,200 280,40" stroke="url(#ribbonGradCyan)" strokeWidth="8" strokeLinecap="round" opacity="0.9"/>
             <path d="M 20,180 C 80,230 180,190 220,120 C 260,50 160,-10 90,40 C 30,80 80,220 220,230" stroke="url(#ribbonGradGreen)" strokeWidth="5" strokeLinecap="round" opacity="0.9"/>
             <defs>
@@ -318,13 +318,13 @@ export const UltimateFlows: React.FC<UltimateFlowsProps> = ({ onNotify }) => {
           </svg>
           <div className="absolute -top-6 flex items-center gap-1 z-20">
             {[0, 1, 2, 3, 4].map((i) => (
-              <svg key={i} className="w-5 h-5 fill-[#25D366] drop-shadow-[0_0_8px_rgba(37,211,102,0.9)] animate-bounce" style={{ animationDelay: `${i * 0.15}s` }} viewBox="0 0 24 24">
+              <svg key={i} className="w-5 h-5 fill-[#25D366] animate-bounce" style={{ animationDelay: `${i * 0.15}s` }} viewBox="0 0 24 24">
                 <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
               </svg>
             ))}
           </div>
-          <div className="w-[190px] h-[190px] rounded-3xl bg-gradient-to-br from-[#142030]/90 to-[#09101a]/95 border border-white/20 backdrop-blur-xl flex flex-col items-center justify-center p-4 shadow-[0_20px_50px_rgba(0,0,0,0.8),0_0_20px_rgba(37,211,102,0.2)]">
-            <svg width="68" height="68" viewBox="0 0 24 24" fill="none" stroke="#25D366" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="drop-shadow-[0_0_12px_rgba(37,211,102,0.8)]">
+          <div className="w-[190px] h-[190px] rounded-3xl bg-gradient-to-br from-[#142030]/90 to-[#09101a]/95 border border-white/20 backdrop-blur-xl flex flex-col items-center justify-center p-4">
+            <svg width="68" height="68" viewBox="0 0 24 24" fill="none" stroke="#25D366" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
               <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
               <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
               <line x1="12" y1="22.08" x2="12" y2="12"></line>
@@ -338,10 +338,10 @@ export const UltimateFlows: React.FC<UltimateFlowsProps> = ({ onNotify }) => {
     } else if (type === "confirm") {
       return (
         <div className="relative w-full h-[270px] flex items-center justify-center animate-[float_4.8s_ease-in-out_infinite_alternate]">
-          <div className="w-[210px] h-[180px] rounded-3xl bg-gradient-to-br from-[#142030]/90 to-[#09101a]/95 border border-white/20 backdrop-blur-xl flex flex-col justify-between p-4 shadow-[0_20px_50px_rgba(0,0,0,0.8),0_0_20px_rgba(37,211,102,0.2)]">
+          <div className="w-[210px] h-[180px] rounded-3xl bg-gradient-to-br from-[#142030]/90 to-[#09101a]/95 border border-white/20 backdrop-blur-xl flex flex-col justify-between p-4">
             <div className="flex items-center justify-between w-full">
               <div className="flex items-center gap-1.5">
-                <span className="w-2 h-2 rounded-full bg-[#25D366] shadow-[0_0_8px_#25D366]" />
+                <span className="w-2 h-2 rounded-full bg-[#25D366]" />
                 <span className="text-[10px] font-bold text-white font-mono">ORDER #48291</span>
               </div>
               <span className="text-[10px] text-[#25D366] font-bold">$89.00</span>
@@ -359,8 +359,8 @@ export const UltimateFlows: React.FC<UltimateFlowsProps> = ({ onNotify }) => {
     } else if (type === "truck") {
       return (
         <div className="relative w-full h-[270px] flex items-center justify-center animate-[float_4.8s_ease-in-out_infinite_alternate]">
-          <div className="w-[200px] h-[180px] rounded-3xl bg-gradient-to-br from-[#142030]/90 to-[#09101a]/95 border border-white/20 backdrop-blur-xl flex flex-col items-center justify-center p-4 shadow-[0_20px_50px_rgba(0,0,0,0.8)]">
-            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#38BDF8" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="drop-shadow-[0_0_14px_rgba(56,189,248,0.8)] mb-3">
+          <div className="w-[200px] h-[180px] rounded-3xl bg-gradient-to-br from-[#142030]/90 to-[#09101a]/95 border border-white/20 backdrop-blur-xl flex flex-col items-center justify-center p-4">
+            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#38BDF8" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="mb-3">
               <rect x="1" y="3" width="15" height="13"></rect>
               <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
               <circle cx="5.5" cy="18.5" r="2.5"></circle>
@@ -375,8 +375,8 @@ export const UltimateFlows: React.FC<UltimateFlowsProps> = ({ onNotify }) => {
     } else if (type === "cart") {
       return (
         <div className="relative w-full h-[270px] flex items-center justify-center animate-[float_4.8s_ease-in-out_infinite_alternate]">
-          <div className="w-[200px] h-[180px] rounded-3xl bg-gradient-to-br from-[#142030]/90 to-[#09101a]/95 border border-white/20 backdrop-blur-xl flex flex-col items-center justify-center p-4 shadow-[0_20px_50px_rgba(0,0,0,0.8)]">
-            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#25D366" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="drop-shadow-[0_0_16px_rgba(37,211,102,0.85)] mb-3">
+          <div className="w-[200px] h-[180px] rounded-3xl bg-gradient-to-br from-[#142030]/90 to-[#09101a]/95 border border-white/20 backdrop-blur-xl flex flex-col items-center justify-center p-4">
+            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#25D366" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="mb-3">
               <circle cx="9" cy="21" r="1"></circle>
               <circle cx="20" cy="21" r="1"></circle>
               <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
@@ -390,8 +390,8 @@ export const UltimateFlows: React.FC<UltimateFlowsProps> = ({ onNotify }) => {
     } else {
       return (
         <div className="relative w-full h-[270px] flex items-center justify-center animate-[float_4.8s_ease-in-out_infinite_alternate]">
-          <div className="w-[190px] h-[190px] rounded-3xl bg-gradient-to-br from-[#142030]/90 to-[#09101a]/95 border border-white/20 backdrop-blur-xl flex flex-col items-center justify-center p-4 shadow-[0_20px_50px_rgba(0,0,0,0.8)]">
-            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#25D366" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="drop-shadow-[0_0_16px_rgba(37,211,102,0.8)] mb-3">
+          <div className="w-[190px] h-[190px] rounded-3xl bg-gradient-to-br from-[#142030]/90 to-[#09101a]/95 border border-white/20 backdrop-blur-xl flex flex-col items-center justify-center p-4">
+            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#25D366" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="mb-3">
               <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
               <polyline points="2 17 12 22 22 17"></polyline>
               <polyline points="2 12 12 17 22 12"></polyline>
@@ -425,20 +425,19 @@ export const UltimateFlows: React.FC<UltimateFlowsProps> = ({ onNotify }) => {
 
       {/* Header Row Matching ARCHITECTURE & Reference Image */}
       <div className="mb-12 md:mb-16 flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-[#262626] pb-8 relative">
-        {/* Glowing bottom line accent */}
-        <div className="absolute bottom-[-1px] left-0 w-32 h-[2px] bg-[#0080FB] shadow-[0_0_10px_#0080FB]" />
+        <div className="absolute bottom-[-1px] left-0 w-32 h-[2px] bg-[#0080FB]" />
         
         <div className="flex items-start gap-4">
           {/* Vertical blue accent bar (from reference image) */}
-          <div className="w-1.5 h-12 sm:h-14 md:h-16 bg-[#0080FB] shadow-[0_0_14px_#0080FB] rounded-full shrink-0 mt-1" />
+          <div className="w-1.5 h-12 sm:h-14 md:h-16 bg-[#0080FB] rounded-full shrink-0 mt-1" />
 
           <div>
             <h2 className="font-['Hanken_Grotesk'] font-black text-4xl sm:text-6xl md:text-7xl leading-none text-white uppercase tracking-tighter">
               FLAGSHIP <span className="text-[#0080FB]">FLOWS</span>
             </h2>
-            <p className="font-['JetBrains_Mono'] text-xs sm:text-sm text-[#0080FB] uppercase tracking-[0.2em] font-semibold mt-3">
+            {/* <p className="font-['JetBrains_Mono'] text-xs sm:text-sm text-[#0080FB] uppercase tracking-[0.2em] font-semibold mt-3">
               // HIGH-CONVERTING WHATSAPP COMMERCE ARCHITECTURE
-            </p>
+            </p> */}
           </div>
         </div>
 
@@ -472,19 +471,14 @@ export const UltimateFlows: React.FC<UltimateFlowsProps> = ({ onNotify }) => {
                 onClick={() => !isExpanded && handleSelectCard(i)}
                 style={{
                   flex: isExpanded ? '1 0 630px' : '0 0 60px',
-                  transition: 'flex-basis 0.65s cubic-bezier(0.2, 0.9, 0.2, 1), flex-grow 0.65s cubic-bezier(0.2, 0.9, 0.2, 1), border-color 0.3s ease, box-shadow 0.5s ease'
+                  transition: 'flex-basis 0.65s cubic-bezier(0.2, 0.9, 0.2, 1), flex-grow 0.65s cubic-bezier(0.2, 0.9, 0.2, 1), border-color 0.3s ease'
                 }}
                 className={`relative rounded-3xl overflow-hidden border bg-[#070D14] will-change-[flex-basis,flex-grow] cursor-pointer ${
                   isExpanded 
-                    ? 'border-[#25D366]/50 shadow-[0_24px_60px_rgba(0,0,0,0.8),0_0_35px_rgba(37,211,102,0.2)] cursor-default' 
+                    ? 'border-[#25D366]/50 cursor-default' 
                     : 'border-white/10 hover:border-white/25'
                 }`}
               >
-                {/* Background glow canvas */}
-                <div className="absolute inset-0 z-0 pointer-events-none bg-[radial-gradient(circle_at_75%_25%,#0C1A24_0%,#060D15_65%,#03060A_100%)]">
-                  <div className="absolute -top-16 -right-16 w-64 h-64 rounded-full bg-[#0080FB]/20 blur-[60px]" />
-                  <div className="absolute -bottom-10 right-10 w-72 h-72 rounded-full bg-[#25D366]/15 blur-[60px]" />
-                </div>
 
                 {/* Collapsed State: Top Number, Bottom-Aligned Text, NO BOTTOM ICON */}
                 <div 
@@ -531,7 +525,7 @@ export const UltimateFlows: React.FC<UltimateFlowsProps> = ({ onNotify }) => {
 
                       <h3 className="text-2xl md:text-3xl font-black uppercase text-white leading-tight">
                         {item.headlineA} <br />
-                        <span className="text-[#25D366] drop-shadow-[0_0_20px_rgba(37,211,102,0.45)]">
+                        <span className="text-[#25D366]">
                           {item.headlineB}
                         </span>
                       </h3>
@@ -565,7 +559,7 @@ export const UltimateFlows: React.FC<UltimateFlowsProps> = ({ onNotify }) => {
                       href="https://apps.shopify.com"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#25D366] to-emerald-600 hover:from-emerald-400 hover:to-emerald-500 text-slate-950 font-bold text-xs shadow-lg shadow-[#25D366]/25 hover:-translate-y-0.5 transition-all flex items-center gap-2"
+                      className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#25D366] to-emerald-600 hover:from-emerald-400 hover:to-emerald-500 text-slate-950 font-bold text-xs hover:-translate-y-0.5 transition-all flex items-center gap-2"
                     >
                       <span>Install on Shopify</span>
                       <ArrowRight className="w-3.5 h-3.5" />
@@ -593,7 +587,7 @@ export const UltimateFlows: React.FC<UltimateFlowsProps> = ({ onNotify }) => {
               onClick={() => handleSelectCard(i)}
               className={`h-2 rounded-full transition-all duration-300 ${
                 i === activeIndex 
-                  ? 'w-7 bg-[#25D366] shadow-md shadow-[#25D366]/50' 
+                  ? 'w-7 bg-[#25D366]' 
                   : 'w-2 bg-white/20 hover:bg-white/40'
               }`}
               aria-label={`Jump to slide ${i + 1}`}

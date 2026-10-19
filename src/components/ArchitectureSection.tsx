@@ -112,14 +112,14 @@ export const ArchitectureSection: React.FC = () => {
     <section id="architecture" ref={sectionRef} className="max-w-[1440px] mx-auto px-6 md:px-16 pt-24 sm:pt-32 lg:pt-36 mb-24 md:mb-32 perspective-1000">
       {/* Header Row */}
       <div className="mb-16 md:mb-20 flex flex-col md:flex-row md:items-end justify-between gap-8 border-b border-[#262626] pb-8 relative">
-        <div className="absolute bottom-[-1px] left-0 w-32 h-[2px] bg-[#0080FB] shadow-[0_0_10px_#0080FB]" />
+        <div className="absolute bottom-[-1px] left-0 w-32 h-[2px] bg-[#0080FB]" />
         <div>
-          <h2 className="font-['Hanken_Grotesk'] font-black text-5xl md:text-7xl lg:text-[5.5rem] leading-none text-[#e5e2e1] uppercase tracking-tighter mb-4">
+          <h2 className="font-['Hanken_Grotesk'] font-black text-5xl md:text-7xl lg:text-[5.5rem] leading-none text-[#e5e2e1] uppercase tracking-tighter">
             ARCHITECTURE
           </h2>
-          <p className="font-['JetBrains_Mono'] text-xs text-[#0080FB] uppercase tracking-[0.2em] font-semibold">
+          {/* <p className="font-['JetBrains_Mono'] text-xs text-[#0080FB] uppercase tracking-[0.2em] font-semibold mt-4">
             /// OFFICIAL META CLOUD API / SHOPIFY NATIVE ///
-          </p>
+          </p> */}
         </div>
         <div className="font-['JetBrains_Mono'] text-xs text-[#888888] max-w-md border-l-2 border-[#262626] pl-4 py-2 leading-relaxed">
           Engineered natively for Shopify with official Meta Cloud API protocols, 2-way interactive order tags, and sub-second webhook execution.
@@ -130,7 +130,6 @@ export const ArchitectureSection: React.FC = () => {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-[1px] bg-[#262626] border border-[#262626]">
         {steps.map((step, index) => {
           const Icon = step.icon;
-          const isHovered = mousePos.index === index;
 
           return (
             <div
@@ -140,18 +139,8 @@ export const ArchitectureSection: React.FC = () => {
               }}
               onMouseMove={(e) => handleCardMouseMove(e, index)}
               onMouseLeave={() => handleCardMouseLeave(index)}
-              className="arch-card bg-[#0e0e0e] p-8 md:p-12 lg:p-14 hover:bg-[#131313] transition-colors duration-500 relative group cursor-pointer flex flex-col justify-between min-h-[360px] preserve-3d overflow-hidden will-change-transform shadow-xl"
+              className="arch-card bg-[#0e0e0e] p-8 md:p-12 lg:p-14 hover:bg-[#131313] transition-colors duration-500 relative group cursor-pointer flex flex-col justify-between min-h-[360px] preserve-3d overflow-hidden will-change-transform"
             >
-              {/* Spotlight radial light follower */}
-              {isHovered && (
-                <div
-                  className="absolute pointer-events-none -inset-px opacity-70 transition-opacity duration-300 z-10"
-                  style={{
-                    background: `radial-gradient(400px circle at ${mousePos.x}px ${mousePos.y}px, rgba(0, 128, 251, 0.15), transparent 70%)`,
-                  }}
-                />
-              )}
-
               {/* Giant Background Step Number with Deep Parallax */}
               <div
                 ref={(el) => {
@@ -164,7 +153,7 @@ export const ArchitectureSection: React.FC = () => {
 
               {/* Content */}
               <div className="relative z-20">
-                <div className="w-12 h-12 border border-[#262626] bg-[#131313] flex items-center justify-center text-[#0080FB] group-hover:border-[#0080FB] group-hover:shadow-[0_0_15px_rgba(0,128,251,0.3)] transition-all mb-8">
+                <div className="w-12 h-12 border border-[#262626] bg-[#131313] flex items-center justify-center text-[#0080FB] group-hover:border-[#0080FB] transition-all mb-8">
                   <Icon className="w-6 h-6 group-hover:scale-110 transition-transform" />
                 </div>
 
@@ -186,7 +175,7 @@ export const ArchitectureSection: React.FC = () => {
                   <Zap className="w-3 h-3 text-[#0080FB]" />
                   STEP_{step.num} PROTOCOL
                 </span>
-                <span className="w-2 h-2 rounded-full bg-[#0080FB] opacity-0 group-hover:opacity-100 shadow-[0_0_8px_#0080FB] transition-opacity" />
+                <span className="w-2 h-2 rounded-full bg-[#0080FB] opacity-0 group-hover:opacity-100 transition-opacity" />
               </div>
             </div>
           );

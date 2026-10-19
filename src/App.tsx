@@ -14,6 +14,7 @@ import { RevenueBoostSection } from './components/RevenueBoostSection';
 import { PricingPage } from './components/PricingPage';
 import { MetaRatesPage } from './components/MetaRatesPage';
 import { AutomationsPage } from './components/AutomationsPage';
+import { PrivacyPolicyPage } from './components/PrivacyPolicyPage';
 import { Footer } from './components/Footer';
 import { CheckCircle } from 'lucide-react';
 
@@ -41,7 +42,7 @@ class ErrorBoundary extends React.Component<
     if (this.state.hasError) {
       return (
         <div className="min-h-screen bg-[#06080d] text-white flex flex-col items-center justify-center p-8 text-center">
-          <div className="max-w-lg bg-[#0e1626] border border-[#0080FB] rounded-2xl p-8 shadow-[0_0_50px_rgba(0,128,251,0.3)]">
+          <div className="max-w-lg bg-[#0e1626] border border-[#0080FB] rounded-2xl p-8">
             <h2 className="text-xl font-bold font-['JetBrains_Mono'] text-[#0080FB] mb-3 uppercase tracking-wider">
               Navigation Recovery
             </h2>
@@ -70,27 +71,18 @@ export const App: React.FC = () => {
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const lenisRef = useRef<Lenis | null>(null);
 
-  // Initialize currentPage directly from URL hash on first render
-  const [currentPage, setCurrentPage] = useState<'home' | 'pricing' | 'meta-rates' | 'automations'>(() => {
+  // Initialize currentPage directly from URL pathname or legacy hash on first render
+  const [currentPage, setCurrentPage] = useState<'home' | 'pricing' | 'meta-rates' | 'automations' | 'privacy-policy'>(() => {
     if (typeof window !== 'undefined') {
+      const path = window.location.pathname.toLowerCase();
       const hash = window.location.hash.toLowerCase();
-      if (hash.includes('automations')) return 'automations';
-      if (hash.includes('meta-rates') || hash.includes('rates')) return 'meta-rates';
-      if (hash.includes('pricing')) return 'pricing';
+      if (path.includes('privacy-policy') || hash.includes('privacy-policy') || path.includes('privacy') || hash.includes('privacy')) return 'privacy-policy';
+      if (path.includes('automations') || hash.includes('automations')) return 'automations';
+      if (path.includes('meta-rates') || path.includes('rates') || hash.includes('meta-rates') || hash.includes('rates')) return 'meta-rates';
+      if (path.includes('pricing') || hash.includes('pricing')) return 'pricing';
     }
     return 'home';
   });
-
-  // Ambient mouse glow coords
-  const [cursorPos, setCursorPos] = useState({ x: -200, y: -200 });
-
-  useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      setCursorPos({ x: e.clientX, y: e.clientY });
-    };
-    window.addEventListener('mousemove', handleMouseMove, { passive: true });
-    return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, []);
 
   useEffect(() => {
     // Initialize Lenis Smooth Scroll
@@ -130,25 +122,60 @@ export const App: React.FC = () => {
     };
   }, []);
 
-  // Handle URL hash changes (e.g. #pricing, #meta-rates, #automations)
+  // Handle clean URL routing (popstate) and sanitize any legacy hashtags
   useEffect(() => {
-    const handleHashChange = () => {
+    const handleUrlChange = () => {
+      const path = window.location.pathname.toLowerCase();
       const hash = window.location.hash.toLowerCase();
+
+      // Automatically sanitize and remove any legacy '#' from the URL
+      if (hash.includes('privacy-policy') || hash.includes('privacy')) {
+        window.history.replaceState(null, '', '/privacy-policy');
+        setCurrentPage('privacy-policy');
+        return;
+      }
       if (hash.includes('automations')) {
+        window.history.replaceState(null, '', '/automations');
+        setCurrentPage('automations');
+        return;
+      }
+      if (hash.includes('meta-rates') || hash.includes('rates')) {
+        window.history.replaceState(null, '', '/meta-rates');
+        setCurrentPage('meta-rates');
+        return;
+      }
+      if (hash.includes('pricing')) {
+        window.history.replaceState(null, '', '/pricing');
+        setCurrentPage('pricing');
+        return;
+      }
+      if (hash.length > 0) {
+        window.history.replaceState(null, '', window.location.pathname);
+      }
+
+      // Route based on clean pathname
+      if (path.endsWith('/privacy-policy') || path.endsWith('/privacy')) {
+        setCurrentPage('privacy-policy');
+        if (lenisRef.current) {
+          lenisRef.current.scrollTo(0, { immediate: true });
+        } else {
+          window.scrollTo(0, 0);
+        }
+      } else if (path.endsWith('/automations')) {
         setCurrentPage('automations');
         if (lenisRef.current) {
           lenisRef.current.scrollTo(0, { immediate: true });
         } else {
           window.scrollTo(0, 0);
         }
-      } else if (hash.includes('meta-rates') || hash.includes('rates')) {
+      } else if (path.endsWith('/meta-rates')) {
         setCurrentPage('meta-rates');
         if (lenisRef.current) {
           lenisRef.current.scrollTo(0, { immediate: true });
         } else {
           window.scrollTo(0, 0);
         }
-      } else if (hash.includes('pricing')) {
+      } else if (path.endsWith('/pricing')) {
         setCurrentPage('pricing');
         if (lenisRef.current) {
           lenisRef.current.scrollTo(0, { immediate: true });
@@ -166,8 +193,15 @@ export const App: React.FC = () => {
       }
     };
 
-    window.addEventListener('hashchange', handleHashChange);
-    return () => window.removeEventListener('hashchange', handleHashChange);
+    // Sanitize immediately on component mount (strips any existing '#' on localhost)
+    handleUrlChange();
+
+    window.addEventListener('popstate', handleUrlChange);
+    window.addEventListener('hashchange', handleUrlChange);
+    return () => {
+      window.removeEventListener('popstate', handleUrlChange);
+      window.removeEventListener('hashchange', handleUrlChange);
+    };
   }, []);
 
   const handleNotify = (msg: string) => {
@@ -196,24 +230,20 @@ export const App: React.FC = () => {
     }
   };
 
-  const handleNavigatePage = (page: 'home' | 'pricing' | 'meta-rates' | 'automations', targetSection?: string) => {
+  const handleNavigatePage = (page: 'home' | 'pricing' | 'meta-rates' | 'automations' | 'privacy-policy', targetSection?: string) => {
     setCurrentPage(page);
-    if (page === 'automations') {
-      window.location.hash = 'automations';
-      if (lenisRef.current) {
-        lenisRef.current.scrollTo(0, { immediate: true });
-      } else {
-        window.scrollTo(0, 0);
-      }
-    } else if (page === 'meta-rates') {
-      window.location.hash = 'meta-rates';
+
+    // Set clean URL without any '#' hashtag
+    const targetPath = page === 'home' ? '/' : `/${page}`;
+    window.history.pushState(null, '', targetPath);
+
+    if (page === 'automations' || page === 'meta-rates' || page === 'privacy-policy') {
       if (lenisRef.current) {
         lenisRef.current.scrollTo(0, { immediate: true });
       } else {
         window.scrollTo(0, 0);
       }
     } else if (page === 'pricing') {
-      window.location.hash = 'pricing';
       if (lenisRef.current) {
         lenisRef.current.scrollTo(0, { immediate: true });
       } else {
@@ -223,9 +253,7 @@ export const App: React.FC = () => {
         ScrollTrigger.refresh();
       }, 100);
     } else {
-      if (window.location.hash.includes('pricing') || window.location.hash.includes('meta-rates') || window.location.hash.includes('automations')) {
-        window.history.replaceState(null, '', ' ');
-      }
+      // Home page navigation
       if (targetSection) {
         setTimeout(() => {
           handleScrollToSection(targetSection);
@@ -247,21 +275,12 @@ export const App: React.FC = () => {
     <ErrorBoundary>
       <div className="bg-[#0b0d12] text-[#e5e2e1] min-h-screen flex flex-col font-['Hanken_Grotesk'] selection:bg-[#0080FB] selection:text-white relative overflow-x-hidden">
 
-      {/* Dynamic Ambient Mouse Glow Tracking Light */}
-      <div
-        className="fixed w-[600px] h-[600px] rounded-full pointer-events-none z-0 transition-transform duration-700 ease-out will-change-transform opacity-35 blur-[120px]"
-        style={{
-          transform: `translate3d(${cursorPos.x - 300}px, ${cursorPos.y - 300}px, 0)`,
-          background: 'radial-gradient(circle, rgba(0,128,251,0.22) 0%, rgba(37,211,102,0.12) 40%, transparent 70%)',
-        }}
-      />
-
       {/* Cyber Technical Grid Overlay */}
       <div className="fixed inset-0 pointer-events-none z-0 cyber-grid opacity-30" />
 
       {/* Toast Notification Banner */}
       {toastMessage && (
-        <div className="fixed bottom-6 right-6 z-50 bg-[#0e0e0e] border border-[#0080FB] text-white px-5 py-3 shadow-[0_0_30px_rgba(0,128,251,0.3)] flex items-center gap-3 animate-in slide-in-from-bottom duration-300">
+        <div className="fixed bottom-6 right-6 z-50 bg-[#0e0e0e] border border-[#0080FB] text-white px-5 py-3 flex items-center gap-3 animate-in slide-in-from-bottom duration-300">
           <CheckCircle className="w-4 h-4 text-[#25D366]" />
           <span className="font-['JetBrains_Mono'] text-xs uppercase tracking-wider">{toastMessage}</span>
         </div>
@@ -276,6 +295,13 @@ export const App: React.FC = () => {
 
       {/* Main Page Layout */}
       <main className="flex-grow pt-20">
+        <div style={{ display: currentPage === 'privacy-policy' ? 'block' : 'none' }}>
+          <PrivacyPolicyPage 
+            onNotify={handleNotify} 
+            onNavigateHome={(sec) => handleNavigatePage('home', sec)} 
+          />
+        </div>
+
         <div style={{ display: currentPage === 'automations' ? 'block' : 'none' }}>
           <AutomationsPage 
             onNotify={handleNotify} 

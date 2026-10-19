@@ -48,18 +48,12 @@ export const RevenueBoostSection: React.FC = () => {
       ref={sectionRef}
       className="w-full bg-[#0e0e0e] py-24 md:py-40 border-y border-[#262626] overflow-hidden relative perspective-1000"
     >
-      {/* Background Accent Mesh */}
-      <div 
-        className="absolute inset-0 opacity-20 pointer-events-none"
-        style={{ backgroundImage: 'radial-gradient(circle at 80% 60%, rgba(37, 211, 102, 0.3) 0%, transparent 60%)' }}
-      />
-
       <div className="max-w-[1440px] mx-auto px-6 md:px-16 relative z-10">
         <div className="flex flex-col items-start relative">
           {/* Floating Metric Badge 1 */}
           <div
             ref={floatBadge1}
-            className="hidden lg:flex absolute top-10 right-12 z-20 bg-[#131313]/95 border border-[#25D366]/40 px-4 py-2.5 items-center gap-2.5 shadow-[0_0_25px_rgba(37,211,102,0.2)] pointer-events-none will-change-transform"
+            className="hidden lg:flex absolute top-10 right-12 z-20 bg-[#131313]/95 border border-[#25D366]/40 px-4 py-2.5 items-center gap-2.5 pointer-events-none will-change-transform"
           >
             <TrendingUp className="w-4 h-4 text-[#25D366]" />
             <span className="font-['JetBrains_Mono'] text-xs text-white font-bold tracking-wider">
@@ -70,7 +64,7 @@ export const RevenueBoostSection: React.FC = () => {
           {/* Floating Metric Badge 2 */}
           <div
             ref={floatBadge2}
-            className="hidden lg:flex absolute bottom-44 right-1/3 z-20 bg-[#131313]/95 border border-[#0080FB]/40 px-4 py-2.5 items-center gap-2.5 shadow-[0_0_25px_rgba(0,128,251,0.2)] pointer-events-none will-change-transform"
+            className="hidden lg:flex absolute bottom-44 right-1/3 z-20 bg-[#131313]/95 border border-[#0080FB]/40 px-4 py-2.5 items-center gap-2.5 pointer-events-none will-change-transform"
           >
             <ShieldCheck className="w-4 h-4 text-[#0080FB]" />
             <span className="font-['JetBrains_Mono'] text-xs text-white font-bold tracking-wider">
@@ -79,10 +73,10 @@ export const RevenueBoostSection: React.FC = () => {
           </div>
 
           {/* Protocol Tag */}
-          <div className="font-['JetBrains_Mono'] text-xs text-[#25D366] mb-10 md:mb-12 tracking-[0.4em] uppercase font-semibold flex items-center gap-2">
+          {/* <div className="font-['JetBrains_Mono'] text-xs text-[#25D366] mb-10 md:mb-12 tracking-[0.4em] uppercase font-semibold flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-[#25D366] animate-ping" />
             <span>/// HIGH CONVERSION / SHOPIFY AUTOMATION ///</span>
-          </div>
+          </div> */}
 
           {/* Massive Stacked Headline with Kinetic Parallax Lines */}
           <h2 className="font-['Hanken_Grotesk'] font-black text-5xl sm:text-7xl md:text-8xl lg:text-[10rem] xl:text-[11.5rem] leading-[0.82] uppercase tracking-tighter text-[#e5e2e1] mb-14 select-none">
@@ -92,7 +86,7 @@ export const RevenueBoostSection: React.FC = () => {
             <br />
             <span
               ref={line2Ref}
-              className="text-[#0080FB] glow-text inline-block will-change-transform"
+              className="text-[#0080FB] inline-block will-change-transform"
             >
               CHATRADIX
             </span>
@@ -107,7 +101,7 @@ export const RevenueBoostSection: React.FC = () => {
             <br />
             <span
               ref={line5Ref}
-              className="text-[#25D366] glow-green-text inline-block will-change-transform"
+              className="text-[#25D366] inline-block will-change-transform"
             >
               BOOST
             </span>
@@ -117,7 +111,7 @@ export const RevenueBoostSection: React.FC = () => {
           <div className="w-full flex justify-end">
             <div
               ref={calloutRef}
-              className="max-w-md border-l-4 border-[#25D366] bg-[#131313] p-8 border border-[#262626] shadow-2xl will-change-transform hover:border-[#25D366]/60 transition-colors"
+              className="max-w-md border-l-4 border-[#25D366] bg-[#131313] p-8 border border-[#262626] will-change-transform hover:border-[#25D366]/60 transition-colors"
             >
               <p className="font-['Hanken_Grotesk'] text-base md:text-lg text-[#888888] mb-8 leading-relaxed">
                 WhatsApp messages achieve up to 98% open rates compared to ~20% for standard marketing emails. Recover abandoned checkouts, verify COD orders, and engage customers directly where they chat daily.
@@ -127,7 +121,7 @@ export const RevenueBoostSection: React.FC = () => {
                 href="https://apps.shopify.com/chatradix"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="bg-[#25D366] text-black font-['JetBrains_Mono'] text-xs font-bold px-8 py-4 hover:bg-white hover:text-black transition-all inline-flex items-center gap-3 uppercase tracking-[0.15em] group shadow-[0_0_20px_rgba(37,211,102,0.3)] hover:shadow-[0_0_30px_rgba(255,255,255,0.4)]"
+                className="bg-[#25D366] text-black font-['JetBrains_Mono'] text-xs font-bold px-8 py-4 hover:bg-white hover:text-black transition-all inline-flex items-center gap-3 uppercase tracking-[0.15em] group"
               >
                 <span>INSTALL ON SHOPIFY</span>
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />

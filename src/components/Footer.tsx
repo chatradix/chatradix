@@ -3,7 +3,7 @@ import React from 'react';
 interface FooterProps {
   onScrollToTop: () => void;
   onScrollToSection: (id: string) => void;
-  onNavigatePage?: (page: 'home' | 'pricing' | 'meta-rates' | 'automations', targetSection?: string) => void;
+  onNavigatePage?: (page: 'home' | 'pricing' | 'meta-rates' | 'automations' | 'privacy-policy', targetSection?: string) => void;
 }
 
 export const Footer: React.FC<FooterProps> = ({ onScrollToTop, onScrollToSection, onNavigatePage }) => {
@@ -144,15 +144,13 @@ export const Footer: React.FC<FooterProps> = ({ onScrollToTop, onScrollToSection
           ©2026 CHATRADIX • OFFICIAL META WHATSAPP CLOUD API AUTOMATION
         </p>
 
-        <nav className="flex gap-6">
-          <a 
-            href="https://chatradix.com/privacy-policy" 
-            target="_blank"
-            rel="noopener noreferrer"
-            className="font-['JetBrains_Mono'] text-[11px] text-[#888888] hover:text-[#e5e2e1] transition-colors tracking-wider uppercase"
+        <nav className="flex gap-6 items-center">
+          <button 
+            onClick={() => onNavigatePage ? onNavigatePage('privacy-policy') : null}
+            className="font-['JetBrains_Mono'] text-[11px] text-[#888888] hover:text-[#0080FB] transition-colors tracking-wider uppercase cursor-pointer"
           >
             Privacy Policy
-          </a>
+          </button>
           <a 
             href="https://apps.shopify.com/chatradix" 
             target="_blank"

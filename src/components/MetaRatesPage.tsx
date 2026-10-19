@@ -100,14 +100,6 @@ export const MetaRatesPage: React.FC<MetaRatesPageProps> = ({
         }}
       />
 
-      {/* Dynamic Ambient Electric Blue Glow */}
-      <div 
-        className="absolute top-16 left-1/2 -translate-x-1/2 w-[1100px] h-[500px] pointer-events-none rounded-full blur-[200px] opacity-25"
-        style={{
-          background: 'radial-gradient(circle, rgba(0,128,251,0.55) 0%, rgba(37,211,102,0.12) 45%, transparent 70%)'
-        }}
-      />
-
       <div className="max-w-[1520px] mx-auto px-4 sm:px-8 md:px-12 relative z-10">
 
         {/* ==============================================================
@@ -116,15 +108,15 @@ export const MetaRatesPage: React.FC<MetaRatesPageProps> = ({
         <div className="flex flex-col items-center text-center max-w-4xl mx-auto mb-16 sm:mb-20">
           
           {/* Protocol Badge */}
-          <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-[#0080FB]/10 border border-[#0080FB]/35 text-xs font-['JetBrains_Mono'] text-[#0080FB] font-bold tracking-[0.2em] uppercase mb-6 shadow-[0_0_25px_rgba(0,128,251,0.25)]">
+          {/* <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-[#0080FB]/10 border border-[#0080FB]/35 text-xs font-['JetBrains_Mono'] text-[#0080FB] font-bold tracking-[0.2em] uppercase mb-6">
             <span className="w-2 h-2 rounded-full bg-[#0080FB] animate-ping" />
             <span>/// OFFICIAL META CLOUD API v20.0 WHOLESALE DIRECTORY ///</span>
-          </div>
+          </div> */}
 
           {/* Main Headline */}
           <h1 className="font-['Hanken_Grotesk'] font-black text-4xl sm:text-6xl lg:text-7xl tracking-tight uppercase leading-[0.96] mb-6 text-white">
             META WHATSAPP RATES <br />
-            <span className="text-[#0080FB] drop-shadow-[0_0_35px_rgba(0,128,251,0.4)]">
+            <span className="text-[#0080FB]">
               BY COUNTRY
             </span>
           </h1>
@@ -195,8 +187,8 @@ export const MetaRatesPage: React.FC<MetaRatesPageProps> = ({
                   }}
                   className={`group relative rounded-2xl p-5 sm:p-6 cursor-pointer transition-all duration-300 flex flex-col justify-between overflow-hidden ${
                     isSelected
-                      ? 'border-2 border-[#0080FB] bg-gradient-to-b from-[#0f1b2f] via-[#09111f] to-[#060a12] shadow-[0_15px_45px_rgba(0,128,251,0.28)] scale-[1.01]'
-                      : 'border border-[#1a253a] hover:border-[#0080FB]/60 bg-gradient-to-b from-[#0c1424]/90 via-[#080d18]/90 to-[#050810]/95 hover:shadow-[0_10px_35px_rgba(0,128,251,0.12)]'
+                      ? 'border-2 border-[#0080FB] bg-gradient-to-b from-[#0f1b2f] via-[#09111f] to-[#060a12] scale-[1.01]'
+                      : 'border border-[#1a253a] hover:border-[#0080FB]/60 bg-gradient-to-b from-[#0c1424]/90 via-[#080d18]/90 to-[#050810]/95'
                   }`}
                 >
                   {/* Active Top Glowing Accent Line */}
@@ -208,7 +200,7 @@ export const MetaRatesPage: React.FC<MetaRatesPageProps> = ({
                     {/* Header Row: Flag + Name + Calling Code + Status */}
                     <div className="flex items-center justify-between gap-3 mb-4">
                       <div className="flex items-center gap-3">
-                        <span className="text-3xl sm:text-4xl drop-shadow-md select-none">{c.flag}</span>
+                        <span className="text-3xl sm:text-4xl select-none">{c.flag}</span>
                         <div>
                           <h3 className="font-['Hanken_Grotesk'] font-bold text-lg text-white group-hover:text-[#0080FB] transition-colors leading-tight">
                             {c.country}
@@ -221,7 +213,7 @@ export const MetaRatesPage: React.FC<MetaRatesPageProps> = ({
 
                       <span className={`px-2.5 py-1 rounded-full text-[10px] font-['JetBrains_Mono'] font-bold tracking-wider uppercase transition-all ${
                         isSelected 
-                          ? 'bg-[#0080FB] text-white shadow-[0_0_12px_#0080FB]' 
+                          ? 'bg-[#0080FB] text-white' 
                           : 'bg-[#10192a] border border-[#1e2d47] text-[#63728f] group-hover:text-[#8ea4c8] group-hover:border-[#0080FB]/40'
                       }`}>
                         {isSelected ? 'INSPECTING' : 'SELECT'}
@@ -298,14 +290,14 @@ export const MetaRatesPage: React.FC<MetaRatesPageProps> = ({
         ============================================================== */}
         <div id="rate-inspector" className="w-full mb-20 scroll-mt-36">
           
-          <div className="bg-gradient-to-b from-[#0e1728] via-[#09101d] to-[#060a12] border-2 border-[#0080FB] rounded-3xl p-6 sm:p-10 shadow-[0_20px_80px_rgba(0,128,251,0.22)] relative overflow-hidden">
+          <div className="bg-gradient-to-b from-[#0e1728] via-[#09101d] to-[#060a12] border-2 border-[#0080FB] rounded-3xl p-6 sm:p-10 relative overflow-hidden">
             <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-transparent via-[#0080FB] to-transparent" />
             
             {/* Inspector Header: Selected Country Banner */}
             <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 pb-8 border-b border-[#1b283d] mb-8">
               
               <div className="flex items-start sm:items-center gap-4">
-                <span className="text-5xl sm:text-6xl drop-shadow-md select-none">{activeCountry.flag}</span>
+                <span className="text-5xl sm:text-6xl select-none">{activeCountry.flag}</span>
                 <div>
                   <div className="flex flex-wrap items-center gap-2.5 mb-1">
                     <h2 className="font-['Hanken_Grotesk'] font-black text-2xl sm:text-4xl text-white uppercase tracking-tight">
@@ -326,7 +318,7 @@ export const MetaRatesPage: React.FC<MetaRatesPageProps> = ({
 
               {/* Status & Markup Guarantees */}
               <div className="flex flex-wrap items-center gap-3">
-                <span className="px-3.5 py-1.5 rounded-full text-xs font-['JetBrains_Mono'] font-bold bg-[#25D366]/15 text-[#25D366] border border-[#25D366]/35 flex items-center gap-2 shadow-[0_0_15px_rgba(37,211,102,0.15)]">
+                <span className="px-3.5 py-1.5 rounded-full text-xs font-['JetBrains_Mono'] font-bold bg-[#25D366]/15 text-[#25D366] border border-[#25D366]/35 flex items-center gap-2">
                   <span className="w-2 h-2 rounded-full bg-[#25D366] animate-pulse" />
                   <span>0% CHATRADIX MARKUP GUARANTEE</span>
                 </span>
@@ -341,8 +333,8 @@ export const MetaRatesPage: React.FC<MetaRatesPageProps> = ({
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 mb-10">
               
               {/* 1. Utility Rate Card */}
-              <div className="bg-[#0b1322] border-2 border-[#0080FB] rounded-2xl p-5 flex flex-col justify-between relative shadow-[0_0_30px_rgba(0,128,251,0.18)]">
-                <span className="absolute -top-3 right-4 px-2.5 py-0.5 rounded-md text-[9px] font-['JetBrains_Mono'] font-black bg-[#0080FB] text-white uppercase tracking-wider shadow-[0_0_10px_#0080FB]">
+              <div className="bg-[#0b1322] border-2 border-[#0080FB] rounded-2xl p-5 flex flex-col justify-between relative">
+                <span className="absolute -top-3 right-4 px-2.5 py-0.5 rounded-md text-[9px] font-['JetBrains_Mono'] font-black bg-[#0080FB] text-white uppercase tracking-wider">
                   CORE UTILITY
                 </span>
                 <div>
@@ -442,7 +434,7 @@ export const MetaRatesPage: React.FC<MetaRatesPageProps> = ({
                       onClick={() => setCalcVolume(vol)}
                       className={`px-3 py-1.5 rounded-lg border transition-all ${
                         calcVolume === vol
-                          ? 'bg-[#0080FB] text-white border-[#0080FB] shadow-[0_0_10px_#0080FB]'
+                          ? 'bg-[#0080FB] text-white border-[#0080FB]'
                           : 'bg-[#0e1626] border-[#1b2b42] text-[#8ea4c8] hover:text-white hover:border-[#0080FB]'
                       }`}
                     >
@@ -496,7 +488,7 @@ export const MetaRatesPage: React.FC<MetaRatesPageProps> = ({
                   </span>
                 </div>
 
-                <div className="bg-[#091b1a] border border-[#25D366]/40 rounded-xl p-4 shadow-[0_0_20px_rgba(37,211,102,0.1)]">
+                <div className="bg-[#091b1a] border border-[#25D366]/40 rounded-xl p-4">
                   <div className="flex items-center justify-between text-xs font-['JetBrains_Mono'] text-[#25D366] uppercase font-bold mb-1">
                     <span>ChatRadix Added Fee</span>
                     <span className="px-1.5 py-0.2 rounded bg-[#25D366]/20 text-[#25D366] text-[9px]">0% MARKUP</span>
@@ -586,7 +578,7 @@ export const MetaRatesPage: React.FC<MetaRatesPageProps> = ({
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search by country name, dial code (e.g. +92, +91, +20, +1, +44), or region..."
-              className="w-full pl-12 sm:pl-14 pr-16 py-4 rounded-2xl bg-[#0a101d] border-2 border-[#1a253a] focus:border-[#0080FB] text-white placeholder-[#556987] font-['Hanken_Grotesk'] text-sm sm:text-base outline-none transition-all shadow-[0_10px_30px_rgba(0,0,0,0.5)] focus:shadow-[0_0_25px_rgba(0,128,251,0.35)]"
+              className="w-full pl-12 sm:pl-14 pr-16 py-4 rounded-2xl bg-[#0a101d] border-2 border-[#1a253a] focus:border-[#0080FB] text-white placeholder-[#556987] font-['Hanken_Grotesk'] text-sm sm:text-base outline-none transition-all"
             />
             {searchQuery && (
               <button 
@@ -599,7 +591,7 @@ export const MetaRatesPage: React.FC<MetaRatesPageProps> = ({
           </div>
 
           {/* Table Container */}
-          <div className="bg-[#0a101d] border border-[#1a253a] rounded-3xl overflow-hidden shadow-[0_15px_50px_rgba(0,0,0,0.6)]">
+          <div className="bg-[#0a101d] border border-[#1a253a] rounded-3xl overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full text-left border-collapse">
                 <thead>
@@ -661,7 +653,7 @@ export const MetaRatesPage: React.FC<MetaRatesPageProps> = ({
                             }}
                             className={`px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-wider transition-all ${
                               isCurrent
-                                ? 'bg-[#0080FB] text-white shadow-[0_0_10px_#0080FB]'
+                                ? 'bg-[#0080FB] text-white'
                                 : 'bg-[#10192a] hover:bg-[#0080FB] text-[#8ea4c8] hover:text-white border border-[#1d2c44]'
                             }`}
                           >
@@ -687,7 +679,7 @@ export const MetaRatesPage: React.FC<MetaRatesPageProps> = ({
         {/* ==============================================================
             5. TRANSPARENT VALUE PROPOSITION & SHOPIFY TRIAL BANNER
         ============================================================== */}
-        <div className="w-full bg-gradient-to-b from-[#0b1220] via-[#080d17] to-[#05070d] border border-[#0080FB]/50 rounded-3xl p-8 sm:p-12 text-center relative overflow-hidden shadow-[0_20px_70px_rgba(0,128,251,0.2)]">
+        <div className="w-full bg-gradient-to-b from-[#0b1220] via-[#080d17] to-[#05070d] border border-[#0080FB]/50 rounded-3xl p-8 sm:p-12 text-center relative overflow-hidden">
           <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[#0080FB] to-transparent opacity-90" />
           
           <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#25D366]/15 border border-[#25D366]/30 text-xs font-['JetBrains_Mono'] text-[#25D366] font-bold uppercase mb-4">
@@ -709,7 +701,7 @@ export const MetaRatesPage: React.FC<MetaRatesPageProps> = ({
               target="_blank"
               rel="noopener noreferrer"
               onClick={() => onNotify("Opening Shopify App Store for ChatRadix...")}
-              className="bg-[#0080FB] hover:bg-white hover:text-[#0080FB] text-white font-['JetBrains_Mono'] text-xs font-bold px-8 py-4 rounded-xl uppercase tracking-widest flex items-center justify-center gap-2 shadow-[0_0_30px_rgba(0,128,251,0.45)] transition-all active:scale-95"
+              className="bg-[#0080FB] hover:bg-white hover:text-[#0080FB] text-white font-['JetBrains_Mono'] text-xs font-bold px-8 py-4 rounded-xl uppercase tracking-widest flex items-center justify-center gap-2 transition-all active:scale-95"
             >
               <span>INSTALL ON SHOPIFY (14-DAY TRIAL)</span>
               <ArrowUpRight className="w-4 h-4" />

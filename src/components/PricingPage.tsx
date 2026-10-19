@@ -168,15 +168,6 @@ export const PricingPage: React.FC<PricingPageProps> = ({ onNotify, onNavigateHo
 
   return (
     <div id="pricing" className="w-full bg-[#06080d] text-[#e5e2e1] pt-28 sm:pt-32 lg:pt-36 pb-20 selection:bg-[#0080FB] selection:text-white relative">
-      
-      {/* Dynamic Ambient Electric Blue Glow */}
-      <div 
-        className="absolute top-20 left-1/2 -translate-x-1/2 w-[1200px] h-[550px] pointer-events-none rounded-full blur-[200px] opacity-20"
-        style={{
-          background: 'radial-gradient(circle, rgba(0,128,251,0.6) 0%, rgba(0,80,200,0.2) 50%, transparent 70%)'
-        }}
-      />
-
       <div className="max-w-[1580px] mx-auto px-4 sm:px-8 md:px-12 relative z-10">
 
         {/* ==============================================================
@@ -185,10 +176,10 @@ export const PricingPage: React.FC<PricingPageProps> = ({ onNotify, onNavigateHo
         <div className="flex flex-col items-center text-center max-w-4xl mx-auto mb-14 sm:mb-16">
           
           {/* Breadcrumb Technical Pill */}
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#0080FB]/10 border border-[#0080FB]/30 text-xs font-['JetBrains_Mono'] text-[#0080FB] font-bold tracking-widest uppercase mb-6 shadow-[0_0_20px_rgba(0,128,251,0.2)]">
+          {/* <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#0080FB]/10 border border-[#0080FB]/30 text-xs font-['JetBrains_Mono'] text-[#0080FB] font-bold tracking-widest uppercase mb-6">
             <span className="w-2 h-2 rounded-full bg-[#0080FB] animate-pulse" />
             <span>TRANSPARENT TIER ARCHITECTURE</span>
-          </div>
+          </div> */}
 
           <h1 className="font-['Hanken_Grotesk'] font-black text-4xl sm:text-5xl lg:text-6xl tracking-tight uppercase leading-[0.98] mb-6 text-white">
             PREDICTABLE PRICING. <br />
@@ -227,8 +218,8 @@ export const PricingPage: React.FC<PricingPageProps> = ({ onNotify, onNavigateHo
                 key={plan.id}
                 className={`relative rounded-3xl p-6 sm:p-8 flex flex-col justify-between transition-all duration-300 ${
                   plan.popular
-                    ? 'border-2 border-[#0080FB] bg-gradient-to-b from-[#0e1728]/95 via-[#09101d]/95 to-[#060a12]/98 shadow-[0_20px_60px_rgba(0,128,251,0.22)] scale-[1.02] z-20'
-                    : 'border border-[#1a253a] hover:border-[#0080FB]/50 bg-gradient-to-b from-[#0b1220]/80 via-[#070b14]/80 to-[#05070d]/90 hover:shadow-[0_15px_40px_rgba(0,128,251,0.1)]'
+                    ? 'border-2 border-[#0080FB] bg-gradient-to-b from-[#0e1728]/95 via-[#09101d]/95 to-[#060a12]/98 scale-[1.02] z-20'
+                    : 'border border-[#1a253a] hover:border-[#0080FB]/50 bg-gradient-to-b from-[#0b1220]/80 via-[#070b14]/80 to-[#05070d]/90'
                 }`}
               >
                 {/* Glowing Top Rail on featured plan */}
@@ -245,7 +236,7 @@ export const PricingPage: React.FC<PricingPageProps> = ({ onNotify, onNavigateHo
 
                     <span className={`px-2.5 py-1 rounded-full text-[10px] font-['JetBrains_Mono'] font-bold tracking-widest uppercase ${
                       plan.popular
-                        ? 'bg-[#0080FB] text-white shadow-[0_0_12px_#0080FB]'
+                        ? 'bg-[#0080FB] text-white'
                         : 'bg-[#10192a] border border-[#1e2d47] text-[#8ea4c8]'
                     }`}>
                       {plan.badge}
@@ -338,7 +329,7 @@ export const PricingPage: React.FC<PricingPageProps> = ({ onNotify, onNavigateHo
                     onClick={() => onNotify(`Redirecting to Shopify App Store for ${plan.name} Plan...`)}
                     className={`w-full py-3.5 px-4 rounded-xl font-['JetBrains_Mono'] text-xs font-bold tracking-widest uppercase flex items-center justify-center gap-2 transition-all active:scale-[0.98] ${
                       plan.popular
-                        ? 'bg-[#0080FB] hover:bg-white hover:text-[#0080FB] text-white shadow-[0_0_25px_rgba(0,128,251,0.45)]'
+                        ? 'bg-[#0080FB] hover:bg-white hover:text-[#0080FB] text-white'
                         : 'bg-[#10192a] hover:bg-[#0080FB] text-[#0080FB] hover:text-white border border-[#1e2d47] hover:border-[#0080FB]'
                     }`}
                   >
@@ -362,9 +353,9 @@ export const PricingPage: React.FC<PricingPageProps> = ({ onNotify, onNavigateHo
         <div className="mb-24 bg-[#0a101d] border border-[#1a253a] rounded-3xl p-8 sm:p-12 relative overflow-hidden">
           
           <div className="text-center max-w-3xl mx-auto mb-12">
-            <span className="font-['JetBrains_Mono'] text-xs text-[#0080FB] font-bold tracking-widest uppercase block mb-2">
+            {/* <span className="font-['JetBrains_Mono'] text-xs text-[#0080FB] font-bold tracking-widest uppercase block mb-2">
               // COMPLETE FEATURE MANIFESTO
-            </span>
+            </span> */}
             <h2 className="font-['Hanken_Grotesk'] font-black text-3xl sm:text-4xl text-white uppercase tracking-tight">
               Included in Every Single Plan (No Gating)
             </h2>
@@ -430,7 +421,7 @@ export const PricingPage: React.FC<PricingPageProps> = ({ onNotify, onNavigateHo
               href="https://apps.shopify.com/chatradix"
               target="_blank"
               rel="noopener noreferrer"
-              className="bg-[#0080FB] hover:bg-white hover:text-[#0080FB] text-white font-['JetBrains_Mono'] text-xs font-bold px-8 py-4 rounded-xl uppercase tracking-widest flex items-center gap-2 shadow-[0_0_25px_rgba(0,128,251,0.4)] transition-all"
+              className="bg-[#0080FB] hover:bg-white hover:text-[#0080FB] text-white font-['JetBrains_Mono'] text-xs font-bold px-8 py-4 rounded-xl uppercase tracking-widest flex items-center gap-2 transition-all"
             >
               <span>CONNECT META API NOW</span>
               <ArrowRight className="w-4 h-4" />
@@ -443,9 +434,9 @@ export const PricingPage: React.FC<PricingPageProps> = ({ onNotify, onNavigateHo
         ============================================================== */}
         <div className="max-w-4xl mx-auto mb-20">
           <div className="text-center mb-10">
-            <span className="font-['JetBrains_Mono'] text-xs text-[#0080FB] font-bold tracking-widest uppercase block mb-1">
+            {/* <span className="font-['JetBrains_Mono'] text-xs text-[#0080FB] font-bold tracking-widest uppercase block mb-1">
               // CLARIFICATIONS & POLICIES
-            </span>
+            </span> */}
             <h2 className="font-['Hanken_Grotesk'] font-black text-3xl sm:text-4xl text-white uppercase tracking-tight">
               Frequently Asked Questions
             </h2>
@@ -487,7 +478,7 @@ export const PricingPage: React.FC<PricingPageProps> = ({ onNotify, onNavigateHo
         {/* ==============================================================
             BOTTOM CONVERSION CTA BANNER
         ============================================================== */}
-        <div className="w-full bg-[#0a101d] border border-[#0080FB]/40 rounded-3xl p-8 sm:p-12 text-center relative overflow-hidden shadow-[0_20px_70px_rgba(0,128,251,0.15)]">
+        <div className="w-full bg-[#0a101d] border border-[#0080FB]/40 rounded-3xl p-8 sm:p-12 text-center relative overflow-hidden">
           <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[#0080FB] to-transparent opacity-90" />
           
           <h2 className="font-['Hanken_Grotesk'] font-black text-3xl sm:text-5xl text-white uppercase tracking-tight mb-4">
@@ -504,7 +495,7 @@ export const PricingPage: React.FC<PricingPageProps> = ({ onNotify, onNavigateHo
               target="_blank"
               rel="noopener noreferrer"
               onClick={() => onNotify("Opening Shopify App Store for ChatRadix...")}
-              className="bg-[#0080FB] hover:bg-white hover:text-[#0080FB] text-white font-['JetBrains_Mono'] text-xs font-bold px-8 py-4 rounded-xl uppercase tracking-widest flex items-center justify-center gap-2 shadow-[0_0_25px_rgba(0,128,251,0.45)] transition-all active:scale-95"
+              className="bg-[#0080FB] hover:bg-white hover:text-[#0080FB] text-white font-['JetBrains_Mono'] text-xs font-bold px-8 py-4 rounded-xl uppercase tracking-widest flex items-center justify-center gap-2 transition-all active:scale-95"
             >
               <span>INSTALL ON SHOPIFY (14-DAY TRIAL)</span>
               <ArrowUpRight className="w-4 h-4" />

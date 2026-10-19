@@ -85,7 +85,7 @@ export const HeroSection: React.FC = () => {
           </h1>
 
           {/* Subtitle */}
-          <p className="font-['Hanken_Grotesk'] text-base sm:text-lg md:text-xl text-[#e5e2e1] max-w-3xl mb-12 sm:mb-16 mx-auto leading-relaxed drop-shadow-[0_2px_12px_rgba(0,0,0,0.95)]">
+          <p className="font-['Hanken_Grotesk'] text-base sm:text-lg md:text-xl text-[#e5e2e1] max-w-3xl mb-12 sm:mb-16 mx-auto leading-relaxed">
             Automate your Shopify store with Meta's official WhatsApp Business Cloud API. Recover abandoned checkouts, verify COD orders with instant two-way tags, and broadcast 10-card product carousels with zero phone ban risk.
           </p>
 
@@ -95,7 +95,7 @@ export const HeroSection: React.FC = () => {
               href="https://apps.shopify.com/chatradix"
               target="_blank"
               rel="noopener noreferrer"
-              className="bg-[#0080FB] border border-[#0080FB] text-white font-['JetBrains_Mono'] text-xs font-bold px-10 py-5 hover:bg-white hover:text-[#0080FB] transition-all duration-300 active:scale-95 inline-flex items-center gap-3 justify-center tracking-[0.15em] rounded-none group shadow-[0_0_30px_rgba(0,128,251,0.35)]"
+              className="bg-[#0080FB] border border-[#0080FB] text-white font-['JetBrains_Mono'] text-xs font-bold px-10 py-5 hover:bg-white hover:text-[#0080FB] transition-all duration-300 active:scale-95 inline-flex items-center gap-3 justify-center tracking-[0.15em] rounded-none group"
             >
               <span>INSTALL ON SHOPIFY</span>
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
