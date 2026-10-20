@@ -32,19 +32,24 @@ export const ArchitectureSection: React.FC = () => {
         }
       );
 
-      // Deep Parallax Scrub for Background Numbers 01, 02, 03
+      // Parallax Scrub for Background Numbers 01, 02, 03 - Keeps numbers comfortably inside cards without cutting off
       numberRefs.current.forEach((numEl, i) => {
         if (!numEl) return;
-        gsap.to(numEl, {
-          y: -40 * (i + 1),
-          ease: 'none',
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: 'top bottom',
-            end: 'bottom top',
-            scrub: 1.5,
-          },
-        });
+        const cardEl = cardRefs.current[i] || sectionRef.current;
+        gsap.fromTo(
+          numEl,
+          { y: 0 },
+          {
+            y: 22 + i * 8,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: cardEl,
+              start: 'top bottom',
+              end: 'bottom top',
+              scrub: 1.2,
+            },
+          }
+        );
       });
     }, sectionRef);
 
@@ -127,7 +132,7 @@ export const ArchitectureSection: React.FC = () => {
       </div>
 
       {/* Grid of 3 Step Cards with Spotlight and 3D Tilt */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-[1px] bg-[#262626] border border-[#262626]">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
         {steps.map((step, index) => {
           const Icon = step.icon;
 
@@ -139,14 +144,14 @@ export const ArchitectureSection: React.FC = () => {
               }}
               onMouseMove={(e) => handleCardMouseMove(e, index)}
               onMouseLeave={() => handleCardMouseLeave(index)}
-              className="arch-card bg-[#0e0e0e] p-8 md:p-12 lg:p-14 hover:bg-[#131313] transition-colors duration-500 relative group cursor-pointer flex flex-col justify-between min-h-[360px] preserve-3d overflow-hidden will-change-transform"
+              className="arch-card bg-[#0e0e0e] rounded-2xl p-8 md:p-12 lg:p-14 hover:bg-[#131313] transition-colors duration-500 relative group cursor-pointer flex flex-col justify-between min-h-[360px] preserve-3d overflow-hidden will-change-transform"
             >
               {/* Giant Background Step Number with Deep Parallax */}
               <div
                 ref={(el) => {
                   numberRefs.current[index] = el;
                 }}
-                className="font-['Hanken_Grotesk'] font-black text-[7rem] md:text-[8rem] leading-none text-[#1b1e26] group-hover:text-[#0080FB]/20 transition-colors absolute top-4 right-8 z-0 select-none pointer-events-none will-change-transform"
+                className="font-['Hanken_Grotesk'] font-black text-[6.5rem] md:text-[7.5rem] lg:text-[8rem] leading-none text-[#1b1e26] group-hover:text-[#0080FB]/20 transition-colors absolute top-7 sm:top-8 md:top-10 right-6 sm:right-8 z-0 select-none pointer-events-none will-change-transform"
               >
                 {step.num}
               </div>

@@ -350,7 +350,10 @@ export const UltimateFlows: React.FC<UltimateFlowsProps> = ({ onNotify }) => {
               "Please confirm your delivery address to dispatch order today."
             </p>
             <div className="grid grid-cols-2 gap-2 w-full">
-              <div className="bg-[#25D366] text-[#050A10] text-[10px] font-extrabold py-1.5 rounded-lg text-center">Confirm ✓</div>
+              <div className="bg-[#25D366] text-[#050A10] text-[10px] font-extrabold py-1.5 rounded-lg text-center flex items-center justify-center gap-1">
+                <span>Confirm</span>
+                <Check className="w-3 h-3 stroke-[3]" />
+              </div>
               <div className="bg-white/10 text-gray-400 text-[10px] font-semibold py-1.5 rounded-lg text-center">Cancel</div>
             </div>
           </div>
@@ -519,8 +522,9 @@ export const UltimateFlows: React.FC<UltimateFlowsProps> = ({ onNotify }) => {
                   {/* Body Grid: Left Content + Right 3D Artwork */}
                   <div className="grid grid-cols-1 md:grid-cols-[1.2fr_0.8fr] gap-6 items-center my-auto">
                     <div className="flex flex-col gap-3">
-                      <div className="text-xs font-mono text-[#25D366] bg-[#25D366]/10 border border-[#25D366]/25 px-3 py-1 rounded-md w-fit leading-relaxed">
-                        ⚡ {item.desc}
+                      <div className="inline-flex items-start gap-2 text-xs font-mono text-[#25D366] bg-[#25D366]/10 border border-[#25D366]/25 px-3 py-1.5 rounded-md max-w-full leading-relaxed">
+                        <Zap className="w-3.5 h-3.5 text-[#25D366] shrink-0 mt-0.5 fill-[#25D366]/30" />
+                        <span>{item.desc}</span>
                       </div>
 
                       <h3 className="text-2xl md:text-3xl font-black uppercase text-white leading-tight">
@@ -541,9 +545,10 @@ export const UltimateFlows: React.FC<UltimateFlowsProps> = ({ onNotify }) => {
 
                       <button
                         onClick={handleNext}
-                        className="mt-2 inline-flex items-center gap-2 text-xs font-bold text-[#25D366] bg-[#25D366]/10 border border-[#25D366]/40 px-4 py-2 rounded-full w-fit hover:bg-[#25D366] hover:text-[#04080F] transition-all hover:translate-x-1"
+                        className="mt-2 inline-flex items-center gap-2 text-xs font-bold text-[#25D366] bg-[#25D366]/10 border border-[#25D366]/40 px-4 py-2 rounded-full w-fit hover:bg-[#25D366] hover:text-[#04080F] transition-all hover:translate-x-1 group"
                       >
-                        {item.nextPill}
+                        <ArrowRight className="w-3.5 h-3.5 text-[#25D366] shrink-0 group-hover:translate-x-0.5 transition-transform" />
+                        <span>{item.nextPill.replace(/^\(→\)\s*/, '')}</span>
                       </button>
                     </div>
 

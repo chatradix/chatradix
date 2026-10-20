@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { ArrowRight, TrendingUp, Zap, Sparkles, ShieldCheck } from 'lucide-react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { RevenueGlobeCanvas } from './RevenueGlobeCanvas';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -48,6 +49,8 @@ export const RevenueBoostSection: React.FC = () => {
       ref={sectionRef}
       className="w-full bg-[#0e0e0e] py-24 md:py-40 border-y border-[#262626] overflow-hidden relative perspective-1000"
     >
+      {/* Background Animated Canvas: 3D Globe + Revenue Graph + Cyber Grid */}
+      <RevenueGlobeCanvas />
       <div className="max-w-[1440px] mx-auto px-6 md:px-16 relative z-10">
         <div className="flex flex-col items-start relative">
           {/* Floating Metric Badge 1 */}
