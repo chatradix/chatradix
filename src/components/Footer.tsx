@@ -30,103 +30,54 @@ export const Footer: React.FC<FooterProps> = ({ onScrollToTop, onScrollToSection
         </div>
 
         {/* Nav Columns Grid */}
-        <nav className="grid grid-cols-2 sm:grid-cols-4 gap-8 lg:gap-16 w-full lg:w-auto">
-          {/* Column 1: AUTOMATIONS */}
-          <div className="flex flex-col gap-4">
+        <nav className="flex flex-wrap sm:flex-nowrap gap-12 sm:gap-16 lg:gap-24 w-full lg:w-auto">
+          {/* Column 1: QUICK LINKS */}
+          <div className="flex flex-col gap-4 min-w-[160px]">
             <span className="font-['JetBrains_Mono'] text-xs text-[#888888] border-b border-[#262626] pb-2 uppercase tracking-[0.2em] font-semibold">
-              AUTOMATIONS
+              QUICK LINKS
             </span>
             <button 
               onClick={() => onNavigatePage ? onNavigatePage('automations') : onScrollToSection('flows')} 
               className="font-['JetBrains_Mono'] text-xs text-[#e5e2e1] hover:text-[#0080FB] transition-colors text-left uppercase tracking-wider"
             >
-              All 12 Automations
+              Automation
             </button>
             <button 
-              onClick={() => onNavigatePage ? onNavigatePage('automations') : onScrollToSection('flows')} 
+              onClick={() => onNavigatePage ? onNavigatePage('home', 'architecture') : onScrollToSection('architecture')} 
               className="font-['JetBrains_Mono'] text-xs text-[#e5e2e1] hover:text-[#0080FB] transition-colors text-left uppercase tracking-wider"
             >
-              Order Confirmation
+              Architecture
             </button>
-            <button 
-              onClick={() => onNavigatePage ? onNavigatePage('automations') : onScrollToSection('flows')} 
-              className="font-['JetBrains_Mono'] text-xs text-[#e5e2e1] hover:text-[#0080FB] transition-colors text-left uppercase tracking-wider"
-            >
-              Abandoned Checkout
-            </button>
-            <button 
-              onClick={() => onNavigatePage ? onNavigatePage('automations') : onScrollToSection('flows')} 
-              className="font-['JetBrains_Mono'] text-xs text-[#e5e2e1] hover:text-[#0080FB] transition-colors text-left uppercase tracking-wider"
-            >
-              Shipping & Delivery
-            </button>
-            <button onClick={() => onScrollToSection('flows')} className="font-['JetBrains_Mono'] text-xs text-[#e5e2e1] hover:text-[#0080FB] transition-colors text-left uppercase tracking-wider">
-              Media Carousels
-            </button>
-          </div>
-
-          {/* Column 2: FEATURES */}
-          <div className="flex flex-col gap-4">
-            <span className="font-['JetBrains_Mono'] text-xs text-[#888888] border-b border-[#262626] pb-2 uppercase tracking-[0.2em] font-semibold">
-              FEATURES
-            </span>
-            <button onClick={() => onScrollToSection('architecture')} className="font-['JetBrains_Mono'] text-xs text-[#e5e2e1] hover:text-[#0080FB] transition-colors text-left uppercase tracking-wider">
-              2-Way Order Tagging
-            </button>
-            <button onClick={() => onScrollToSection('architecture')} className="font-['JetBrains_Mono'] text-xs text-[#e5e2e1] hover:text-[#0080FB] transition-colors text-left uppercase tracking-wider">
-              60s Embedded Signup
-            </button>
-            <button onClick={() => onScrollToSection('architecture')} className="font-['JetBrains_Mono'] text-xs text-[#e5e2e1] hover:text-[#0080FB] transition-colors text-left uppercase tracking-wider">
-              Shopify Admin 1-Click
-            </button>
-            <button onClick={() => onScrollToSection('architecture')} className="font-['JetBrains_Mono'] text-xs text-[#e5e2e1] hover:text-[#0080FB] transition-colors text-left uppercase tracking-wider">
-              Anti-Spam Shield
-            </button>
-          </div>
-
-          {/* Column 3: PLATFORM */}
-          <div className="flex flex-col gap-4">
-            <span className="font-['JetBrains_Mono'] text-xs text-[#888888] border-b border-[#262626] pb-2 uppercase tracking-[0.2em] font-semibold">
-              PLATFORM
-            </span>
-            <button onClick={() => onScrollToSection('meta-partner')} className="font-['JetBrains_Mono'] text-xs text-[#25D366] hover:text-[#0080FB] transition-colors text-left uppercase tracking-wider">
-              Official Meta API
-            </button>
-            <a 
-              href="https://apps.shopify.com/chatradix"
-              target="_blank"
-              rel="noopener noreferrer" 
-              className="font-['JetBrains_Mono'] text-xs text-[#0080FB] hover:underline transition-colors text-left uppercase tracking-wider"
-            >
-              Shopify App Store
-            </a>
             <button 
               onClick={() => onNavigatePage ? onNavigatePage('meta-rates') : null} 
-              className="font-['JetBrains_Mono'] text-xs text-[#0080FB] hover:underline transition-colors text-left uppercase tracking-wider font-semibold"
+              className="font-['JetBrains_Mono'] text-xs text-[#e5e2e1] hover:text-[#0080FB] transition-colors text-left uppercase tracking-wider"
             >
-              Meta Rates by Country
+              Meta Rates
             </button>
             <button 
               onClick={() => onNavigatePage ? onNavigatePage('pricing') : null} 
-              className="font-['JetBrains_Mono'] text-xs text-[#0080FB] hover:underline transition-colors text-left uppercase tracking-wider font-semibold"
+              className="font-['JetBrains_Mono'] text-xs text-[#e5e2e1] hover:text-[#0080FB] transition-colors text-left uppercase tracking-wider"
             >
-              Pricing & Plans
+              Pricing
             </button>
-            <button onClick={() => onScrollToSection('architecture')} className="font-['JetBrains_Mono'] text-xs text-[#e5e2e1] hover:text-[#0080FB] transition-colors text-left uppercase tracking-wider">
-              Sub-second Webhooks
+            <button 
+              onClick={() => onNavigatePage ? onNavigatePage('home', 'support') : onScrollToSection('support')} 
+              className="font-['JetBrains_Mono'] text-xs text-[#e5e2e1] hover:text-[#0080FB] transition-colors text-left uppercase tracking-wider"
+            >
+              Support
             </button>
           </div>
 
-          {/* Column 4: CONNECT */}
-          <div className="flex flex-col gap-4">
+          {/* Column 2: CONNECT */}
+          <div className="flex flex-col gap-4 min-w-[160px]">
             <span className="font-['JetBrains_Mono'] text-xs text-[#888888] border-b border-[#262626] pb-2 uppercase tracking-[0.2em] font-semibold">
               CONNECT
             </span>
-            <button onClick={() => onScrollToSection('support')} className="font-['JetBrains_Mono'] text-xs text-[#e5e2e1] hover:text-[#0080FB] transition-colors text-left uppercase tracking-wider">
+            <button 
+              onClick={() => onNavigatePage ? onNavigatePage('home', 'support') : onScrollToSection('support')} 
+              className="font-['JetBrains_Mono'] text-xs text-[#e5e2e1] hover:text-[#0080FB] transition-colors text-left uppercase tracking-wider"
+            >
               Technical Support
-            </button>
-            <button onClick={() => onScrollToSection('offer')} className="font-['JetBrains_Mono'] text-xs text-[#0080FB] hover:underline transition-colors text-left uppercase tracking-wider">
-              2 Months Free Launch
             </button>
             <a 
               href="mailto:info@chatradix.com" 
@@ -154,7 +105,7 @@ export const Footer: React.FC<FooterProps> = ({ onScrollToTop, onScrollToSection
           <a 
             href="https://apps.shopify.com/chatradix" 
             target="_blank"
-            rel="noopener noreferrer"
+            rel="noopener noreferrer" 
             className="font-['JetBrains_Mono'] text-[11px] text-[#0080FB] hover:text-white transition-colors tracking-wider uppercase"
           >
             Shopify App Listing
