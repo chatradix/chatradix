@@ -72,6 +72,17 @@ export const App: React.FC = () => {
   const lenisRef = useRef<Lenis | null>(null);
 
   // Initialize currentPage directly from URL pathname or legacy hash on first render
+  const [automationCategory, setAutomationCategory] = useState<string>(() => {
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      const cat = params.get("category");
+      if (cat && ["all", "transactional", "recovery", "growth", "operations"].includes(cat)) {
+        return cat;
+      }
+    }
+    return "all";
+  });
+
   const [currentPage, setCurrentPage] = useState<'home' | 'pricing' | 'meta-rates' | 'automations' | 'privacy-policy'>(() => {
     if (typeof window !== 'undefined') {
       const path = window.location.pathname.toLowerCase();
@@ -134,6 +145,12 @@ export const App: React.FC = () => {
         setCurrentPage('privacy-policy');
         return;
       }
+      const searchParams = new URLSearchParams(window.location.search);
+      const urlCat = searchParams.get('category');
+      if (urlCat && ['all', 'transactional', 'recovery', 'growth', 'operations'].includes(urlCat)) {
+        setAutomationCategory(urlCat);
+      }
+
       if (hash.includes('automations')) {
         window.history.replaceState(null, '', '/automations');
         setCurrentPage('automations');
@@ -230,11 +247,21 @@ export const App: React.FC = () => {
     }
   };
 
-  const handleNavigatePage = (page: 'home' | 'pricing' | 'meta-rates' | 'automations' | 'privacy-policy', targetSection?: string) => {
+  const handleNavigatePage = (
+    page: 'home' | 'pricing' | 'meta-rates' | 'automations' | 'privacy-policy',
+    targetSection?: string,
+    category?: string
+  ) => {
     setCurrentPage(page);
 
-    // Set clean URL without any '#' hashtag
-    const targetPath = page === 'home' ? '/' : `/${page}`;
+    if (category) {
+      setAutomationCategory(category);
+    }
+
+    let targetPath = page === 'home' ? '/' : `/${page}`;
+    if (page === 'automations' && category && category !== 'all') {
+      targetPath += `?category=${encodeURIComponent(category)}`;
+    }
     window.history.pushState(null, '', targetPath);
 
     if (page === 'automations' || page === 'meta-rates' || page === 'privacy-policy') {
@@ -305,7 +332,13 @@ export const App: React.FC = () => {
         <div style={{ display: currentPage === 'automations' ? 'block' : 'none' }}>
           <AutomationsPage 
             onNotify={handleNotify} 
-            onNavigateHome={(sec) => handleNavigatePage('home', sec)} 
+            onNavigateHome={(sec) => handleNavigatePage('home', sec)}
+            selectedCategory={automationCategory}
+            onSelectCategory={(cat) => {
+              setAutomationCategory(cat);
+              const targetPath = cat === 'all' ? '/automations' : `/automations?category=${encodeURIComponent(cat)}`;
+              window.history.replaceState(null, '', targetPath);
+            }}
           />
         </div>
 

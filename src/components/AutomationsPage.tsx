@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   ArrowLeft, 
   ArrowRight, 
@@ -31,6 +31,8 @@ import {
 interface AutomationsPageProps {
   onNotify?: (msg: string) => void;
   onNavigateHome: (targetSection?: string) => void;
+  selectedCategory?: string;
+  onSelectCategory?: (category: string) => void;
 }
 
 export interface AutomationFeature {
@@ -335,9 +337,41 @@ const CATEGORY_GROUPS: CategoryGroup[] = [
 
 export const AutomationsPage: React.FC<AutomationsPageProps> = ({ 
   onNotify, 
-  onNavigateHome 
+  onNavigateHome,
+  selectedCategory,
+  onSelectCategory
 }) => {
-  const [activeCategoryFilter, setActiveCategoryFilter] = useState<string>('all');
+  const [activeCategoryFilter, setActiveCategoryFilter] = useState<string>(() => {
+    if (selectedCategory && ['all', 'transactional', 'recovery', 'growth', 'operations'].includes(selectedCategory)) {
+      return selectedCategory;
+    }
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      const cat = params.get('category');
+      if (cat && ['all', 'transactional', 'recovery', 'growth', 'operations'].includes(cat)) {
+        return cat;
+      }
+    }
+    return 'all';
+  });
+
+  useEffect(() => {
+    if (selectedCategory && ['all', 'transactional', 'recovery', 'growth', 'operations'].includes(selectedCategory)) {
+      setActiveCategoryFilter(selectedCategory);
+    }
+  }, [selectedCategory]);
+
+  useEffect(() => {
+    const handleUrlChange = () => {
+      const params = new URLSearchParams(window.location.search);
+      const cat = params.get('category');
+      if (cat && ['all', 'transactional', 'recovery', 'growth', 'operations'].includes(cat)) {
+        setActiveCategoryFilter(cat);
+      }
+    };
+    window.addEventListener('popstate', handleUrlChange);
+    return () => window.removeEventListener('popstate', handleUrlChange);
+  }, []);
   const [enabledFeatures, setEnabledFeatures] = useState<Record<number, boolean>>({
     1: true,
     2: true,
@@ -490,7 +524,15 @@ export const AutomationsPage: React.FC<AutomationsPageProps> = ({
           {filterTabs.map((tab) => (
             <button
               key={tab.id}
-              onClick={() => setActiveCategoryFilter(tab.id)}
+              onClick={() => {
+                setActiveCategoryFilter(tab.id);
+                if (onSelectCategory) {
+                  onSelectCategory(tab.id);
+                } else {
+                  const targetPath = tab.id === 'all' ? '/automations' : `/automations?category=${encodeURIComponent(tab.id)}`;
+                  window.history.replaceState(null, '', targetPath);
+                }
+              }}
               className={`px-4 py-2 rounded-xl text-xs font-mono font-bold tracking-wider uppercase transition-all ${
                 activeCategoryFilter === tab.id
                   ? 'bg-[#25D366] text-[#050A10] shadow-[0_0_20px_rgba(37,211,102,0.3)]'
