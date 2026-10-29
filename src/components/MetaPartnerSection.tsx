@@ -41,7 +41,7 @@ export const MetaPartnerSection: React.FC = () => {
     <section
       id="meta-partner"
       ref={sectionRef}
-      className="mb-24 md:mb-32 border-y border-[#262626] py-24 md:py-32 bg-[#0e0e0e] relative overflow-hidden perspective-1000"
+      className="border-t border-[#262626] py-24 md:py-32 bg-[#0e0e0e] relative overflow-hidden perspective-1000"
     >
       <div className="max-w-[1440px] mx-auto px-6 md:px-16 flex flex-col lg:flex-row items-center justify-between gap-12 md:gap-16 relative z-10">
         {/* Left Copy */}

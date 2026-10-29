@@ -66,52 +66,40 @@ export const Footer: React.FC<FooterProps> = ({ onScrollToTop, onScrollToSection
             {/* Category 1 */}
             <button 
               onClick={() => handleCategoryClick('transactional')}
-              className="group flex items-center justify-between text-left font-['JetBrains_Mono'] text-xs text-[#e5e2e1] hover:text-[#25D366] transition-colors uppercase tracking-wider py-1"
+              className="group flex items-center text-left font-['JetBrains_Mono'] text-xs text-[#e5e2e1] hover:text-[#25D366] transition-colors uppercase tracking-wider py-1"
             >
               <span className="group-hover:translate-x-1 transition-transform">
                 Transactional & Shipping
-              </span>
-              <span className="text-[10px] px-2 py-0.5 rounded-md bg-white/[0.04] border border-white/10 text-gray-400 group-hover:border-[#25D366]/40 group-hover:text-[#25D366] transition-colors">
-                5
               </span>
             </button>
 
             {/* Category 2 */}
             <button 
               onClick={() => handleCategoryClick('recovery')}
-              className="group flex items-center justify-between text-left font-['JetBrains_Mono'] text-xs text-[#e5e2e1] hover:text-[#25D366] transition-colors uppercase tracking-wider py-1"
+              className="group flex items-center text-left font-['JetBrains_Mono'] text-xs text-[#e5e2e1] hover:text-[#25D366] transition-colors uppercase tracking-wider py-1"
             >
               <span className="group-hover:translate-x-1 transition-transform">
                 Sales Recovery
-              </span>
-              <span className="text-[10px] px-2 py-0.5 rounded-md bg-white/[0.04] border border-white/10 text-gray-400 group-hover:border-[#25D366]/40 group-hover:text-[#25D366] transition-colors">
-                2
               </span>
             </button>
 
             {/* Category 3 */}
             <button 
               onClick={() => handleCategoryClick('growth')}
-              className="group flex items-center justify-between text-left font-['JetBrains_Mono'] text-xs text-[#e5e2e1] hover:text-[#25D366] transition-colors uppercase tracking-wider py-1"
+              className="group flex items-center text-left font-['JetBrains_Mono'] text-xs text-[#e5e2e1] hover:text-[#25D366] transition-colors uppercase tracking-wider py-1"
             >
               <span className="group-hover:translate-x-1 transition-transform">
                 Premium & Growth
-              </span>
-              <span className="text-[10px] px-2 py-0.5 rounded-md bg-white/[0.04] border border-white/10 text-gray-400 group-hover:border-[#25D366]/40 group-hover:text-[#25D366] transition-colors">
-                4
               </span>
             </button>
 
             {/* Category 4 */}
             <button 
               onClick={() => handleCategoryClick('operations')}
-              className="group flex items-center justify-between text-left font-['JetBrains_Mono'] text-xs text-[#e5e2e1] hover:text-[#25D366] transition-colors uppercase tracking-wider py-1"
+              className="group flex items-center text-left font-['JetBrains_Mono'] text-xs text-[#e5e2e1] hover:text-[#25D366] transition-colors uppercase tracking-wider py-1"
             >
               <span className="group-hover:translate-x-1 transition-transform">
                 Store Operations
-              </span>
-              <span className="text-[10px] px-2 py-0.5 rounded-md bg-white/[0.04] border border-white/10 text-gray-400 group-hover:border-[#25D366]/40 group-hover:text-[#25D366] transition-colors">
-                1
               </span>
             </button>
 
@@ -193,16 +181,6 @@ export const Footer: React.FC<FooterProps> = ({ onScrollToTop, onScrollToSection
             >
               info@chatradix.com
             </a>
-
-            {/* Infrastructure Health Badge */}
-            <div className="mt-3 pt-3 border-t border-[#262626] flex flex-col gap-1 font-['JetBrains_Mono'] text-[11px] text-[#888888]">
-              <span className="text-white/40 uppercase tracking-widest text-[9px]">SLA STATUS</span>
-              <div className="flex items-center gap-1.5 text-[#25D366]">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#25D366]" />
-                <span className="font-semibold">99.98% Uptime</span>
-              </div>
-              <span className="text-[10px] text-gray-500">TLS 1.3 Certified</span>
-            </div>
           </div>
         </div>
 

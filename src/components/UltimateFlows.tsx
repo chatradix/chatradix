@@ -12,8 +12,16 @@ import {
   Sparkles
 } from 'lucide-react';
 
+// ============================================================================
+// CONFIGURATION OPTIONS:
+// Set ENABLE_HOVER_ACTIVATE to true to activate slides when hovering over them.
+// Set ENABLE_HOVER_ACTIVATE to false if you want slides to ONLY activate on click.
+// ============================================================================
+export const ENABLE_HOVER_ACTIVATE = true; // <-- CHANGE TO false TO STOP HOVER ACTIVATION
+
 interface UltimateFlowsProps {
   onNotify?: (msg: string) => void;
+  enableHoverActivate?: boolean;
 }
 
 export interface AutomationItem {
@@ -198,10 +206,15 @@ export const CHATRADIX_AUTOMATIONS: AutomationItem[] = [
   }
 ];
 
-export const UltimateFlows: React.FC<UltimateFlowsProps> = ({ onNotify }) => {
+export const UltimateFlows: React.FC<UltimateFlowsProps> = ({ 
+  onNotify,
+  enableHoverActivate = ENABLE_HOVER_ACTIVATE
+}) => {
   const [activeIndex, setActiveIndex] = useState<number>(0); // Starts on Slide 01: Order Confirmation
   const [isAutoplay, setIsAutoplay] = useState<boolean>(true);
+  const [isHovered, setIsHovered] = useState<boolean>(false);
   const deckScrollRef = useRef<HTMLDivElement | null>(null);
+  const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const AUTOPLAY_DURATION = 5000;
 
@@ -222,7 +235,7 @@ export const UltimateFlows: React.FC<UltimateFlowsProps> = ({ onNotify }) => {
 
   // Autoplay timer - Plays through all slides once, then stops autoplay and opens first slide
   useEffect(() => {
-    if (!isAutoplay || isMobile) return;
+    if (!isAutoplay || isMobile || isHovered) return;
 
     const timer = setInterval(() => {
       setActiveIndex((prev) => {
@@ -283,6 +296,23 @@ export const UltimateFlows: React.FC<UltimateFlowsProps> = ({ onNotify }) => {
     setActiveIndex(index);
     if (onNotify) {
       onNotify(`Viewing ${CHATRADIX_AUTOMATIONS[index].title}`);
+    }
+  };
+
+  const handleCardMouseEnter = (index: number) => {
+    if (!enableHoverActivate || isMobile || index === activeIndex) return;
+
+    if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
+    // Smooth 90ms gentle debounce to prevent accidental triggering when cursor passes by
+    hoverTimeoutRef.current = setTimeout(() => {
+      handleSelectCard(index);
+    }, 90);
+  };
+
+  const handleCardMouseLeave = () => {
+    if (hoverTimeoutRef.current) {
+      clearTimeout(hoverTimeoutRef.current);
+      hoverTimeoutRef.current = null;
     }
   };
 
@@ -460,6 +490,11 @@ export const UltimateFlows: React.FC<UltimateFlowsProps> = ({ onNotify }) => {
       <div 
         id="flows-deck-scroll"
         ref={deckScrollRef} 
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => {
+          setIsHovered(false);
+          handleCardMouseLeave();
+        }}
         style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
         className="w-full overflow-x-auto no-scrollbar scroll-smooth py-2"
       >
@@ -472,11 +507,14 @@ export const UltimateFlows: React.FC<UltimateFlowsProps> = ({ onNotify }) => {
                 key={item.id}
                 id={`acc-card-${i}`}
                 onClick={() => !isExpanded && handleSelectCard(i)}
+                onMouseEnter={() => !isExpanded && handleCardMouseEnter(i)}
+                onMouseLeave={handleCardMouseLeave}
                 style={{
-                  flex: isExpanded ? '1 0 630px' : '0 0 60px',
-                  transition: 'flex-basis 0.65s cubic-bezier(0.2, 0.9, 0.2, 1), flex-grow 0.65s cubic-bezier(0.2, 0.9, 0.2, 1), border-color 0.3s ease'
+                  flex: isExpanded ? (isMobile ? '0 0 auto' : '0 0 670px') : (isMobile ? '0 0 56px' : '0 0 60px'),
+                  width: isExpanded && !isMobile ? '670px' : undefined,
+                  transition: 'flex-basis 0.55s cubic-bezier(0.25, 1, 0.5, 1), width 0.55s cubic-bezier(0.25, 1, 0.5, 1), border-color 0.3s ease'
                 }}
-                className={`relative rounded-3xl overflow-hidden border bg-[#070D14] will-change-[flex-basis,flex-grow] cursor-pointer ${
+                className={`relative rounded-3xl overflow-hidden border bg-[#070D14] will-change-[flex-basis,width] cursor-pointer ${
                   isExpanded 
                     ? 'border-[#25D366]/50 cursor-default' 
                     : 'border-white/10 hover:border-white/25'
@@ -503,9 +541,9 @@ export const UltimateFlows: React.FC<UltimateFlowsProps> = ({ onNotify }) => {
                   </span>
                 </div>
 
-                {/* Expanded Rich State - Smooth fade in without layout flicker */}
+                {/* Expanded Rich State - Fixed width prevents element resizing / reflow during animation */}
                 <div 
-                  className={`relative z-20 h-full p-6 md:p-8 flex flex-col justify-between w-full min-w-full lg:min-w-[580px] transition-opacity duration-500 ease-out delay-100 ${
+                  className={`relative z-20 h-full p-6 md:p-8 flex flex-col justify-between w-full lg:w-[670px] lg:min-w-[670px] lg:max-w-[670px] transition-opacity duration-300 ease-out ${
                     isExpanded ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
                   }`}
                 >
@@ -520,16 +558,16 @@ export const UltimateFlows: React.FC<UltimateFlowsProps> = ({ onNotify }) => {
                   </div>
 
                   {/* Body Grid: Left Content + Right 3D Artwork */}
-                  <div className="grid grid-cols-1 md:grid-cols-[1.2fr_0.8fr] gap-6 items-center my-auto">
-                    <div className="flex flex-col gap-3">
+                  <div className="grid grid-cols-1 md:grid-cols-[1.35fr_0.65fr] gap-6 items-center my-auto">
+                    <div className="flex flex-col gap-3 min-w-0">
                       <div className="inline-flex items-start gap-2 text-xs font-mono text-[#25D366] bg-[#25D366]/10 border border-[#25D366]/25 px-3 py-1.5 rounded-md max-w-full leading-relaxed">
                         <Zap className="w-3.5 h-3.5 text-[#25D366] shrink-0 mt-0.5 fill-[#25D366]/30" />
                         <span>{item.desc}</span>
                       </div>
 
-                      <h3 className="text-2xl md:text-3xl font-black uppercase text-white leading-tight">
-                        {item.headlineA} <br />
-                        <span className="text-[#25D366]">
+                      <h3 className="text-2xl lg:text-[1.7rem] font-black uppercase text-white leading-[1.12] tracking-tight">
+                        <span className="block whitespace-nowrap">{item.headlineA}</span>
+                        <span className="text-[#25D366] block whitespace-nowrap">
                           {item.headlineB}
                         </span>
                       </h3>
@@ -553,7 +591,7 @@ export const UltimateFlows: React.FC<UltimateFlowsProps> = ({ onNotify }) => {
                     </div>
 
                     {/* Right 3D Artwork */}
-                    <div className="hidden md:flex items-center justify-center">
+                    <div className="hidden md:flex items-center justify-center shrink-0">
                       {renderArtwork(item.artworkType)}
                     </div>
                   </div>

@@ -38,7 +38,7 @@ export const RevenueBoostSection: React.FC = () => {
 
       if (calloutRef.current) tl.to(calloutRef.current, { y: -40, ease: 'none' }, 0);
       if (floatBadge1.current) tl.to(floatBadge1.current, { y: -100, x: -30, ease: 'none' }, 0);
-      if (floatBadge2.current) tl.to(floatBadge2.current, { y: -80, x: 40, ease: 'none' }, 0);
+      if (floatBadge2.current) { /* removed */ }
     }, sectionRef);
 
     return () => ctx.revert();
@@ -61,17 +61,6 @@ export const RevenueBoostSection: React.FC = () => {
             <TrendingUp className="w-4 h-4 text-[#25D366]" />
             <span className="font-['JetBrains_Mono'] text-xs text-white font-bold tracking-wider">
               98% AVERAGE MESSAGE OPEN RATE
-            </span>
-          </div>
-
-          {/* Floating Metric Badge 2 */}
-          <div
-            ref={floatBadge2}
-            className="hidden lg:flex absolute bottom-44 right-1/3 z-20 bg-[#131313]/95 border border-[#0080FB]/40 px-4 py-2.5 items-center gap-2.5 pointer-events-none will-change-transform"
-          >
-            <ShieldCheck className="w-4 h-4 text-[#0080FB]" />
-            <span className="font-['JetBrains_Mono'] text-xs text-white font-bold tracking-wider">
-              99.98% OFFICIAL DELIVERABILITY
             </span>
           </div>
 
