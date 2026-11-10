@@ -3,15 +3,13 @@
   <head>
     <meta charset="UTF-8" />
 
-    <!-- GitHub Pages SPA redirect restoration: reads ?p= param set by 404.html and restores the real URL before React boots -->
+    <!-- GitHub Pages SPA routing: restores original URL saved by 404.html before React reads window.location -->
     <script>
       (function() {
-        var search = window.location.search;
-        if (search && search.indexOf('?p=') === 0) {
-          var decoded = search.slice(3).split('&').map(decodeURIComponent);
-          var path = '/' + decoded[0];
-          var query = decoded.length > 1 ? '?' + decoded.slice(1).map(decodeURIComponent).join('&') : '';
-          history.replaceState(null, null, path + query + window.location.hash);
+        var redirect = sessionStorage.getItem('spa_redirect');
+        if (redirect && redirect !== '/' && redirect !== window.location.pathname) {
+          sessionStorage.removeItem('spa_redirect');
+          history.replaceState(null, null, redirect);
         }
       })();
     </script>
