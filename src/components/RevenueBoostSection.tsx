@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { ArrowRight, TrendingUp, Zap, Sparkles, ShieldCheck } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { RevenueGlobeCanvas } from './RevenueGlobeCanvas';
@@ -14,8 +14,6 @@ export const RevenueBoostSection: React.FC = () => {
   const line4Ref = useRef<HTMLSpanElement>(null);
   const line5Ref = useRef<HTMLSpanElement>(null);
   const calloutRef = useRef<HTMLDivElement>(null);
-  const floatBadge1 = useRef<HTMLDivElement>(null);
-  const floatBadge2 = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!sectionRef.current) return;
@@ -37,8 +35,6 @@ export const RevenueBoostSection: React.FC = () => {
       if (line5Ref.current) tl.to(line5Ref.current, { x: 40, scale: 1.05, ease: 'none' }, 0);
 
       if (calloutRef.current) tl.to(calloutRef.current, { y: -40, ease: 'none' }, 0);
-      if (floatBadge1.current) tl.to(floatBadge1.current, { y: -100, x: -30, ease: 'none' }, 0);
-      if (floatBadge2.current) { /* removed */ }
     }, sectionRef);
 
     return () => ctx.revert();
@@ -53,17 +49,6 @@ export const RevenueBoostSection: React.FC = () => {
       <RevenueGlobeCanvas />
       <div className="max-w-[1440px] mx-auto px-6 md:px-16 relative z-10">
         <div className="flex flex-col items-start relative">
-          {/* Floating Metric Badge 1 */}
-          <div
-            ref={floatBadge1}
-            className="hidden lg:flex absolute top-10 right-12 z-20 bg-[#131313]/95 border border-[#25D366]/40 px-4 py-2.5 items-center gap-2.5 pointer-events-none will-change-transform"
-          >
-            <TrendingUp className="w-4 h-4 text-[#25D366]" />
-            <span className="font-['JetBrains_Mono'] text-xs text-white font-bold tracking-wider">
-              98% AVERAGE MESSAGE OPEN RATE
-            </span>
-          </div>
-
           {/* Protocol Tag */}
           {/* <div className="font-['JetBrains_Mono'] text-xs text-[#25D366] mb-10 md:mb-12 tracking-[0.4em] uppercase font-semibold flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-[#25D366] animate-ping" />

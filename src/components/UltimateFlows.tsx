@@ -294,9 +294,6 @@ export const UltimateFlows: React.FC<UltimateFlowsProps> = ({
 
   const handleSelectCard = (index: number) => {
     setActiveIndex(index);
-    if (onNotify) {
-      onNotify(`Viewing ${CHATRADIX_AUTOMATIONS[index].title}`);
-    }
   };
 
   const handleCardMouseEnter = (index: number) => {

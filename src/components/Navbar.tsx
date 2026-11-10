@@ -15,15 +15,19 @@ export const Navbar: React.FC<NavbarProps> = ({
 }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  const navLinks = [
-    { label: 'AUTOMATIONS', id: 'automations', page: 'automations' as const },
-    { label: 'ARCHITECTURE', id: 'architecture', page: 'home' as const },
-    { label: 'META RATES', id: 'meta-rates', page: 'meta-rates' as const },
-    { label: 'PRICING', id: 'pricing', page: 'pricing' as const },
-    { label: 'SUPPORT', id: 'support', page: 'home' as const },
+  type NavLink = {
+    label: string;
+    id: string;
+    page: 'home' | 'pricing' | 'meta-rates' | 'automations';
+  };
+
+  const navLinks: NavLink[] = [
+    { label: 'AUTOMATIONS', id: 'automations', page: 'automations' },
+    { label: 'META RATES', id: 'meta-rates', page: 'meta-rates' },
+    { label: 'PRICING', id: 'pricing', page: 'pricing' },
   ];
 
-  const handleNavClick = (link: typeof navLinks[0]) => {
+  const handleNavClick = (link: NavLink) => {
     if (link.page === 'pricing' || link.page === 'meta-rates' || link.page === 'automations') {
       if (onNavigatePage) {
         onNavigatePage(link.page);

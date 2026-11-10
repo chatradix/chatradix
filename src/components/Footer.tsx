@@ -43,17 +43,7 @@ export const Footer: React.FC<FooterProps> = ({ onScrollToTop, onScrollToSection
             OFFICIAL META WHATSAPP CLOUD API AUTOMATION FOR SHOPIFY.
           </p>
 
-          <div className="mt-2 p-3.5 rounded-xl bg-white/[0.02] border border-white/5 flex flex-col gap-2">
-            <div className="flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-[#25D366] animate-pulse" />
-              <span className="font-['JetBrains_Mono'] text-[11px] font-semibold text-[#25D366] tracking-wider uppercase">
-                Official Cloud API Engine
-              </span>
-            </div>
-            <p className="text-[11px] text-[#888888] font-['JetBrains_Mono'] leading-relaxed">
-              Direct Meta BSP architecture. Sub-second webhook triggers with 100% automated Shopify sync.
-            </p>
-          </div>
+
         </div>
 
         {/* Column 2: AUTOMATIONS - 4 Feature Categories (lg:col-span-3) */}
