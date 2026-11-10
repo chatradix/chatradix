@@ -2,6 +2,19 @@
 <html lang="en" class="dark">
   <head>
     <meta charset="UTF-8" />
+
+    <!-- GitHub Pages SPA redirect restoration: reads ?p= param set by 404.html and restores the real URL before React boots -->
+    <script>
+      (function() {
+        var search = window.location.search;
+        if (search && search.indexOf('?p=') === 0) {
+          var decoded = search.slice(3).split('&').map(decodeURIComponent);
+          var path = '/' + decoded[0];
+          var query = decoded.length > 1 ? '?' + decoded.slice(1).map(decodeURIComponent).join('&') : '';
+          history.replaceState(null, null, path + query + window.location.hash);
+        }
+      })();
+    </script>
     <link rel="icon" type="image/svg+xml" href="https://lh3.googleusercontent.com/aida-public/AB6AXuD4BT-V62A-JevE2YMC366EkrIqOnAMfabGJOm0Edkt6eiLCKokzj8pzTffvDhwnFf1oJRX9TlM6JgF_WttOxz7QTRcGYuz2hebsuaN8968udeJs660L6PdMh3_FbQn8dvtmEchfCk8X9PQ8uq2N6mptzkuqmdZrhc6k8t03DdJVJN3Iy0Ck3_jXl6hRv072x3avWMt3ldSs-Q-ksFbXSiDf2ankrbJjJsGEO-EykxBDmI6X2xxo81LfVOcH-oPzLfVCA" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ChatRadix - Shopify WhatsApp Flows</title>
@@ -107,6 +120,6 @@
     <link rel="stylesheet" crossorigin href="./assets/index-CN6jZMnb.css">
   </head>
   <body class="bg-[#131313] text-[#e5e2e1] min-h-screen flex flex-col font-['Hanken_Grotesk'] selection:bg-[#0080FB] selection:text-white">
-    <div id="root"></div>
+    <div id="root"></div>
   </body>
 </html>

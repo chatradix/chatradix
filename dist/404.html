@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>ChatRadix - Shopify WhatsApp Flows</title>
+    <script>
+      // Single Page App - GitHub Pages 404 redirect trick
+      // Encodes the full path + search + hash into a ?p= query param on the root URL.
+      // The index.html script below reads and restores it.
+      var l = window.location;
+      l.replace(
+        l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '') +
+        '/?p=/' + l.pathname.slice(1).split('/').map(encodeURIComponent).join('/') +
+        (l.search ? '&q=' + l.search.slice(1).split('&').map(encodeURIComponent).join('&') : '') +
+        l.hash
+      );
+    </script>
+  </head>
+  <body></body>
+</html>
