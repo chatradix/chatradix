@@ -144,7 +144,7 @@ export const ArchitectureSection: React.FC = () => {
               }}
               onMouseMove={(e) => handleCardMouseMove(e, index)}
               onMouseLeave={() => handleCardMouseLeave(index)}
-              className="arch-card bg-[#0e0e0e] rounded-2xl p-8 md:p-12 lg:p-14 hover:bg-[#131313] transition-colors duration-500 relative group cursor-pointer flex flex-col justify-between min-h-[360px] preserve-3d overflow-hidden will-change-transform"
+              className="arch-card bg-[#0e0e0e] p-8 md:p-12 lg:p-14 hover:bg-[#131313] transition-colors duration-500 relative group cursor-pointer flex flex-col justify-between min-h-[360px] preserve-3d overflow-hidden will-change-transform"
             >
               {/* Giant Background Step Number with Deep Parallax */}
               <div
