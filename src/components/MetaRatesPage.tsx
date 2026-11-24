@@ -13,6 +13,7 @@ import {
   Zap,
   ExternalLink,
   ChevronRight,
+  ChevronDown,
   Sliders,
   DollarSign,
   Layers,
@@ -37,6 +38,8 @@ export const MetaRatesPage: React.FC<MetaRatesPageProps> = ({
   const [selectedCountryId, setSelectedCountryId] = useState<string>('pakistan');
   const [activeRegionFilter, setActiveRegionFilter] = useState<string>('all');
   const [calcVolume, setCalcVolume] = useState<number>(5000);
+  const [selectedCategory, setSelectedCategory] = useState<'utility' | 'marketing' | 'authentication'>('marketing');
+  const [calculatorMessages, setCalculatorMessages] = useState<number>(1000);
 
   // Top 6 featured benchmark countries requested
   const featuredCountryIds = ['pakistan', 'india', 'egypt', 'united-states', 'united-kingdom', 'canada'];
@@ -81,6 +84,17 @@ export const MetaRatesPage: React.FC<MetaRatesPageProps> = ({
     return (calcVolume * activeCountry.marketing).toFixed(2);
   }, [calcVolume, activeCountry]);
 
+  // Top Cost Calculator live calculations
+  const activeRatePerMessage = useMemo(() => {
+    if (selectedCategory === 'utility') return activeCountry.utility;
+    if (selectedCategory === 'authentication') return activeCountry.authentication;
+    return activeCountry.marketing;
+  }, [selectedCategory, activeCountry]);
+
+  const calculatedCost = useMemo(() => {
+    return (calculatorMessages * activeRatePerMessage).toFixed(2);
+  }, [calculatorMessages, activeRatePerMessage]);
+
   // Estimated savings vs typical aggregator markup ($0.008/msg markup)
   const estimatedMarkupSavings = useMemo(() => {
     return (calcVolume * 0.008).toFixed(2);
@@ -103,51 +117,191 @@ export const MetaRatesPage: React.FC<MetaRatesPageProps> = ({
       <div className="max-w-[1520px] mx-auto px-4 sm:px-8 md:px-12 relative z-10">
 
         {/* ==============================================================
-            1. PAGE HERO & TELEMETRIC HEADER
+            1. PAGE HERO & LIVE COST CALCULATOR CONSOLE
         ============================================================== */}
-        <div className="flex flex-col items-center text-center max-w-4xl mx-auto mb-16 sm:mb-20">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14 items-center mb-16 sm:mb-20 pt-2 sm:pt-4">
           
-          {/* Protocol Badge */}
-          {/* <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-[#0080FB]/10 border border-[#0080FB]/35 text-xs font-['JetBrains_Mono'] text-[#0080FB] font-bold tracking-[0.2em] uppercase mb-6">
-            <span className="w-2 h-2 rounded-full bg-[#0080FB] animate-ping" />
-            <span>/// OFFICIAL META CLOUD API v20.0 WHOLESALE DIRECTORY ///</span>
-          </div> */}
-
-          {/* Main Headline */}
-          <h1 className="font-['Hanken_Grotesk'] font-black text-4xl sm:text-6xl lg:text-7xl tracking-tight uppercase leading-[0.96] mb-6 text-white">
-            META WHATSAPP RATES <br />
-            <span className="text-[#0080FB]">
-              BY COUNTRY
-            </span>
-          </h1>
-
-          <p className="font-['Hanken_Grotesk'] text-base sm:text-lg text-[#9aa5bb] leading-relaxed max-w-2xl font-normal mb-8">
-            Official wholesale per-conversation rates direct from Meta's API rate card. ChatRadix connects directly with <span className="text-white font-semibold underline decoration-[#0080FB] decoration-2 underline-offset-4">0% extra markup</span>—you pay wholesale Meta pricing with complete transparency.
-          </p>
-
-          {/* Telemetry Metrics Bar */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 w-full max-w-3xl font-['JetBrains_Mono'] text-xs">
-            <div className="bg-[#0b1220]/90 border border-[#1b283d] rounded-xl px-4 py-3 flex flex-col items-center justify-center text-center">
-              <span className="text-[#0080FB] font-bold text-base sm:text-lg">200+</span>
-              <span className="text-[10px] text-[#63728f] uppercase tracking-wider mt-0.5">Countries Covered</span>
-            </div>
+          {/* Left Column: Headline, Subtitle, Category Pills */}
+          <div className="lg:col-span-7 flex flex-col items-start text-left">
             
-            <div className="bg-[#0b1220]/90 border border-[#1b283d] rounded-xl px-4 py-3 flex flex-col items-center justify-center text-center">
-              <span className="text-[#25D366] font-bold text-base sm:text-lg">0.00%</span>
-              <span className="text-[10px] text-[#63728f] uppercase tracking-wider mt-0.5">ChatRadix Markup</span>
+            {/* Main Headline */}
+            <h1 className="font-['Hanken_Grotesk'] font-black text-4xl sm:text-6xl xl:text-7xl tracking-tight uppercase leading-[0.96] mb-6 text-white">
+              META WHATSAPP <br />
+              RATES <br />
+              <span className="bg-gradient-to-r from-[#0080FB] via-[#00d2c4] to-[#25D366] bg-clip-text text-transparent drop-shadow-[0_0_30px_rgba(0,210,196,0.4)]">
+                BY COUNTRY
+              </span>
+            </h1>
+
+            <p className="font-['Hanken_Grotesk'] text-base sm:text-lg text-[#94a3b8] leading-relaxed max-w-xl font-normal mb-8">
+              No hidden markups, direct Meta invoicing. View real-time rates and calculate your estimated monthly spend.
+            </p>
+
+            {/* Category Selector Pills Container */}
+            <div className="flex flex-wrap items-center gap-3 p-1.5 rounded-full bg-[#0a1220]/90 border border-[#1e293b]/80 backdrop-blur-md">
+              <button
+                type="button"
+                onClick={() => setSelectedCategory('utility')}
+                className={`px-5 py-2 rounded-full text-xs sm:text-sm font-['JetBrains_Mono'] font-bold transition-all duration-200 ${
+                  selectedCategory === 'utility'
+                    ? 'bg-[#25D366]/15 border border-[#25D366] text-[#25D366] shadow-[0_0_15px_rgba(37,211,102,0.25)]'
+                    : 'text-[#94a3b8] hover:text-white border border-transparent'
+                }`}
+              >
+                Utility
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setSelectedCategory('marketing')}
+                className={`px-5 py-2 rounded-full text-xs sm:text-sm font-['JetBrains_Mono'] font-bold transition-all duration-200 ${
+                  selectedCategory === 'marketing'
+                    ? 'bg-[#25D366]/15 border border-[#25D366] text-[#25D366] shadow-[0_0_15px_rgba(37,211,102,0.25)]'
+                    : 'text-[#94a3b8] hover:text-white border border-transparent'
+                }`}
+              >
+                Marketing
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setSelectedCategory('authentication')}
+                className={`px-5 py-2 rounded-full text-xs sm:text-sm font-['JetBrains_Mono'] font-bold transition-all duration-200 ${
+                  selectedCategory === 'authentication'
+                    ? 'bg-[#25D366]/15 border border-[#25D366] text-[#25D366] shadow-[0_0_15px_rgba(37,211,102,0.25)]'
+                    : 'text-[#94a3b8] hover:text-white border border-transparent'
+                }`}
+              >
+                Authentication
+              </button>
             </div>
 
-            <div className="bg-[#0b1220]/90 border border-[#1b283d] rounded-xl px-4 py-3 flex flex-col items-center justify-center text-center">
-              <span className="text-white font-bold text-base sm:text-lg">1,000 / mo</span>
-              <span className="text-[10px] text-[#63728f] uppercase tracking-wider mt-0.5">Free Meta Service Msgs</span>
-            </div>
+          </div>
 
-            <div className="bg-[#0b1220]/90 border border-[#1b283d] rounded-xl px-4 py-3 flex flex-col items-center justify-center text-center">
-              <span className="text-[#0080FB] font-bold text-base sm:text-lg">OCT 1, 2026</span>
-              <span className="text-[10px] text-[#63728f] uppercase tracking-wider mt-0.5">Official Rate Schedule</span>
+          {/* Right Column: Cost Calculator Card */}
+          <div className="lg:col-span-5 w-full">
+            <div className="relative rounded-3xl p-6 sm:p-8 bg-gradient-to-b from-[#0f172a]/95 via-[#0a101f]/98 to-[#060a14] border border-[#1e293b] hover:border-[#0080FB]/50 shadow-[0_0_50px_rgba(0,128,251,0.14)] backdrop-blur-xl transition-all duration-300">
+              
+              {/* Subtle Ambient Radial Glow on Card Top-Right */}
+              <div className="absolute top-0 right-0 w-44 h-44 bg-[#0080FB]/10 rounded-full blur-3xl pointer-events-none" />
+
+              {/* Card Header */}
+              <div className="flex items-center justify-between mb-6 relative z-10">
+                <h3 className="font-['Hanken_Grotesk'] font-bold text-xl sm:text-2xl text-white">
+                  Cost calculator
+                </h3>
+                <div 
+                  className="text-[#64748b] hover:text-[#94a3b8] transition-colors cursor-pointer"
+                  title="Official Meta Cloud API rate calculator with 0% ChatRadix platform markup."
+                >
+                  <Info className="w-5 h-5" />
+                </div>
+              </div>
+
+              {/* Choose a Country Dropdown */}
+              <div className="mb-6 relative z-10">
+                <label className="block text-xs font-['JetBrains_Mono'] text-[#94a3b8] mb-2 font-medium">
+                  Choose a country
+                </label>
+                <div className="relative">
+                  <select
+                    value={selectedCountryId}
+                    onChange={(e) => {
+                      setSelectedCountryId(e.target.value);
+                    }}
+                    className="w-full bg-[#0d1627] border border-[#1e2c44] hover:border-[#0080FB]/60 focus:border-[#0080FB] rounded-xl px-4 py-3 text-sm text-white font-['JetBrains_Mono'] appearance-none cursor-pointer outline-none transition-all pr-10"
+                  >
+                    {META_RATES_DATA.map((c) => (
+                      <option key={c.id} value={c.id} className="bg-[#0b1220] text-white py-1.5">
+                        {c.flag} {c.country} ({c.callingCode})
+                      </option>
+                    ))}
+                  </select>
+                  <ChevronDown className="w-4 h-4 text-[#64748b] absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none" />
+                </div>
+              </div>
+
+              {/* Monthly Messages + Slider */}
+              <div className="mb-6 relative z-10">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-xs font-['JetBrains_Mono'] text-[#94a3b8] font-medium">
+                    Monthly Messages
+                  </span>
+                  <span className="font-['JetBrains_Mono'] text-lg sm:text-xl font-bold text-white">
+                    {calculatorMessages.toLocaleString()}
+                  </span>
+                </div>
+
+                <div className="py-2">
+                  <input
+                    type="range"
+                    min={100}
+                    max={20000}
+                    step={100}
+                    value={calculatorMessages}
+                    onChange={(e) => setCalculatorMessages(Number(e.target.value))}
+                    className="w-full h-2 rounded-lg appearance-none cursor-pointer accent-[#25D366] bg-[#1e293b]"
+                    style={{
+                      background: `linear-gradient(to right, #25D366 ${((calculatorMessages - 100) / (20000 - 100)) * 100}%, #1e293b ${((calculatorMessages - 100) / (20000 - 100)) * 100}%)`
+                    }}
+                  />
+                </div>
+              </div>
+
+              {/* Rate Per Message */}
+              <div className="mb-5 relative z-10">
+                <span className="block text-xs font-['JetBrains_Mono'] text-[#94a3b8] mb-1 font-medium">
+                  Rate per message
+                </span>
+                <div className="font-['JetBrains_Mono'] text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+                  ${activeRatePerMessage.toFixed(4)}
+                </div>
+              </div>
+
+              {/* Estimated Monthly Cost */}
+              <div className="mb-6 relative z-10">
+                <span className="block text-xs font-['JetBrains_Mono'] text-[#94a3b8] mb-1 font-medium">
+                  Estimated monthly cost
+                </span>
+                <div className="font-['JetBrains_Mono'] text-3xl sm:text-4xl font-black text-white tracking-tight">
+                  ${calculatedCost}
+                </div>
+              </div>
+
+              {/* Card Footer Subtext */}
+              <div className="pt-4 border-t border-[#1e293b]/70 flex items-center justify-between text-xs text-[#64748b] font-['JetBrains_Mono'] relative z-10">
+                <span className="flex items-center gap-1.5">
+                  <span>Calculator is based on <span className="text-[#38bdf8] hover:underline cursor-pointer">latest Meta API pricing</span>.</span>
+                  <Info className="w-3.5 h-3.5 text-[#38bdf8] shrink-0" />
+                </span>
+              </div>
+
             </div>
           </div>
 
+        </div>
+
+        {/* Telemetry Metrics Bar */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 w-full max-w-5xl mx-auto mb-16 sm:mb-20 font-['JetBrains_Mono'] text-xs">
+          <div className="bg-[#0b1220]/90 border border-[#1b283d] rounded-xl px-4 py-3 flex flex-col items-center justify-center text-center">
+            <span className="text-[#0080FB] font-bold text-base sm:text-lg">200+</span>
+            <span className="text-[10px] text-[#63728f] uppercase tracking-wider mt-0.5">Countries Covered</span>
+          </div>
+          
+          <div className="bg-[#0b1220]/90 border border-[#1b283d] rounded-xl px-4 py-3 flex flex-col items-center justify-center text-center">
+            <span className="text-[#25D366] font-bold text-base sm:text-lg">0.00%</span>
+            <span className="text-[10px] text-[#63728f] uppercase tracking-wider mt-0.5">ChatRadix Markup</span>
+          </div>
+
+          <div className="bg-[#0b1220]/90 border border-[#1b283d] rounded-xl px-4 py-3 flex flex-col items-center justify-center text-center">
+            <span className="text-white font-bold text-base sm:text-lg">1,000 / mo</span>
+            <span className="text-[10px] text-[#63728f] uppercase tracking-wider mt-0.5">Free Meta Service Msgs</span>
+          </div>
+
+          <div className="bg-[#0b1220]/90 border border-[#1b283d] rounded-xl px-4 py-3 flex flex-col items-center justify-center text-center">
+            <span className="text-[#0080FB] font-bold text-base sm:text-lg">OCT 1, 2026</span>
+            <span className="text-[10px] text-[#63728f] uppercase tracking-wider mt-0.5">Official Rate Schedule</span>
+          </div>
         </div>
 
         {/* ==============================================================
