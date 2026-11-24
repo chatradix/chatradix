@@ -1,10 +1,16 @@
 import React, { useEffect, useRef } from 'react';
 
-interface GridPulse {
-  col: number;
-  rowProgress: number;
+interface Milestone {
+  fraction: number; // 0 to 1 along chart X
+  label: string;
+  badge: string;
+  isHero?: boolean;
+}
+
+interface Photon {
+  progress: number;
   speed: number;
-  color: string;
+  lineIndex: number;
   size: number;
 }
 
@@ -23,12 +29,11 @@ export const RevenueGlobeCanvas: React.FC = () => {
     let height = 0;
     let time = 0;
 
-    let mouseX = 0;
-    let mouseY = 0;
-    let targetMouseX = 0;
-    let targetMouseY = 0;
+    let mouseX = -9999;
+    let mouseY = -9999;
+    let isHovering = false;
 
-    // Handle Resize with Device Pixel Ratio
+    // Handle Resize with Device Pixel Ratio for razor-sharp rendering
     const handleResize = () => {
       const rect = canvas.getBoundingClientRect();
       width = rect.width;
@@ -45,14 +50,21 @@ export const RevenueGlobeCanvas: React.FC = () => {
 
     const handleMouseMove = (e: MouseEvent) => {
       const rect = canvas.getBoundingClientRect();
-      const normX = (e.clientX - rect.left) / (rect.width || 1) - 0.5;
-      const normY = (e.clientY - rect.top) / (rect.height || 1) - 0.5;
-      targetMouseX = normX;
-      targetMouseY = normY;
+      mouseX = e.clientX - rect.left;
+      mouseY = e.clientY - rect.top;
+      isHovering = mouseX >= 0 && mouseX <= width && mouseY >= 0 && mouseY <= height;
     };
-    window.addEventListener('mousemove', handleMouseMove);
 
-    // Pause animation when section is offscreen
+    const handleMouseLeave = () => {
+      isHovering = false;
+      mouseX = -9999;
+      mouseY = -9999;
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+    document.addEventListener('mouseleave', handleMouseLeave);
+
+    // Pause when offscreen
     const observer = new IntersectionObserver(
       ([entry]) => {
         isVisible = entry.isIntersecting;
@@ -61,27 +73,49 @@ export const RevenueGlobeCanvas: React.FC = () => {
     );
     observer.observe(canvas);
 
-    // -------------------------------------------------------------
-    // 3D SURFACE & GRAPH GRID CONFIGURATION
-    // -------------------------------------------------------------
-    // Columns (X width) and Rows (Z depth)
-    const COLS = 32;
-    const ROWS = 28;
+    // Milestones pinned to primary upward trend
+    const milestones: Milestone[] = [
+      { fraction: 0.18, label: '30D ONBOARD', badge: '+42% BASELINE' },
+      { fraction: 0.42, label: 'CART RECOVERY', badge: '+184% REVENUE' },
+      { fraction: 0.70, label: 'COD 2-WAY SYNC', badge: '+290% CONV' },
+      { fraction: 0.92, label: 'SCALE AUTOMATION', badge: '+380% ROAS', isHero: true },
+    ];
 
-    // Data pulses travelling along the surface grid lines
-    const pulses: GridPulse[] = [];
-    const pulseCount = 8;
-    const colors = ['#25D366', '#0080FB', '#38BDF8', '#66FF8E'];
-
-    for (let i = 0; i < pulseCount; i++) {
-      pulses.push({
-        col: Math.floor(Math.random() * COLS),
-        rowProgress: Math.random() * ROWS,
-        speed: 0.08 + Math.random() * 0.12,
-        color: colors[i % colors.length],
+    // Flowing photons racing along trendlines
+    const photons: Photon[] = [];
+    for (let i = 0; i < 9; i++) {
+      photons.push({
+        progress: Math.random(),
+        speed: 0.0018 + Math.random() * 0.0022,
+        lineIndex: i % 2, // 0 = main green line, 1 = cyan secondary
         size: 2 + Math.random() * 2,
       });
     }
+
+    // Chart curve mathematical functions
+    // Primary curve: exponential acceleration simulating surging revenue
+    const getPrimaryY = (normX: number, t: number, chartH: number, baselineY: number) => {
+      const progress = Math.pow(normX, 1.45);
+      const wave = Math.sin(normX * 8 + t * 1.5) * 8 + Math.cos(normX * 14 - t * 2) * 5;
+      const lift = chartH * 0.78 * progress;
+      return baselineY - lift + wave;
+    };
+
+    // Secondary curve: traditional linear marketing baseline
+    const getSecondaryY = (normX: number, t: number, chartH: number, baselineY: number) => {
+      const progress = Math.pow(normX, 1.05);
+      const wave = Math.sin(normX * 6 + t * 1.1) * 6;
+      const lift = chartH * 0.38 * progress;
+      return baselineY - lift + wave;
+    };
+
+    // Tertiary accent curve: abandoned cart recovery wave
+    const getTertiaryY = (normX: number, t: number, chartH: number, baselineY: number) => {
+      const progress = Math.pow(normX, 1.25);
+      const wave = Math.cos(normX * 10 + t * 1.8) * 10;
+      const lift = chartH * 0.58 * progress;
+      return baselineY - lift + wave;
+    };
 
     // -------------------------------------------------------------
     // RENDER LOOP
@@ -93,312 +127,340 @@ export const RevenueGlobeCanvas: React.FC = () => {
       }
 
       time += 0.016;
-
-      // Smooth mouse lerping
-      mouseX += (targetMouseX - mouseX) * 0.05;
-      mouseY += (targetMouseY - mouseY) * 0.05;
-
       ctx.clearRect(0, 0, width, height);
 
-      // Camera & Spatial Framing: Position the 3D grid towards center-right to frame the text
       const isMobile = width < 768;
-      const originX = width * (isMobile ? 0.5 : 0.62);
-      const originY = height * 0.58;
 
-      // Camera view angles
-      const pitch = 0.95 + mouseY * 0.25; // Viewing from elevated perspective
-      const yaw = -0.35 + mouseX * 0.35;   // Subtle isometric angle
-
-      const cosP = Math.cos(pitch);
-      const sinP = Math.sin(pitch);
-      const cosY = Math.cos(yaw);
-      const sinY = Math.sin(yaw);
-
-      const fov = isMobile ? 320 : 460;
-
-      // Grid dimensions in world units
-      const gridWidth = isMobile ? 650 : 1050;
-      const gridDepth = isMobile ? 700 : 1000;
-      const stepX = gridWidth / (COLS - 1);
-      const stepZ = gridDepth / (ROWS - 1);
-
-      // Compute and project 3D points
-      interface ScreenPoint {
-        sx: number;
-        sy: number;
-        sz: number;
-        rawY: number;
-        visible: boolean;
-        col: number;
-        row: number;
-      }
-
-      const grid: ScreenPoint[][] = [];
-
-      for (let r = 0; r < ROWS; r++) {
-        grid[r] = [];
-        const zRel = (r / (ROWS - 1) - 0.5) * gridDepth;
-
-        for (let c = 0; c < COLS; c++) {
-          const xRel = (c / (COLS - 1) - 0.5) * gridWidth;
-
-          // Undulating graph wave height function (composite harmonics + revenue trend curve)
-          const normC = c / COLS;
-          const normR = r / ROWS;
-
-          // Harmonic waves
-          const wave1 = Math.sin(normC * 7.5 + time * 1.6 + normR * 3.2) * 38;
-          const wave2 = Math.cos(normR * 6.0 - time * 1.2 + normC * 2.8) * 28;
-          const wave3 = Math.sin((normC + normR) * 9.0 + time * 2.2) * 16;
-
-          // Upward revenue trend peak towards back-right
-          const trendRidge = Math.pow(normC * 0.85 + normR * 0.45, 2.2) * 75;
-
-          // Interactive swell from cursor position
-          const mouseDist = Math.hypot(normC - (mouseX + 0.5), normR - (mouseY + 0.5));
-          const interactiveSwell = Math.max(0, 1 - mouseDist * 3.2) * 55;
-
-          const elevation = -(wave1 + wave2 + wave3 + trendRidge + interactiveSwell);
-
-          // 3D Rotation (Yaw then Pitch)
-          const xRot = xRel * cosY - zRel * sinY;
-          const zTemp = xRel * sinY + zRel * cosY;
-
-          const yRot = elevation * cosP - zTemp * sinP;
-          const zRot = elevation * sinP + zTemp * cosP + (isMobile ? 550 : 700);
-
-          if (zRot <= 20) {
-            grid[r][c] = { sx: 0, sy: 0, sz: zRot, rawY: elevation, visible: false, col: c, row: r };
-            continue;
-          }
-
-          const scale = fov / zRot;
-          const sx = originX + xRot * scale;
-          const sy = originY + yRot * scale;
-
-          grid[r][c] = {
-            sx,
-            sy,
-            sz: zRot,
-            rawY: elevation,
-            visible: sx >= -80 && sx <= width + 80 && sy >= -80 && sy <= height + 80,
-            col: c,
-            row: r,
-          };
-        }
-      }
+      // Chart bounding box in canvas coordinates
+      const chartLeft = isMobile ? width * 0.05 : width * 0.32;
+      const chartRight = width * (isMobile ? 0.95 : 0.96);
+      const chartWidth = chartRight - chartLeft;
+      const chartTop = height * (isMobile ? 0.08 : 0.12);
+      const chartBottom = height * (isMobile ? 0.90 : 0.86);
+      const chartHeight = chartBottom - chartTop;
 
       // -------------------------------------------------------------
-      // 1. DRAW SURFACE QUAD MESHES (Subtle glowing cyber polygons)
+      // 1. TECHNICAL FINANCIAL GRID & VALUE SCALES
       // -------------------------------------------------------------
       ctx.save();
-      for (let r = 0; r < ROWS - 1; r++) {
-        for (let c = 0; c < COLS - 1; c++) {
-          const p1 = grid[r][c];
-          const p2 = grid[r][c + 1];
-          const p3 = grid[r + 1][c + 1];
-          const p4 = grid[r + 1][c];
+      const gridRows = 5;
+      const yLabels = ['$250,000', '$150,000', '$75,000', '$25,000', '$0'];
 
-          if (!p1.visible && !p2.visible && !p3.visible && !p4.visible) continue;
+      for (let i = 0; i < gridRows; i++) {
+        const y = chartTop + (chartHeight / (gridRows - 1)) * i;
 
-          const avgZ = (p1.sz + p2.sz + p3.sz + p4.sz) / 4;
-          const depthAlpha = Math.max(0.015, Math.min(0.12, 1 - (avgZ - 250) / 950));
-          const avgElev = (p1.rawY + p2.rawY + p3.rawY + p4.rawY) / 4;
-
-          // Higher elevation quads glow with emerald green; lower with deep signal blue
-          const isHighPeak = avgElev < -60;
-          const fillColor = isHighPeak
-            ? `rgba(37, 211, 102, ${depthAlpha * 1.5})`
-            : `rgba(0, 128, 251, ${depthAlpha * 0.9})`;
-
-          ctx.beginPath();
-          ctx.moveTo(p1.sx, p1.sy);
-          ctx.lineTo(p2.sx, p2.sy);
-          ctx.lineTo(p3.sx, p3.sy);
-          ctx.lineTo(p4.sx, p4.sy);
-          ctx.closePath();
-          ctx.fillStyle = fillColor;
-          ctx.fill();
-        }
-      }
-      ctx.restore();
-
-      // -------------------------------------------------------------
-      // 2. DRAW GRAPH GRID LINES (LATERAL & LONGITUDINAL)
-      // -------------------------------------------------------------
-      ctx.save();
-
-      // Row lines (Lateral cross sections)
-      for (let r = 0; r < ROWS; r++) {
         ctx.beginPath();
-        let started = false;
-
-        for (let c = 0; c < COLS; c++) {
-          const pt = grid[r][c];
-          if (!pt.visible) continue;
-
-          if (!started) {
-            ctx.moveTo(pt.sx, pt.sy);
-            started = true;
-          } else {
-            ctx.lineTo(pt.sx, pt.sy);
-          }
+        ctx.strokeStyle = i === gridRows - 1 ? 'rgba(255, 255, 255, 0.12)' : 'rgba(255, 255, 255, 0.04)';
+        ctx.lineWidth = 1;
+        if (i < gridRows - 1) {
+          ctx.setLineDash([4, 6]);
+        } else {
+          ctx.setLineDash([]);
         }
+        ctx.moveTo(chartLeft, y);
+        ctx.lineTo(chartRight, y);
+        ctx.stroke();
 
-        if (started) {
-          const depthRatio = 1 - r / ROWS;
-          const alpha = Math.max(0.06, Math.min(0.48, depthRatio * 0.55));
-          const isAccentRow = r % 4 === 0;
-
-          ctx.strokeStyle = isAccentRow
-            ? `rgba(56, 189, 248, ${alpha * 1.4})`
-            : `rgba(37, 211, 102, ${alpha})`;
-          ctx.lineWidth = isAccentRow ? 1.3 : 0.85;
-          ctx.stroke();
+        // Technical currency metric on the right
+        if (!isMobile) {
+          ctx.fillStyle = 'rgba(136, 136, 136, 0.45)';
+          ctx.font = '10px "JetBrains Mono", monospace';
+          ctx.textAlign = 'right';
+          ctx.fillText(yLabels[i], chartRight + 2, y - 5);
         }
       }
 
-      // Column lines (Longitudinal depth lines)
-      for (let c = 0; c < COLS; c++) {
+      // Vertical timeline grid bars
+      const gridCols = isMobile ? 4 : 7;
+      const xLabels = ['DAY 0', 'WEEK 1', 'WEEK 2', 'WEEK 3', 'WEEK 4', 'SCALE', 'META v20'];
+
+      for (let j = 0; j < gridCols; j++) {
+        const x = chartLeft + (chartWidth / (gridCols - 1)) * j;
+
         ctx.beginPath();
-        let started = false;
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.03)';
+        ctx.lineWidth = 1;
+        ctx.setLineDash([3, 5]);
+        ctx.moveTo(x, chartTop);
+        ctx.lineTo(x, chartBottom);
+        ctx.stroke();
 
-        for (let r = 0; r < ROWS; r++) {
-          const pt = grid[r][c];
-          if (!pt.visible) continue;
-
-          if (!started) {
-            ctx.moveTo(pt.sx, pt.sy);
-            started = true;
-          } else {
-            ctx.lineTo(pt.sx, pt.sy);
-          }
-        }
-
-        if (started) {
-          const isAccentCol = c % 4 === 0;
-          const alpha = isAccentCol ? 0.35 : 0.16;
-          ctx.strokeStyle = isAccentCol
-            ? `rgba(0, 128, 251, ${alpha * 1.3})`
-            : `rgba(38, 38, 38, ${alpha * 2})`;
-          ctx.lineWidth = isAccentCol ? 1.2 : 0.75;
-          ctx.stroke();
+        if (!isMobile && j < xLabels.length) {
+          ctx.fillStyle = 'rgba(136, 136, 136, 0.35)';
+          ctx.font = '9px "JetBrains Mono", monospace';
+          ctx.textAlign = 'center';
+          ctx.fillText(xLabels[j], x, chartBottom + 16);
         }
       }
       ctx.restore();
 
+      // Sample points along the width
+      const numSamples = isMobile ? 45 : 75;
+
       // -------------------------------------------------------------
-      // 3. VERTICAL GRAPH BARS & DROP LINES (Fintech / Growth markers)
+      // 2. SECONDARY BASELINE AREA & TRENDLINE (Cyan / Legacy email)
       // -------------------------------------------------------------
       ctx.save();
-      for (let r = 2; r < ROWS - 2; r += 3) {
-        for (let c = 3; c < COLS - 2; c += 4) {
-          const pt = grid[r][c];
-          if (!pt.visible) continue;
+      ctx.beginPath();
+      ctx.moveTo(chartLeft, chartBottom);
 
-          // Drop line to baseline
-          if (pt.rawY < -45) {
-            const dropAlpha = Math.min(0.35, Math.abs(pt.rawY) / 120);
-            ctx.beginPath();
-            ctx.setLineDash([2, 3]);
-            ctx.moveTo(pt.sx, pt.sy);
-            ctx.lineTo(pt.sx, pt.sy + Math.abs(pt.rawY) * 0.65);
-            ctx.strokeStyle = `rgba(37, 211, 102, ${dropAlpha})`;
-            ctx.lineWidth = 1;
-            ctx.stroke();
-            ctx.setLineDash([]);
-          }
-        }
+      for (let s = 0; s <= numSamples; s++) {
+        const normX = s / numSamples;
+        const x = chartLeft + normX * chartWidth;
+        const y = getSecondaryY(normX, time, chartHeight, chartBottom);
+        ctx.lineTo(x, y);
+      }
+
+      ctx.lineTo(chartRight, chartBottom);
+      ctx.closePath();
+
+      const secFill = ctx.createLinearGradient(0, chartTop, 0, chartBottom);
+      secFill.addColorStop(0, 'rgba(0, 128, 251, 0.12)');
+      secFill.addColorStop(1, 'rgba(0, 128, 251, 0.0)');
+      ctx.fillStyle = secFill;
+      ctx.fill();
+
+      // Stroke secondary line
+      ctx.beginPath();
+      for (let s = 0; s <= numSamples; s++) {
+        const normX = s / numSamples;
+        const x = chartLeft + normX * chartWidth;
+        const y = getSecondaryY(normX, time, chartHeight, chartBottom);
+        if (s === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      }
+      ctx.strokeStyle = 'rgba(0, 128, 251, 0.55)';
+      ctx.lineWidth = 1.5;
+      ctx.setLineDash([4, 4]);
+      ctx.stroke();
+      ctx.restore();
+
+      // -------------------------------------------------------------
+      // 3. TERTIARY ACCENT TRENDLINE (Electric Blue / Recovery flows)
+      // -------------------------------------------------------------
+      ctx.save();
+      ctx.beginPath();
+      for (let s = 0; s <= numSamples; s++) {
+        const normX = s / numSamples;
+        const x = chartLeft + normX * chartWidth;
+        const y = getTertiaryY(normX, time, chartHeight, chartBottom);
+        if (s === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      }
+      ctx.strokeStyle = 'rgba(56, 189, 248, 0.4)';
+      ctx.lineWidth = 1.2;
+      ctx.setLineDash([]);
+      ctx.stroke();
+      ctx.restore();
+
+      // -------------------------------------------------------------
+      // 4. PRIMARY SURGING REVENUE TRENDLINE & NEON GLOW (Green)
+      // -------------------------------------------------------------
+      ctx.save();
+
+      // Area fill underneath primary line
+      ctx.beginPath();
+      ctx.moveTo(chartLeft, chartBottom);
+
+      for (let s = 0; s <= numSamples; s++) {
+        const normX = s / numSamples;
+        const x = chartLeft + normX * chartWidth;
+        const y = getPrimaryY(normX, time, chartHeight, chartBottom);
+        ctx.lineTo(x, y);
+      }
+
+      ctx.lineTo(chartRight, chartBottom);
+      ctx.closePath();
+
+      const primeFill = ctx.createLinearGradient(0, chartTop * 0.8, 0, chartBottom);
+      primeFill.addColorStop(0, 'rgba(37, 211, 102, 0.22)');
+      primeFill.addColorStop(0.5, 'rgba(37, 211, 102, 0.08)');
+      primeFill.addColorStop(1, 'rgba(37, 211, 102, 0.0)');
+      ctx.fillStyle = primeFill;
+      ctx.fill();
+
+      // Primary stroke with intense bloom glow
+      ctx.beginPath();
+      for (let s = 0; s <= numSamples; s++) {
+        const normX = s / numSamples;
+        const x = chartLeft + normX * chartWidth;
+        const y = getPrimaryY(normX, time, chartHeight, chartBottom);
+        if (s === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      }
+
+      ctx.strokeStyle = '#25D366';
+      ctx.lineWidth = 2.8;
+      ctx.shadowColor = '#25D366';
+      ctx.shadowBlur = 14;
+      ctx.setLineDash([]);
+      ctx.stroke();
+      ctx.restore();
+
+      // -------------------------------------------------------------
+      // 5. PHOTON ENERGY PULSES STREAMING ALONG THE TRENDLINES
+      // -------------------------------------------------------------
+      ctx.save();
+      for (let i = 0; i < photons.length; i++) {
+        const p = photons[i];
+        p.progress += p.speed;
+        if (p.progress > 1) p.progress = 0;
+
+        const x = chartLeft + p.progress * chartWidth;
+        const y =
+          p.lineIndex === 0
+            ? getPrimaryY(p.progress, time, chartHeight, chartBottom)
+            : getSecondaryY(p.progress, time, chartHeight, chartBottom);
+
+        ctx.beginPath();
+        ctx.arc(x, y, p.size, 0, Math.PI * 2);
+        ctx.fillStyle = p.lineIndex === 0 ? '#66FF8E' : '#38BDF8';
+        ctx.shadowColor = p.lineIndex === 0 ? '#25D366' : '#0080FB';
+        ctx.shadowBlur = 12;
+        ctx.fill();
       }
       ctx.restore();
 
       // -------------------------------------------------------------
-      // 4. DATA PULSES (Flowing signals racing along grid tracks)
+      // 6. MILESTONE NODES & FLOATING METRIC BADGES
       // -------------------------------------------------------------
       ctx.save();
-      for (let i = 0; i < pulses.length; i++) {
-        const p = pulses[i];
-        p.rowProgress += p.speed;
+      for (let m = 0; m < milestones.length; m++) {
+        const ms = milestones[m];
+        const x = chartLeft + ms.fraction * chartWidth;
+        const y = getPrimaryY(ms.fraction, time, chartHeight, chartBottom);
 
-        if (p.rowProgress >= ROWS - 1) {
-          p.rowProgress = 0;
-          p.col = Math.floor(Math.random() * COLS);
-          p.speed = 0.08 + Math.random() * 0.12;
-        }
+        // Vertical laser drop line to baseline
+        ctx.beginPath();
+        ctx.strokeStyle = ms.isHero ? 'rgba(37, 211, 102, 0.45)' : 'rgba(37, 211, 102, 0.2)';
+        ctx.lineWidth = 1;
+        ctx.setLineDash([2, 4]);
+        ctx.moveTo(x, y);
+        ctx.lineTo(x, chartBottom);
+        ctx.stroke();
+        ctx.setLineDash([]);
 
-        const r0 = Math.floor(p.rowProgress);
-        const r1 = Math.min(ROWS - 1, r0 + 1);
-        const frac = p.rowProgress - r0;
+        // Animated pulsing concentric ring on milestone node
+        const pulse = (Math.sin(time * 3.5 + m * 1.5) + 1) / 2;
+        ctx.beginPath();
+        ctx.arc(x, y, 4 + pulse * 6, 0, Math.PI * 2);
+        ctx.strokeStyle = `rgba(37, 211, 102, ${0.4 - pulse * 0.3})`;
+        ctx.lineWidth = 1.2;
+        ctx.stroke();
 
-        const pt0 = grid[r0]?.[p.col];
-        const pt1 = grid[r1]?.[p.col];
+        // Core solid vertex node
+        ctx.beginPath();
+        ctx.arc(x, y, ms.isHero ? 4.5 : 3.5, 0, Math.PI * 2);
+        ctx.fillStyle = '#ffffff';
+        ctx.shadowColor = '#25D366';
+        ctx.shadowBlur = 10;
+        ctx.fill();
 
-        if (pt0 && pt1 && pt0.visible && pt1.visible) {
-          const curX = pt0.sx + (pt1.sx - pt0.sx) * frac;
-          const curY = pt0.sy + (pt1.sy - pt0.sy) * frac;
+        // Floating pill badge above the milestone node (skip small screens if crowded)
+        if (!isMobile || ms.isHero) {
+          const badgeY = y - (ms.isHero ? 36 : 28);
+          const badgeText = ms.badge;
+          ctx.font = 'bold 10px "JetBrains Mono", monospace';
+          const textWidth = ctx.measureText(badgeText).width;
+          const padX = 8;
+          const padY = 5;
+          const badgeW = textWidth + padX * 2;
+          const badgeH = 20;
 
+          // Badge background
           ctx.beginPath();
-          ctx.arc(curX, curY, p.size, 0, Math.PI * 2);
-          ctx.fillStyle = p.color;
-          ctx.shadowColor = p.color;
-          ctx.shadowBlur = 10;
+          ctx.fillStyle = ms.isHero ? 'rgba(14, 28, 18, 0.92)' : 'rgba(10, 16, 26, 0.88)';
+          ctx.strokeStyle = ms.isHero ? '#25D366' : 'rgba(56, 189, 248, 0.6)';
+          ctx.lineWidth = 1;
+          ctx.roundRect(x - badgeW / 2, badgeY - badgeH / 2, badgeW, badgeH, 4);
           ctx.fill();
-
-          // Tail
-          ctx.beginPath();
-          ctx.moveTo(curX, curY);
-          ctx.lineTo(pt0.sx, pt0.sy);
-          ctx.strokeStyle = p.color;
-          ctx.lineWidth = p.size * 0.8;
           ctx.stroke();
-        }
-      }
-      ctx.restore();
 
-      // -------------------------------------------------------------
-      // 5. GLOWING VERTEX NODES AT KEY INTERSECTIONS
-      // -------------------------------------------------------------
-      ctx.save();
-      for (let r = 0; r < ROWS; r += 2) {
-        for (let c = 0; c < COLS; c += 2) {
-          const pt = grid[r][c];
-          if (!pt.visible) continue;
+          // Badge text
+          ctx.fillStyle = ms.isHero ? '#25D366' : '#e5e2e1';
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          ctx.fillText(badgeText, x, badgeY);
 
-          const isPeak = pt.rawY < -55;
-          const isAccent = (r % 4 === 0 && c % 4 === 0) || isPeak;
-
-          if (!isAccent) continue;
-
-          const nodeAlpha = Math.max(0.2, Math.min(0.9, 1 - (pt.sz - 300) / 900));
-          const nodeRadius = isPeak ? 2.5 : 1.5;
-
-          ctx.beginPath();
-          ctx.arc(pt.sx, pt.sy, nodeRadius, 0, Math.PI * 2);
-
-          if (isPeak) {
-            ctx.fillStyle = `rgba(37, 211, 102, ${nodeAlpha})`;
-            ctx.shadowColor = '#25D366';
-            ctx.shadowBlur = 8;
-          } else {
-            ctx.fillStyle = `rgba(56, 189, 248, ${nodeAlpha * 0.85})`;
-            ctx.shadowColor = '#0080FB';
-            ctx.shadowBlur = 5;
+          // Sub-label below badge
+          if (!isMobile) {
+            ctx.fillStyle = 'rgba(136, 136, 136, 0.7)';
+            ctx.font = '8px "JetBrains Mono", monospace';
+            ctx.fillText(ms.label, x, badgeY - 14);
           }
-          ctx.fill();
         }
       }
       ctx.restore();
 
       // -------------------------------------------------------------
-      // 6. LEFT VIGNETTE GRADIENT (Guarantees 100% typography contrast)
+      // 7. INTERACTIVE MOUSE CROSSHAIR & LIVE SCRUBBER TOOLTIP
+      // -------------------------------------------------------------
+      if (isHovering && mouseX >= chartLeft && mouseX <= chartRight) {
+        ctx.save();
+        const cursorNormX = (mouseX - chartLeft) / chartWidth;
+        const cursorPrimeY = getPrimaryY(cursorNormX, time, chartHeight, chartBottom);
+
+        // Vertical laser crosshair line
+        ctx.beginPath();
+        ctx.strokeStyle = 'rgba(37, 211, 102, 0.65)';
+        ctx.lineWidth = 1;
+        ctx.setLineDash([3, 3]);
+        ctx.moveTo(mouseX, chartTop);
+        ctx.lineTo(mouseX, chartBottom);
+        ctx.stroke();
+        ctx.setLineDash([]);
+
+        // Glowing cursor marker on primary curve
+        ctx.beginPath();
+        ctx.arc(mouseX, cursorPrimeY, 5, 0, Math.PI * 2);
+        ctx.fillStyle = '#25D366';
+        ctx.shadowColor = '#25D366';
+        ctx.shadowBlur = 14;
+        ctx.fill();
+
+        // Live revenue calculation based on scrubber position
+        const dynamicRev = Math.floor(18000 + Math.pow(cursorNormX, 1.45) * 232000);
+        const dynamicRoas = (2.2 + cursorNormX * 3.8).toFixed(1);
+
+        // HUD Tooltip Box
+        const tipW = 140;
+        const tipH = 50;
+        const tipX = Math.min(chartRight - tipW, Math.max(chartLeft, mouseX + 12));
+        const tipY = Math.max(chartTop, cursorPrimeY - tipH - 12);
+
+        ctx.fillStyle = 'rgba(10, 14, 18, 0.94)';
+        ctx.strokeStyle = '#25D366';
+        ctx.lineWidth = 1;
+        ctx.shadowColor = 'rgba(0, 0, 0, 0.8)';
+        ctx.shadowBlur = 12;
+        ctx.beginPath();
+        ctx.roundRect(tipX, tipY, tipW, tipH, 6);
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.fillStyle = '#25D366';
+        ctx.font = 'bold 12px "JetBrains Mono", monospace';
+        ctx.textAlign = 'left';
+        ctx.textBaseline = 'top';
+        ctx.fillText(`$${dynamicRev.toLocaleString()} MRR`, tipX + 10, tipY + 9);
+
+        ctx.fillStyle = '#888888';
+        ctx.font = '9px "JetBrains Mono", monospace';
+        ctx.fillText(`ROAS: ${dynamicRoas}x // META CLOUD`, tipX + 10, tipY + 28);
+
+        ctx.restore();
+      }
+
+      // -------------------------------------------------------------
+      // 8. LEFT VIGNETTE GRADIENT (Guarantees 100% typography contrast)
       // -------------------------------------------------------------
       ctx.save();
-      const vignette = ctx.createLinearGradient(0, 0, width * (isMobile ? 0.95 : 0.58), 0);
-      vignette.addColorStop(0, 'rgba(14, 14, 14, 0.95)');
-      vignette.addColorStop(0.55, 'rgba(14, 14, 14, 0.7)');
+      const vignette = ctx.createLinearGradient(0, 0, width * (isMobile ? 0.95 : 0.48), 0);
+      vignette.addColorStop(0, 'rgba(14, 14, 14, 0.96)');
+      vignette.addColorStop(0.6, 'rgba(14, 14, 14, 0.65)');
       vignette.addColorStop(1, 'rgba(14, 14, 14, 0)');
       ctx.fillStyle = vignette;
-      ctx.fillRect(0, 0, width * (isMobile ? 0.95 : 0.58), height);
+      ctx.fillRect(0, 0, width * (isMobile ? 0.95 : 0.48), height);
       ctx.restore();
 
       animId = requestAnimationFrame(render);
@@ -410,6 +472,7 @@ export const RevenueGlobeCanvas: React.FC = () => {
       cancelAnimationFrame(animId);
       window.removeEventListener('resize', handleResize);
       window.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseleave', handleMouseLeave);
       observer.disconnect();
     };
   }, []);
