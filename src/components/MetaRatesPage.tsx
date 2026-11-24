@@ -119,15 +119,15 @@ export const MetaRatesPage: React.FC<MetaRatesPageProps> = ({
         {/* ==============================================================
             1. PAGE HERO & LIVE COST CALCULATOR CONSOLE
         ============================================================== */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14 items-center mb-16 sm:mb-20 pt-2 sm:pt-4">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 xl:gap-14 items-center mb-16 sm:mb-20 pt-2 sm:pt-4">
           
           {/* Left Column: Headline, Subtitle, Category Pills */}
           <div className="lg:col-span-7 flex flex-col items-start text-left">
             
             {/* Main Headline */}
-            <h1 className="font-['Hanken_Grotesk'] font-black text-3xl sm:text-4xl md:text-5xl lg:text-5xl xl:text-6xl tracking-tight uppercase leading-[1.05] mb-6 text-white">
+            <h1 className="font-['Hanken_Grotesk'] font-black text-3xl sm:text-5xl md:text-6xl lg:text-[3.8rem] xl:text-[4.6rem] 2xl:text-[5.2rem] tracking-tight uppercase leading-[0.94] mb-6 text-white">
               <span className="block">META WHATSAPP</span>
-              <span className="block sm:whitespace-nowrap">
+              <span className="block xl:whitespace-nowrap">
                 RATES <span className="text-[#0080FB]">BY COUNTRY</span>
               </span>
             </h1>
