@@ -125,10 +125,9 @@ export const MetaRatesPage: React.FC<MetaRatesPageProps> = ({
           <div className="lg:col-span-7 flex flex-col items-start text-left">
             
             {/* Main Headline */}
-            <h1 className="font-['Hanken_Grotesk'] font-black text-4xl sm:text-6xl xl:text-7xl tracking-tight uppercase leading-[0.96] mb-6 text-white">
-              META WHATSAPP <br />
-              RATES <br />
-              <span className="bg-gradient-to-r from-[#0080FB] via-[#00d2c4] to-[#25D366] bg-clip-text text-transparent drop-shadow-[0_0_30px_rgba(0,210,196,0.4)]">
+            <h1 className="font-['Hanken_Grotesk'] font-black text-4xl sm:text-5xl lg:text-6xl xl:text-7xl tracking-tight uppercase leading-[1.0] mb-6 text-white">
+              META WHATSAPP RATES <br />
+              <span className="text-[#0080FB]">
                 BY COUNTRY
               </span>
             </h1>
