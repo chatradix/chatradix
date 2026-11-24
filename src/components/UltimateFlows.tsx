@@ -17,7 +17,7 @@ import {
 // Set ENABLE_HOVER_ACTIVATE to true to activate slides when hovering over them.
 // Set ENABLE_HOVER_ACTIVATE to false if you want slides to ONLY activate on click.
 // ============================================================================
-export const ENABLE_HOVER_ACTIVATE = true; // <-- CHANGE TO false TO STOP HOVER ACTIVATION
+export const ENABLE_HOVER_ACTIVATE = false; // <-- Slides ONLY activate on click
 
 interface UltimateFlowsProps {
   onNotify?: (msg: string) => void;
