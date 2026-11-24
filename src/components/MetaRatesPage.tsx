@@ -126,7 +126,8 @@ export const MetaRatesPage: React.FC<MetaRatesPageProps> = ({
             
             {/* Main Headline */}
             <h1 className="font-['Hanken_Grotesk'] font-black text-4xl sm:text-5xl lg:text-6xl xl:text-7xl tracking-tight uppercase leading-[1.0] mb-6 text-white">
-              META WHATSAPP RATES <br />
+              META WHATSAPP <br />
+              <span>RATES </span>
               <span className="text-[#0080FB]">
                 BY COUNTRY
               </span>
